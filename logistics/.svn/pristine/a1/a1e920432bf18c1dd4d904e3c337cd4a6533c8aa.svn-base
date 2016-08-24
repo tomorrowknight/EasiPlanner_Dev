@@ -1,0 +1,73 @@
+<?php
+use app\models\ParcelSearch;
+
+use yii\helpers\Html;
+use yii\grid\GridView;
+
+/* @var $this yii\web\View */
+/* @var $dataProvider yii\data\ActiveDataProvider */
+
+$this->title = 'Parcels';
+$this->params ['breadcrumbs'] [] = $this->title;
+?>
+<div class="parcel-index">
+
+	<h1>
+		<?= Html::encode($this->title)?>
+	</h1>
+
+	<p>
+		<?= Html::a('Create Parcel', ['create'], ['class' => 'btn btn-success'])?>
+		<?= Html::a('Import Parcels', ['import'], ['class' => 'btn btn-warning'])?>
+		<?= Html::a('Export Parcels', array_merge(['export'],$_GET), ['class' => 'btn btn-info','target'=>"_blank"])?>
+		<?= Html::a('Delete All Parcels', ['delete-all'], ['class' => 'btn btn-danger','onclick'=>"return confirm('Confirm delete?')"])?>
+	</p>
+
+	<?
+
+	echo GridView::widget ( [
+			'dataProvider' => $dataProvider,
+			'filterModel' => $searchModel,
+			'columns' => [
+					[
+							'class' => 'yii\grid\SerialColumn'
+					],
+
+					'identifier',
+					'address',
+					'postal',
+					'note',
+					[
+							'attribute' => 'vehicle',
+							'label' => 'Vehicle',
+							'value' => 'vehicle.name'
+					],
+					// 'deliver_time',
+					'phone',
+					'customer_name',
+					'volume',
+					'weight',
+					'service_time',
+					'window_start',
+					'window_end',
+					'deliver_time',
+					'lat',
+					'lng',
+					[
+							'label' => 'Status',
+							'format' => 'raw',
+							'attribute' => 'failed',
+							'value' => function ($model) {
+								if (empty($model->lat)) return "";
+								$labelClass = $model->failed?"danger":"success";
+								return Html::tag ('label', $model->failed?"Fail":"OK", ['class'=>"label label-$labelClass"]);
+							}
+					],
+					[
+							'class' => 'yii\grid\ActionColumn'
+					]
+			]
+	] );
+	?>
+
+</div>

@@ -1,0 +1,215 @@
+//Author Evan Lee
+
+var SuperModel = {
+	Model : Supermodel.Model.extend({
+		name : "",
+		urlRoot : function() {
+			return site.urlTo(this.name + 's');
+		},
+		initialize : function() {
+			Supermodel.Model.prototype.initialize.apply(this, arguments);
+			this.boot();
+		},
+		createMarker : function(map) {
+			this.map = map;
+			this.marker = new google.maps.Marker({
+				position : this.getPosition(),
+				map : map,
+				model : this
+			});
+			this.marker.setIcon(this.getIcon());
+		},
+		getIcon : function() {
+			return this.getIconUrl(this.id);
+		},
+		getIconUrl : function(index) {
+			return site.urlTo("image/view?name=" + this.name + "&id=" + index);
+		},
+		getPosition : function() {
+			return new google.maps.LatLng(this.get('lat'), this.get('lng'));
+		},
+		distance : function(model) {
+			return google.maps.geometry.spherical.computeDistanceBetween(this.getPosition(), model.getPosition());
+		},
+		travelTime : function(model) {
+			return this.distance(model) / 500;
+		},
+		boot : function() {
+		},
+		setMarkerIcon : function() {
+		},
+	}),
+	Collection : Backbone.Collection.extend({
+		triggerEach : function() {
+			var args = Array.prototype.slice.call(arguments);
+			func = args.shift();
+			this.each(function(model) {
+				model[func].apply(model, args);
+			});
+		},
+		search : function(func) {
+			return new this.constructor(this.filter(func));
+		},
+		getVisibleModels : function() {
+			return this.search(function(parcel) {
+				return !empty(parcel.marker) && !empty(parcel.marker.map);
+			});
+		}
+	})
+};
+
+//Parcel
+var Parcel = SuperModel.Model.extend({
+	name : "parcel",
+	boot : function() {
+		this.on('change:selected change:vehicle_id change:seq', function() {
+			this.marker.setIcon(this.getIcon());
+			if(empty(this.get("vehicle_id"))){
+				this.set("seq","");
+			}
+		}, this);
+	},
+	getColor : function() {
+		return hexColor(this.get("vehicle_id") );
+	},
+	getInvertColor:function(){
+		return hexInvertColor(this.get("vehicle_id") );
+	},
+	getIcon : function() {
+		if (this.get("selected")) {
+			var fillColor = "ffffff";
+			var textColor = "000000";
+		}else if(empty(this.get("vehicle_id"))){
+			var fillColor = "000000";
+			var textColor = "ffffff";
+		}else{
+			var fillColor = this.getColor().slice(-6);
+			var textColor = this.getInvertColor().slice(-6);
+		};
+		url = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld="+(this.get("seq")+1)+"|"+fillColor+"|"+textColor;
+		return url;
+	},
+	getWindowStart : function() {
+		return new Date(parseDate(this.get("window_start"))).getHours();
+	},
+	getWindowEnd : function() {
+		return new Date(parseDate(this.get("window_end"))).getHours();
+	},
+	getWindowStartTime : function() {
+		return parseDate(this.get("window_start")) / 60000;
+	},
+	getWindowEndTime : function() {
+		return parseDate(this.get("window_end")) / 60000;
+	},
+	getLatestStartTime : function() {
+		return this.getWindowEndTime() - this.get("service_time");
+	},
+	getServiceEndTime : function() {
+		return this.get("planned_deliver_time") + this.get("service_time");
+	},
+	onFilter : function(vehicle_id, window_start, window_end) {
+		var isWithIn = (this.getWindowStart() >= window_start && this.getWindowStart() <= window_end) || (this.getWindowEnd() >= window_start && this.getWindowEnd() <= window_end);
+		if ((vehicle_id == "" || this.get("vehicle_id") == vehicle_id || this.get("vehicle_id") == "") && isWithIn) {
+			this.marker.setMap(this.map);
+		} else {
+			this.marker.setMap(null);
+		}
+	},
+	onSelect : function(bounds, selected) {
+		if (!empty(this.marker) && bounds.contains(this.marker.getPosition())) {
+			this.set('selected', selected);
+		}
+	}
+});
+
+var Parcels = SuperModel.Collection.extend({
+	model : function(attrs, options) {
+		return Parcel.create(attrs, options);
+	},
+	url : site.urlTo("parcels") + "?date=" + getParameterByName("date"),
+	getSelectedParcels : function() {
+		return this.search(function(parcel) {
+			return !empty(parcel.marker) && parcel.marker.map != null & parcel.get("selected");
+		});
+	},
+	getSelectedTotalVolume : function() {
+		return this.getSelectedParcels().reduce(function(memo, parcel) {
+			return memo + parseFloat(parcel.get("volume"));
+		}, 0);
+	},
+	getSelectedTotalWeight : function() {
+		return this.getSelectedParcels().reduce(function(memo, parcel) {
+			return memo + parseFloat(parcel.get("weight"));
+		}, 0);
+	},
+	getIdleParcels : function() {
+		return this.getVisibleModels().search(function(parcel) {
+			return parcel.get("vehicle_id") == "";
+		});
+	}
+});
+
+//Vehicle
+var Vehicle = SuperModel.Model.extend({
+	name : "vehicle",
+	getPosition : function() {
+		return new google.maps.LatLng(this.driver().get('lat'), this.driver().get('lng'));
+	},
+	getCapacityVolumeLeft : function() {
+		return this.get("capacity_volume") - this.parcels().search(function(parcel) {
+			return parcel.marker.map != null;
+		}).reduce(function(memo, parcel) {
+			return memo + parcel.get("volume");
+		}, 0);
+	},
+	getCapacityWeightLeft : function() {
+		return this.get("capacity_weight") - this.parcels().search(function(parcel) {
+			return parcel.marker.map != null;
+		}).reduce(function(memo, parcel) {
+			return memo + parcel.get("weight");
+		}, 0);
+	},
+	getColor : function() {
+		return hexColor(this.id);
+	}
+});
+var Vehicles = SuperModel.Collection.extend({
+	model : function(attrs, options) {
+		return Vehicle.create(attrs, options);
+	},
+	url : site.urlTo("vehicles")
+});
+
+// Driver
+var Drivers = SuperModel.Collection.extend({
+	model : function(attrs, options) {
+		return Driver.create(attrs, options);
+	},
+	url : site.urlTo("drivers")
+});
+
+var Driver = SuperModel.Model.extend({
+	name : "driver",
+});
+
+//Profile
+var Profile = SuperModel.Model.extend({
+	name : "profile",
+	url : site.urlTo("profiles/my-profile"),
+});
+
+//Relations
+Vehicle.has().many('parcels', {
+	collection : Parcels,
+	inverse : 'vehicle'
+});
+
+Parcel.has().one('vehicle', {
+	model : Vehicle,
+	inverse : 'parcels'
+});
+
+Vehicle.has().one('driver', {
+	model : Driver,
+	inverse : 'vehicle'
+});

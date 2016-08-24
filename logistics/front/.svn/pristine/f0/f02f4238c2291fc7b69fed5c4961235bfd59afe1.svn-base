@@ -1,0 +1,23 @@
+{
+    "name": "chief725",
+    "description": "my libs",
+    "version": "1.0.1",
+    "license": "mit",
+    "authors": [
+        {
+            "name": "Evan",
+            "email": "chief725@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+		"php": ">=5.4.0",
+		"yiisoft/yii2": "*",
+		"jstayton/google-maps-geocoder": "*"
+	},
+    "autoload": {
+        "psr-4": {
+            "chief725\\": "."
+        }
+    }
+}

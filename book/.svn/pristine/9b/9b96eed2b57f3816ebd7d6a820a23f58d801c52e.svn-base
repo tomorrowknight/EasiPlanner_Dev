@@ -1,0 +1,141 @@
+/*---------------------------------
+ LAYOUT
+ -----------------------------------*/
+body {
+	margin: 0;
+	padding: 0;
+	color: #000;
+	text-shadow: 0px 0px 1px transparent;
+	font: normal 11pt "Microsoft yahei", "微软雅黑", "黑体", "helvetica neue",
+		"lucida grande", helvetica, arial, sans-serif, "宋体" !important;
+	/* google font pixelation fix */
+}
+
+.module {
+	background: #fff;
+	border: 1px solid #d8d8d8;
+	-webkit-box-shadow: 0 0 10px #bbb;
+	-moz-box-shadow: 0 0 10px #bbb;
+	box-shadow: 0 0 10px #bbb;
+	margin-bottom: 15px;
+	padding: 10px;
+}
+
+.module.mod-line-top {
+	border-top: 6px solid #dd4814;
+}
+
+.pagination .first, .pagination .last {
+	display: none;
+}
+
+h1, h2, h3 {
+	border-bottom: 3px solid #dd4814;
+	padding-bottom: 15px;
+	font-weight: bold !important;
+}
+
+h4, h5 {
+	border-left: 3px solid #DD4814;
+	padding-left: 5px;
+	font-weight: bold !important;
+}
+
+ul {
+	padding-left: 20px !important;
+}
+/*
+ * Callouts
+ *
+ * Not quite alerts, but custom and helpful notes for folks reading the docs.
+ * Requires a base and modifier class.
+ */
+
+/* Common styles for all types */
+.bs-callout {
+	margin: 20px 0;
+	padding: 15px 30px 15px 15px;
+	border-left: 5px solid #eee;
+}
+
+.bs-callout h4 {
+	margin-top: 0;
+}
+
+.bs-callout p:last-child {
+	margin-bottom: 0;
+}
+
+.bs-callout code, .bs-callout .highlight {
+	background-color: #fff;
+}
+
+/* Variations */
+.bs-callout-danger {
+	background-color: #fcf2f2;
+	border-color: #dFb5b4;
+}
+
+.bs-callout-warning {
+	background-color: #fefbed;
+	border-color: #f1e7bc;
+}
+
+.bs-callout-info {
+	background-color: #f0f7fd;
+	border-color: #d0e3f0;
+}
+
+/* fluid ads */
+@media ( max-width : 1280px) {
+	.fluidads {
+		display: none;
+	}
+}
+
+.container {
+	padding-right: 3px !important;
+	padding-left: 3px !important;
+	overflow: hidden;
+}
+
+header .container, nav {
+	padding-right: 15px !important;
+}
+
+.book-node .active {
+	color: #fff;
+	background-color: #dd4814;
+	display: inline-block;
+	padding: 3px;
+}
+
+img {
+	max-width: 100%;
+}
+
+pre {
+	border: 0 !important;
+	background: #ffffff !important;
+}
+
+.syntaxhighlighter {
+	overflow-y: hidden !important;
+	overflow-x: auto !important;
+}
+
+.margin-bottom-5 {
+	margin-bottom: 5px !important;
+}
+
+.margin-bottom-10 {
+	margin-bottom: 10px !important;
+}
+
+.margin-top-5 {
+	margin-top: 5px !important;
+}
+
+.margin-top-10 {
+	margin-top: 10px !important;
+}

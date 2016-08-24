@@ -1,0 +1,53 @@
+<?php
+namespace app\models;
+
+use app\models\Parcel;
+
+use app\models\Vehicle;
+
+use app\models\Driver;
+use app\models\Horizon;
+
+use amnah\yii2\user\models\User;
+
+class MyUser extends User{
+	/**
+	 * get drivers
+	 */
+	public function getDrivers()
+	{
+		return $this->hasMany(Driver::className(), ['user_id' => 'id']);
+	}
+
+	/**
+	 * get vehicles
+	 */
+	public function getVehicles()
+	{
+		return $this->hasMany(Vehicle::className(), ['user_id' => 'id']);
+	}
+
+	/**
+	 * get parcels
+	 */
+	public function getParcels()
+	{
+		return $this->hasMany(Parcel::className(), ['user_id' => 'id'])->with("vehicle");
+	}
+	
+	/**
+	 * get profile
+	*/
+
+	public function getProfile(){
+		return $this->hasOne(MyProfile::className(),["user_id"=>"id"]);
+	}
+
+	/**
+	 * Get the horizons
+	*/
+	public function getHorizons()
+	{
+		return $this->hasMany(Horizon::className(), ['user_id' => 'id'])->orderBy("start asc");
+	}
+}

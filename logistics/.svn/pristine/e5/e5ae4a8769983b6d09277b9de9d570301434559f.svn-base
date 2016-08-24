@@ -1,0 +1,173 @@
+function tsptw(depot, parcels, vehicles, anchor) {
+	//printMatrix(depot,parcels);
+	var visited = [];
+	var routes = [];
+	var depotParcel = createDepotParcel(depot);
+
+	parcels.each(function(p) {
+		p.set("planned_deliver_time", null);
+		p.set("visited", null);
+	});
+
+	while (visited.length != parcels.length) {
+		var vehicle = vehicles.shift();
+		vehicles.push(vehicle);
+		vehicle.left_voclume = vehicle.get("capacity_volume");
+		vehicle.left_weight = vehicle.get("capacity_weight");
+		var ps = [];
+		ps.push(depotParcel);
+		ps.push(depotParcel);
+
+		while (true) {
+			var inserted = false;
+			
+			if (anchor == null) {
+				var center = getCenter(ps, depotParcel, parcels);
+				var sortedParcels = parcels.sortBy(function(parcel) {
+					return parcel.distance(center);
+				});
+			} else {
+				var sortedParcels = parcels.sortBy(function(parcel) {
+					return parcel.distance(anchor);
+				});
+			}
+			_.each(sortedParcels, function(parcel) {
+				if (parcel.get("visited")) {
+					return;
+				}
+				if (vehicle.left_volume < parcel.get("volume") || vehicle.left_weight < parcel.get("weight")) {
+					return;
+				};
+
+				var orderBySavingIndexs = calIndexsBySavings(parcel, ps);
+				for (var i = 0; i < orderBySavingIndexs.length; i++) {
+					var orderBySavingIndex = orderBySavingIndexs[i];
+					var ps_clone = _.map(ps, function(p) {
+						return p.clone();
+					});
+					if (insertParcel(ps_clone, orderBySavingIndex, parcel.clone())) {
+						insertParcel(ps, orderBySavingIndex, parcel);
+						parcel.set("visited", true);
+						visited.push(parcel);
+
+						//update vehicle capacity
+						vehicle.left_volume -= parcel.get("volume");
+						vehicle.left_weight -= parcel.get("weight");
+						inserted = true;
+						break;
+					};
+				}
+			});
+			if (!inserted)
+				break;
+		}
+
+		ps.pop();
+		ps.shift();
+
+		var route = {
+			vehicle : vehicle,
+			parcels : ps,
+			id:new Date().getTime()
+		};
+		
+		if(anchor!=null){
+			return route; // only one route.
+		}
+		
+		routes.push(route);
+	}
+	printRoutes(routes);
+	return routes;
+}
+
+function getCenter(ps, depotParcel, parcels) {
+	if (ps.length == 2) {
+		return parcels.max(function(p) {
+			return p.get("visited") ? 0 : p.distance(depotParcel);
+		});
+	}
+	ps.pop();
+	ps.shift();
+	var centerSum = _.reduce(ps, function(memo, p) {
+		return {
+			lat : memo.lat + p.get("lat"),
+			lng : memo.lng + p.get("lng")
+		};
+	}, {
+		lat : 0,
+		lng : 0
+	});
+	var center = new Parcel;
+	center.set("lat", centerSum.lat / ps.length);
+	center.set("lng", centerSum.lng / ps.length);
+	ps.unshift(depotParcel);
+	ps.push(depotParcel);
+	return center;
+}
+
+function printRoutes(routes) {
+	_.each(routes, function(route) {
+		console.log("================================");
+		_.each(route.parcels, function(parcel) {
+			var tmpl = "<%=obj.get('customer_name')%>\t<%=obj.get('window_start')%>\t\t<%=obj.get('window_end')%>\t\t<%=obj.get('service_time')%>\t\t<%=new Date(obj.get('planned_deliver_time')*60000)%>";
+			//console.log(_.template(tmpl)(parcel).toString());
+		});
+	});
+}
+
+function printMatrix(depot, parcels) {
+	parcels.unshift(depot);
+	for (var i = 0; i < parcels.length; i++) {
+		distances = [];
+		for (var j = 0; j < parcels.length; j++) {
+			distances.push(parcels.at(i).distance(parcels.at(j)).toFixed(0));
+		}
+		console.log(distances.join("\t"));
+	}
+	parcels.shift();
+}
+
+function calIndexsBySavings(parcel, ps) {
+	var savingPairs = [];
+	for (var i = 0; i < ps.length - 1; i++) {
+		savingPairs.push({
+			index : i,
+			saving : parcel.distance(ps[i]) + parcel.distance(ps[i + 1]) - ps[i + 1].distance(ps[i])
+		});
+	}
+	savingPairs = _.sortBy(savingPairs, function(savingPair) {
+		return savingPair.saving;
+	});
+	return _.map(savingPairs, function(savingPair) {
+		return savingPair.index;
+	});
+}
+
+function insertParcel(ps_clone, index, parcel) {
+	ps_clone.splice(index + 1, 0, parcel);
+	for (var i = index + 1; i < ps_clone.length - 1; i++) {
+		if (ps_clone[i - 1].getServiceEndTime == null) {
+			a = 1;
+		}
+		var newStartTime = Math.max(ps_clone[i - 1].getServiceEndTime() + ps_clone[i - 1].travelTime(ps_clone[i]), ps_clone[i].getWindowStartTime());
+		if (newStartTime == ps_clone[i].get("planned_deliver_time")) {
+			return true;
+		} else if (newStartTime > ps_clone[i].getLatestStartTime()) {
+			return false;
+		}
+		ps_clone[i].set("planned_deliver_time", newStartTime);
+	}
+	return true;
+}
+
+function createDepotParcel(depot) {
+	var parcel = new Parcel();
+	parcel.set("window_start", "2000-01-01");
+	parcel.set("window_end", "2099-01-01");
+	parcel.set("lat", depot.get("lat"));
+	parcel.set("lng", depot.get("lng"));
+	parcel.set("service_time", 0);
+	parcel.set("planned_deliver_time", parcel.getWindowStartTime());
+	return parcel;
+}

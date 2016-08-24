@@ -1,0 +1,562 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=gb2312">
+<meta name=Generator content="Microsoft Word 12 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:宋体;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:"\@宋体";
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:10.5pt;
+	font-family:"Calibri","sans-serif";}
+h1
+	{mso-style-link:"Heading 1 Char";
+	margin-top:17.0pt;
+	margin-right:0cm;
+	margin-bottom:16.5pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:240%;
+	page-break-after:avoid;
+	font-size:22.0pt;
+	font-family:"Calibri","sans-serif";
+	font-weight:bold;}
+h2
+	{mso-style-link:"Heading 2 Char";
+	margin-right:0cm;
+	margin-left:0cm;
+	font-size:18.0pt;
+	font-family:宋体;
+	font-weight:bold;}
+h3
+	{mso-style-link:"Heading 3 Char";
+	margin-right:0cm;
+	margin-left:0cm;
+	font-size:13.5pt;
+	font-family:宋体;
+	font-weight:bold;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;}
+p
+	{margin-right:0cm;
+	margin-left:0cm;
+	font-size:12.0pt;
+	font-family:宋体;}
+pre
+	{mso-style-link:"HTML Preformatted Char";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:宋体;}
+span.Heading1Char
+	{mso-style-name:"Heading 1 Char";
+	mso-style-link:"Heading 1";
+	font-family:"Calibri","sans-serif";
+	font-weight:bold;}
+span.Heading2Char
+	{mso-style-name:"Heading 2 Char";
+	mso-style-link:"Heading 2";
+	font-family:宋体;
+	font-weight:bold;}
+span.Heading3Char
+	{mso-style-name:"Heading 3 Char";
+	mso-style-link:"Heading 3";
+	font-family:宋体;
+	font-weight:bold;}
+span.HTMLPreformattedChar
+	{mso-style-name:"HTML Preformatted Char";
+	mso-style-link:"HTML Preformatted";
+	font-family:宋体;}
+p.msochpdefault, li.msochpdefault, div.msochpdefault
+	{mso-style-name:msochpdefault;
+	margin-right:0cm;
+	margin-left:0cm;
+	font-size:10.0pt;
+	font-family:宋体;}
+span.apple-converted-space
+	{mso-style-name:apple-converted-space;}
+span.meta-section
+	{mso-style-name:meta-section;}
+span.tutorial-date
+	{mso-style-name:tutorial-date;}
+.MsoChpDefault
+	{font-size:10.0pt;}
+@page Section1
+	{size:595.3pt 841.9pt;
+	margin:72.0pt 90.0pt 72.0pt 90.0pt;
+	layout-grid:15.6pt;}
+div.Section1
+	{page:Section1;}
+-->
+</style>
+
+</head>
+
+<body lang=ZH-CN link=blue vlink=purple style='text-justify-trim:punctuation'>
+
+<div class=Section1 style='layout-grid:15.6pt'>
+
+<h1 style='margin-top:0cm;margin-right:0cm;margin-bottom:7.5pt;margin-left:
+0cm;background:white'><span lang=EN-US style='font-size:30.0pt;line-height:
+240%;font-family:"Arial","sans-serif";color:#2D2D2D;font-weight:normal'>How To
+Install and Use Composer on Your VPS Running Ubuntu</span></h1>
+
+<h3 style='margin-top:10.5pt;margin-right:0cm;margin-bottom:8.25pt;margin-left:
+0cm;background:white'><span lang=EN-US style='font-size:16.5pt;font-family:
+"Arial","sans-serif";color:#2D2D2D;letter-spacing:-.4pt'>Introduction</span></h3>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'><a
+href="http://getcomposer.org/" target="_blank" style='box-sizing: border-box'><span
+style='color:black'>Composer</span></a><span class=apple-converted-space>&nbsp;</span>is
+a great dependency management tool for PHP. What it does is it keeps track of the
+libraries you declare your project needs and fetches and installs them for you.
+It is not a package manager per se because it’s not used globally by default,
+but rather in each individual project you may have.</span></p>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>What is it used
+for? Say you have an application project that depends on a couple of libraries
+that in turn can even depend on others. Once you declare these dependencies in
+a small .json file, Composer will track down those libraries and install them
+for you.</span></p>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>In this
+tutorial, we will install Composer on a VPS and see how it works and what we
+can do with it. To this end, I will use a server running Ubuntu and the<span
+class=apple-converted-space>&nbsp;</span><a
+href="https://www.digitalocean.com/community/articles/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu"
+target="_blank" style='box-sizing: border-box'><span style='color:black'>LAMP
+stack</span></a><span class=apple-converted-space>&nbsp;</span>already
+installed on it. As for the specific requirements of Composer, it runs on
+Linux, OS X, and Windows alike but it requires you have PHP 5.3.2+ installed.</span></p>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>Be sure you
+have all of the requirements installed:</span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>sudo apt-get install php5 git php5-curl</span></pre>
+
+<h2 style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;margin-left:
+0cm;background:white;box-sizing: border-box'><span lang=EN-US style='font-size:
+21.0pt;font-family:"Arial","sans-serif";color:#2D2D2D;letter-spacing:.15pt;
+font-weight:normal'>Installation</span></h2>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>First, you need
+to download Composer into your project folder. Let’s create an empty folder for
+this purpose in our<span class=apple-converted-space>&nbsp;</span><em
+style='box-sizing: border-box'><span style='font-family:"Arial","sans-serif"'>/var/www</span></em><span
+class=apple-converted-space>&nbsp;</span>Apache web root folder called<span
+class=apple-converted-space>&nbsp;</span><strong style='box-sizing: border-box'><span
+style='font-family:"Arial","sans-serif"'>my_project</span></strong>:</span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>cd /var/www</span></pre><pre style='margin-bottom:21.0pt;
+background:white'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>mkdir my_project</span></pre><pre style='margin-bottom:21.0pt;
+background:white'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>cd my_project</span></pre>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>Download Composer
+into this folder with the following command:</span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>curl -sS <a href="https://getcomposer.org/installer"
+target="_blank" style='box-sizing: border-box'><span style='color:black'>https://getcomposer.org/<wbr
+style='box-sizing: border-box'>installer</span></a> | php</span></pre>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>You should see
+a success message that looks something like this:</span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>All settings correct for using Composer</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>Downloading...</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>Composer successfully installed to: /var/www/my_project/composer.<wbr
+style='box-sizing: border-box'>phar</span></pre><pre style='margin-bottom:21.0pt;
+background:white'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>Use it: php composer.phar</span></pre>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>Now if you
+check in the project folder, you’ll see that only one file has been downloaded:<span
+class=apple-converted-space>&nbsp;</span><strong style='box-sizing: border-box'><span
+style='font-family:"Arial","sans-serif"'>composer.phar</span></strong><span
+class=apple-converted-space>&nbsp;</span>- a PHP archive file that can be run
+from the command line.</span></p>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>If you are in a
+different folder than your project but don’t want to navigate back to your
+project folder to download Composer, you can specify the<span
+class=apple-converted-space>&nbsp;</span><strong style='box-sizing: border-box'><span
+style='font-family:"Arial","sans-serif"'>--install-dir</span></strong><span
+class=apple-converted-space>&nbsp;</span>option and it will download it
+wherever you specify:</span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>curl -sS <a href="https://getcomposer.org/installer"
+target="_blank" style='box-sizing: border-box'><span style='color:black'>https://getcomposer.org/<wbr
+style='box-sizing: border-box'>installer</span></a> | php -- --install-dir=/var/www/<wbr
+style='box-sizing: border-box'>another_folder</span></pre>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>This command
+you can run from anywhere and it will install Composer in<span
+class=apple-converted-space>&nbsp;</span><strong style='box-sizing: border-box'><span
+style='font-family:"Arial","sans-serif"'>another_folder</span></strong><span
+class=apple-converted-space>&nbsp;</span>located in<em style='box-sizing: border-box'><span
+style='font-family:"Arial","sans-serif"'>/var/www</span></em>. To check if
+Composer is working properly, you can use the following command that will bring
+up a list of available commands:</span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>php composer.phar</span></pre>
+
+<h2 style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;margin-left:
+0cm;background:white;box-sizing: border-box'><span lang=EN-US style='font-size:
+21.0pt;font-family:"Arial","sans-serif";color:#2D2D2D;letter-spacing:.15pt;
+font-weight:normal'>Using Composer</span></h2>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>To use Composer
+in your project, you’ll need one file:<span class=apple-converted-space>&nbsp;</span><strong
+style='box-sizing: border-box'><span style='font-family:"Arial","sans-serif"'>composer.json</span></strong>.
+In this file you will describe the dependencies of your project. Let’s say our
+project depends on the<span class=apple-converted-space>&nbsp;</span><a
+href="https://github.com/toin0u/DigitalOcean" target="_blank" style='box-sizing: border-box'><span
+style='color:black'>DigitalOcean</span></a></span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span class=MsoHyperlink><span
+lang=EN-US style='font-size:12.0pt;font-family:"Arial","sans-serif";color:black'>&nbsp;library</span></span><span
+lang=EN-US style='font-size:12.0pt;font-family:宋体'> </span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span
+class=apple-converted-space><span lang=EN-US style='font-size:12.0pt;
+font-family:"Arial","sans-serif";color:black'><a
+href="https://github.com/toin0u/DigitalOcean" target="_blank"><span
+style='color:black;text-decoration:none'>&nbsp;that helps interact with the
+DigitalOcean API. So let</span><span style='color:black;text-decoration:none'>’</span><span
+style='color:black;text-decoration:none'>s create the file:</span></a></span></span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'><a href="https://github.com/toin0u/DigitalOcean" target="_blank"><span
+style='color:black;text-decoration:none'>nano composer.json</span></a></span></pre>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'><a
+href="https://github.com/toin0u/DigitalOcean" target="_blank"><span
+style='color:black;text-decoration:none'>And in this file you can paste in the
+following:</span></a></span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'><a href="https://github.com/toin0u/DigitalOcean" target="_blank"><span
+style='color:black;text-decoration:none'>{</span></a></span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'><a
+href="https://github.com/toin0u/DigitalOcean" target="_blank"><span
+style='color:black;text-decoration:none'>&nbsp;&nbsp;&nbsp; &quot;require&quot;: {</span></a></span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'><a
+href="https://github.com/toin0u/DigitalOcean" target="_blank"><span
+style='color:black;text-decoration:none'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;toin0u/digitalocean&quot;: &quot;1.2.1&quot;</span></a></span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'><a
+href="https://github.com/toin0u/DigitalOcean" target="_blank"><span
+style='color:black;text-decoration:none'>&nbsp;&nbsp;&nbsp; }</span></a></span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'><a
+href="https://github.com/toin0u/DigitalOcean" target="_blank"><span
+style='color:black;text-decoration:none'>}</span></a></span></pre>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'><a
+href="https://github.com/toin0u/DigitalOcean" target="_blank"><span
+style='color:black;text-decoration:none'>Save the file and exit. With this
+simple block of code, you specify that your project requires that library
+(called<span class=apple-converted-space>&nbsp;</span><strong style='box-sizing: border-box'><span
+style='font-family:"Arial","sans-serif"'>digitalocean</span></strong>) created
+by the vendor<span class=apple-converted-space>&nbsp;</span><strong
+style='box-sizing: border-box'><span style='font-family:"Arial","sans-serif"'>toin0u</span></strong>.
+After the colon you write the version you need - in this case being<span
+class=apple-converted-space>&nbsp;</span><strong style='box-sizing: border-box'><span
+style='font-family:"Arial","sans-serif"'>1.2.1</span></strong>. Here you can
+specify any version you want and even use wildcards. But where do you get this
+information about the packages?</span></a></span></p>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'><a
+href="https://github.com/toin0u/DigitalOcean" target="_blank"><span
+style='color:black;text-decoration:none'>There is a great website where you can
+find a lot of libraries with all the information necessary to be specified in
+the<span class=apple-converted-space>&nbsp;</span><em style='box-sizing: border-box'><span
+style='font-family:"Arial","sans-serif"'>composer.json</span></em><span
+class=apple-converted-space>&nbsp;</span>file:<span
+class=apple-converted-space>&nbsp;</span><u>Packagist</u>. The DigitalOcean API
+library<span class=apple-converted-space>&nbsp;</span><u>can also be found on
+Packagist</u>and you can check there exactly what you have to specify in the<span
+class=apple-converted-space>&nbsp;</span><strong style='box-sizing: border-box'><span
+style='font-family:"Arial","sans-serif"'>require</span></strong><span
+class=apple-converted-space>&nbsp;</span>block.</span></a></span></p>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'><a
+href="https://github.com/toin0u/DigitalOcean" target="_blank"><span
+style='color:black;text-decoration:none'>To use wildcards for the version, you
+can specify something like this:</span></a></span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'><a href="https://packagist.org/packages/toin0u/digitalocean"
+target="_blank"><span style='color:black;text-decoration:none'>&quot;toin0u/digitalocean&quot;: &quot;1.2.*&quot;</span></a></span></pre>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'><a
+href="https://packagist.org/packages/toin0u/digitalocean" target="_blank"><span
+style='color:black;text-decoration:none'>This will match any version that
+starts with<span class=apple-converted-space>&nbsp;</span><strong
+style='box-sizing: border-box'><span style='font-family:"Arial","sans-serif"'>1.2</span></strong><span
+class=apple-converted-space>&nbsp;</span>(1.2.0, 1.2.1, etc). Additionally, you
+can specify multiple dependent libraries, not only one. You can do so by adding
+multiple entries in the require block:</span></a></span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'><a href="https://packagist.org/packages/toin0u/digitalocean"
+target="_blank"><span style='color:black;text-decoration:none'>&quot;require&quot;: {</span></a></span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'><a
+href="https://packagist.org/packages/toin0u/digitalocean" target="_blank"><span
+style='color:black;text-decoration:none'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;toin0u/digitalocean&quot;: &quot;1.2.1&quot;,</span></a></span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'><a
+href="https://packagist.org/packages/toin0u/digitalocean" target="_blank"><span
+style='color:black;text-decoration:none'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;acme/foo&quot;: &quot;1.0&quot;</span></a></span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'><a
+href="https://packagist.org/packages/toin0u/digitalocean" target="_blank"><span
+style='color:black;text-decoration:none'>}</span></a></span></pre>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'><a
+href="https://packagist.org/packages/toin0u/digitalocean" target="_blank"><span
+style='color:black;text-decoration:none'>OK, so now that your project has
+specified its dependencies, you need to run a command for Composer to fetch and
+install them to your project:</span></a></span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'><a href="https://packagist.org/packages/toin0u/digitalocean"
+target="_blank"><span style='color:black;text-decoration:none'>php composer.phar install</span></a></span></pre>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'><a
+href="https://packagist.org/packages/toin0u/digitalocean" target="_blank"><span
+style='color:black;text-decoration:none'>This will find the latest version of
+the package that matches the number we specified and download it into a folder
+called<span class=apple-converted-space>&nbsp;</span><strong style='box-sizing: border-box'><span
+style='font-family:"Arial","sans-serif"'>/vendor</span></strong><span
+class=apple-converted-space>&nbsp;</span>right there in your project. In our
+example, we will now find the library in the<strong style='box-sizing: border-box'><span
+style='font-family:"Arial","sans-serif"'>vendor/toin0u/digitalocean</span></strong><span
+class=apple-converted-space>&nbsp;</span>folder. Additionally, Composer creates
+a<span class=apple-converted-space>&nbsp;</span><strong style='box-sizing: border-box'><span
+style='font-family:"Arial","sans-serif"'>composer.lock</span></strong><span
+class=apple-converted-space>&nbsp;</span>file in which it specifies the exact
+versions of the packages it installed and locks the project to those versions.</span></a></span></p>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'><a
+href="https://packagist.org/packages/toin0u/digitalocean" target="_blank"><span
+style='color:black;text-decoration:none'>The purpose of the<span
+class=apple-converted-space>&nbsp;</span><em style='box-sizing: border-box'><span
+style='font-family:"Arial","sans-serif"'>.lock</span></em><span
+class=apple-converted-space>&nbsp;</span>file is to restrict Composer from
+installing other versions to your project. So when you run the install command,
+Composer will first check for this file and will install what’s specified in it
+rather than what the<span class=apple-converted-space>&nbsp;</span><em
+style='box-sizing: border-box'><span style='font-family:"Arial","sans-serif"'>.json</span></em><span
+class=apple-converted-space>&nbsp;</span>file tells it to. This is great
+because if your dependencies are rather strict and other people need to deploy
+your projects, you can rest assured that the exact same version of the library
+is being used.</span></a></span></p>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'><a
+href="https://packagist.org/packages/toin0u/digitalocean" target="_blank"><span
+style='color:black;text-decoration:none'>And as we’ve seen, if there is no<span
+class=apple-converted-space>&nbsp;</span><em style='box-sizing: border-box'><span
+style='font-family:"Arial","sans-serif"'>.lock</span></em><span
+class=apple-converted-space>&nbsp;</span>file, Composer will create one based on
+the dependencies it installed from the<span class=apple-converted-space>&nbsp;</span><em
+style='box-sizing: border-box'><span style='font-family:"Arial","sans-serif"'>.json</span></em><span
+class=apple-converted-space>&nbsp;</span>file. But if you do indeed want to
+overwrite the<span class=apple-converted-space>&nbsp;</span><em
+style='box-sizing: border-box'><span style='font-family:"Arial","sans-serif"'>.lock</span></em><span
+class=apple-converted-space>&nbsp;</span>file and upgrade the dependent
+libraries to newer versions, you can run the following command:</span></a></span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'><a href="https://packagist.org/packages/toin0u/digitalocean"
+target="_blank"><span style='color:black;text-decoration:none'>php composer.phar update</span></a></span></pre>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'><a
+href="https://packagist.org/packages/toin0u/digitalocean" target="_blank"><span
+style='color:black;text-decoration:none'>This will get the latest stable
+versions of the dependent libraries that match the criteria in the<strong
+style='box-sizing: border-box'><span style='font-family:"Arial","sans-serif"'>composer.json</span></strong><span
+class=apple-converted-space>&nbsp;</span>file and overwrite the<span
+class=apple-converted-space>&nbsp;</span><strong style='box-sizing: border-box'><span
+style='font-family:"Arial","sans-serif"'>composer.lock</span></strong><span
+class=apple-converted-space>&nbsp;</span>file with the new dependencies. If you
+only want a particular library to get updated (which very well is probably true
+in most cases) you can run the<span class=apple-converted-space>&nbsp;</span><em
+style='box-sizing: border-box'><span style='font-family:"Arial","sans-serif"'>update</span></em>command
+and pass the packages you need updated as options in the following format:</span></a></span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'><a href="https://packagist.org/packages/toin0u/digitalocean"
+target="_blank"><span style='color:black;text-decoration:none'>php composer.phar update vendor/package vendor/package2</span></a></span></pre>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'><a
+href="https://packagist.org/packages/toin0u/digitalocean" target="_blank"><span
+style='color:black;text-decoration:none'>Or you can use wildcards to update all
+the packages from a specific vendor:</span></a></span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'><a href="https://packagist.org/packages/toin0u/digitalocean"
+target="_blank"><span style='color:black;text-decoration:none'>php composer.phar update vendor/*</span></a></span></pre>
+
+<h2 style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;margin-left:
+0cm;background:white;box-sizing: border-box'><span lang=EN-US style='font-size:
+21.0pt;font-family:"Arial","sans-serif";color:#2D2D2D;letter-spacing:.15pt;
+font-weight:normal'><a href="https://packagist.org/packages/toin0u/digitalocean"
+target="_blank"><span style='color:#2D2D2D;text-decoration:none'>Autoloading</span></a></span></h2>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'><a
+href="https://packagist.org/packages/toin0u/digitalocean" target="_blank"><span
+style='color:black;text-decoration:none'>Another cool thing about Composer is
+its autoloading feature. For those libraries that provide autoloading
+information, Composer automatically generates an<span
+class=apple-converted-space>&nbsp;</span><strong style='box-sizing: border-box'><span
+style='font-family:"Arial","sans-serif"'>autoload.php</span></strong><span
+class=apple-converted-space>&nbsp;</span>file directly in the<span
+class=apple-converted-space>&nbsp;</span><strong style='box-sizing: border-box'><span
+style='font-family:"Arial","sans-serif"'>/vendor</span></strong><span
+class=apple-converted-space>&nbsp;</span>folder that you can include in your
+project. Then you can directly start using the classes from those libraries. In
+your PHP project, you can just specify this:</span></a></span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'><a href="https://packagist.org/packages/toin0u/digitalocean"
+target="_blank"><span style='color:black;text-decoration:none'>require ‘vendor/autoload.php’;</span></a></span></pre>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'><a
+href="https://packagist.org/packages/toin0u/digitalocean" target="_blank"><span
+style='color:black;text-decoration:none'>And you are good to go.</span></a></span></p>
+
+<h2 style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;margin-left:
+0cm;background:white;box-sizing: border-box'><span lang=EN-US style='font-size:
+21.0pt;font-family:"Arial","sans-serif";color:#2D2D2D;letter-spacing:.15pt;
+font-weight:normal'><a href="https://packagist.org/packages/toin0u/digitalocean"
+target="_blank"><span style='color:#2D2D2D;text-decoration:none'>Conclusion</span></a></span></h2>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'><a
+href="https://packagist.org/packages/toin0u/digitalocean" target="_blank"><span
+style='color:black;text-decoration:none'>Composer is a widely used tool in the
+world of PHP. There are many projects and frameworks out there that use
+Composer to manage and install their packages and dependencies. So getting
+familiar with how it works is quite important.</span></a></span></p>
+
+</div>
+
+</body>
+
+</html>

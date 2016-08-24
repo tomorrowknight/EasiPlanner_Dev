@@ -1,0 +1,10 @@
+body{
+	font-size:14px;
+	line-height:28px;
+	font-family: "Microsoft yahei","Microsoft JhengHei" !important; 
+}
+
+img {
+	max-width: 100% !important;
+	margin: 8px 0;
+}

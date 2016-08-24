@@ -1,0 +1,63 @@
+<?php
+
+namespace app\models;
+
+use Yii;
+
+/**
+ * This is the model class for table "driver".
+ *
+ * @property integer $id
+ * @property string $username
+ * @property string $password
+ * @property double $lat
+ * @property double $lng
+ */
+class Driver extends BelongToUser
+{
+	/**
+	 * @inheritdoc
+	 */
+	public static function tableName()
+	{
+		return 'driver';
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function rules()
+	{
+		return [
+		[['username', 'password'], 'required'],
+		[['lat', 'lng'], 'number'],
+		[['username', 'password','licence'], 'string', 'max' => 100]
+		];
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function attributeLabels()
+	{
+		return [
+		'id' => 'ID',
+		'username' => 'Username',
+		'password' => 'Password',
+		'lat' => 'Lat',
+		'lng' => 'Lng',
+		];
+	}
+
+	public function getVehicle()
+	{
+		return $this->hasOne(Vehicle::className(), ['driver_id' => 'id']);
+	}
+
+	public function free(){
+		if (!empty($this->vehicle)){
+			$this->vehicle->driver_id = null;
+			$this->vehicle->save();
+		}
+	}
+}

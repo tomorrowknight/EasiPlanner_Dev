@@ -1,0 +1,26 @@
+<?php
+
+namespace app\commands;
+
+use app\models\Parcel;
+use yii\helpers\Url;
+use chief725\libs\Log;
+use Yii;
+use yii\console\Controller;
+use chief725\libs\__;
+
+class TestController extends Controller {
+	public function actionMatrix($limit = 100) {
+		$parcels = Parcel::find ()->where ( [
+				"user_id" => 8
+		] )->limit ( $limit )->all ();
+		$locs = array_map ( function ($parcel) {
+			return "loc={$parcel->lat},{$parcel->lng}";
+		}, $parcels );
+		$url = "http://www.logistics.lol:5000/table?".join ( "&", $locs );
+		Log::info($url);
+		$response = file_get_contents($url);
+		Log::info($response);
+		#print_r(json_decode($response));
+	}
+}

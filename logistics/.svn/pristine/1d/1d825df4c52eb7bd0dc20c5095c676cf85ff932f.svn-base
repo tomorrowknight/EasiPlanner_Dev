@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+	    <meta charset="UTF-8"/>
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <title>Logistics route Tesing</title>
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+		<script src='http://code.jquery.com/jquery-2.1.4.js'></script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js'></script>
+		<script src='route.js'></script>
+	</head>
+	<body>
+		<div class='container'>
+			<table id='routes' class='table table-striped table-bordered'>
+				<tr><th>ID</th><th>window_start</th><th>window_end</th><th>service time</th><th>planned_deliver_time</th></tr>
+			</table>
+			<script type='text/html' id='parcelTemp'>
+				<tr>
+				<td><%=id%></td>
+				<td><%=window_start%></td>
+				<td><%=window_end%></td>
+				<td><%=service_time%></td>
+				<td><%= new Date(planned_deliver_time*60000) %></td>
+				</tr>
+			</script>
+		</div>
+	</body>
+	<script>
+		$.getJSON("input.json",function(parcels){
+			var routes = route(parcels,null,null);	
+			console.log(routes);
+			_.each(routes,function(route){
+				_.each(route.parcels,function(parcel){
+						$("#routes tbody").append(_.template($("#parcelTemp").html())(parcel));	
+				});
+			});
+		});
+	</script>
+</html>

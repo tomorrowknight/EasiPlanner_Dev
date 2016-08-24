@@ -1,0 +1,34 @@
+<?php
+namespace chief725\libs;
+
+class Log{
+	public static $level = "INFO";
+	private static $levels = ['DEBUG'=>0,"INFO"=>1,"WARN"=>2,"ERROR"=>3];
+
+	public static function debug($msg){
+		self::say("DEBUG", $msg);
+	}
+
+	public static function info($msg){
+		self::say("INFO", $msg);
+	}
+
+	public static function warn($msg){
+		self::say("WARN", $msg);
+	}
+
+	public static function error($msg){
+		self::say("ERROR", $msg);
+	}
+
+	private static function say($type,$msg){
+		if (self::$levels[self::$level] <= self::$levels[$type]){
+			$timestamp = date("H:i:s");
+			echo "$timestamp - $type: $msg\n";
+			if (isset ( $_SERVER ['HTTP_HOST'] )) {
+				echo "<br/>";
+			}
+		}
+	}
+}
+?>

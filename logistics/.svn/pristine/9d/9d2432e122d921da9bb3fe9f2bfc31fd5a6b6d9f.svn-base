@@ -1,0 +1,95 @@
+<?php
+
+namespace app\models;
+
+use chief725\libs\GoogleMap;
+
+use amnah\yii2\user\models\Profile;
+
+use Yii;
+
+/**
+ * This is the model class for table "profile".
+ *
+ * @property integer $id
+ * @property integer $user_id
+ * @property string $create_time
+ * @property string $update_time
+ * @property string $full_name
+ * @property string $address
+ * @property string $postal
+ * @property string $phone
+ * @property double $lat
+ * @property double $lng
+ */
+class MyProfile extends Profile
+{
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return 'profile';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['address', 'postal', 'phone'], 'safe'],
+            [['user_id'], 'integer'],
+            [['lat','lng','create_time', 'update_time'], 'safe'],
+            [['lat', 'lng'], 'number'],
+            [['full_name'], 'string', 'max' => 255],
+            [['address'], 'string', 'max' => 200],
+            [['postal', 'phone'], 'string', 'max' => 100]
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'user_id' => 'User ID',
+            'create_time' => 'Create Time',
+            'update_time' => 'Update Time',
+            'full_name' => 'Full Name',
+            'address' => 'Address',
+            'postal' => 'Postal',
+            'phone' => 'Phone',
+            'lat' => 'Lat',
+            'lng' => 'Lng',
+        ];
+    }
+    
+	public function beforeSave($insert)
+	{
+		if (parent::beforeSave($insert)) {
+			self::updateLatLng(true);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function updateLatLng($forceUpdate=false){
+		if (empty($this->lat) && !empty($this->postal)){
+			$geocode = Geocode::findGeocode($this->postal);
+			if (empty($geocode) && $forceUpdate){
+				$latlng = (new GoogleMap())->getLatLng("sg $this->postal",'sg');
+				Yii::$app->cache->set($this->postal, $latlng, 3600*24*180);
+				Geocode::updateGeocode($this->postal, $latlng['lat'], $latlng['lng']);
+				$geocode = Geocode::findGeocode($this->postal);
+			}
+			if (!empty($geocode)){
+				$this->lat = $geocode->lat;
+				$this->lng = $geocode->lng;
+			}
+		}
+	}
+}

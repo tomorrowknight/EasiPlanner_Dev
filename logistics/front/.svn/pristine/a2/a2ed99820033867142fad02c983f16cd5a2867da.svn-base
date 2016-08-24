@@ -1,0 +1,492 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=gb2312">
+<meta name=Generator content="Microsoft Word 12 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:宋体;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:"\@宋体";
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:10.5pt;
+	font-family:"Calibri","sans-serif";}
+h1
+	{mso-style-link:"Heading 1 Char";
+	margin-top:17.0pt;
+	margin-right:0cm;
+	margin-bottom:16.5pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:240%;
+	page-break-after:avoid;
+	font-size:22.0pt;
+	font-family:"Calibri","sans-serif";
+	font-weight:bold;}
+h2
+	{mso-style-link:"Heading 2 Char";
+	margin-right:0cm;
+	margin-left:0cm;
+	font-size:18.0pt;
+	font-family:宋体;
+	font-weight:bold;}
+h3
+	{mso-style-link:"Heading 3 Char";
+	margin-right:0cm;
+	margin-left:0cm;
+	font-size:13.5pt;
+	font-family:宋体;
+	font-weight:bold;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;}
+p
+	{margin-right:0cm;
+	margin-left:0cm;
+	font-size:12.0pt;
+	font-family:宋体;}
+pre
+	{mso-style-link:"HTML Preformatted Char";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:宋体;}
+span.Heading1Char
+	{mso-style-name:"Heading 1 Char";
+	mso-style-link:"Heading 1";
+	font-family:"Calibri","sans-serif";
+	font-weight:bold;}
+span.Heading2Char
+	{mso-style-name:"Heading 2 Char";
+	mso-style-link:"Heading 2";
+	font-family:宋体;
+	font-weight:bold;}
+span.Heading3Char
+	{mso-style-name:"Heading 3 Char";
+	mso-style-link:"Heading 3";
+	font-family:宋体;
+	font-weight:bold;}
+span.HTMLPreformattedChar
+	{mso-style-name:"HTML Preformatted Char";
+	mso-style-link:"HTML Preformatted";
+	font-family:宋体;}
+p.msochpdefault, li.msochpdefault, div.msochpdefault
+	{mso-style-name:msochpdefault;
+	margin-right:0cm;
+	margin-left:0cm;
+	font-size:10.0pt;
+	font-family:宋体;}
+span.apple-converted-space
+	{mso-style-name:apple-converted-space;}
+span.meta-section
+	{mso-style-name:meta-section;}
+span.tutorial-date
+	{mso-style-name:tutorial-date;}
+.MsoChpDefault
+	{font-size:10.0pt;}
+@page Section1
+	{size:595.3pt 841.9pt;
+	margin:72.0pt 90.0pt 72.0pt 90.0pt;
+	layout-grid:15.6pt;}
+div.Section1
+	{page:Section1;}
+-->
+</style>
+
+</head>
+
+<body lang=ZH-CN link=blue vlink=purple style='text-justify-trim:punctuation'>
+
+<div class=Section1 style='layout-grid:15.6pt'>
+
+<h1 style='margin-top:0cm;margin-right:0cm;margin-bottom:7.5pt;margin-left:
+0cm;background:white'><span lang=EN-US style='font-size:30.0pt;line-height:
+240%;font-family:"Arial","sans-serif";color:#2D2D2D;font-weight:normal'>How To
+Install Linux, nginx, MySQL, PHP (LEMP)&nbsp; </span></h1>
+
+<p class=MsoNormal style='line-height:22.5pt;background:white'><span
+class=tutorial-date><span lang=EN-US style='font-family:"Arial","sans-serif";
+color:#B5B5B5'>&nbsp;</span></span></p>
+
+<h3 style='margin-top:10.5pt;margin-right:0cm;margin-bottom:8.25pt;margin-left:
+0cm;background:white;box-sizing: border-box'><span lang=EN-US style='font-size:
+16.5pt;font-family:"Arial","sans-serif";color:#2D2D2D;letter-spacing:-.4pt'>About
+Lemp</span></h3>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>LEMP stack is a
+group of open source software to get web servers up and running. The acronym
+stands for Linux, nginx (pronounced Engine x), MySQL, and PHP. Since the server
+is already running Ubuntu, the linux part is taken care of. Here is how to
+install the rest.</span></p>
+
+<h2 style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;margin-left:
+0cm;background:white;box-sizing: border-box'><span lang=EN-US style='font-size:
+21.0pt;font-family:"Arial","sans-serif";color:#2D2D2D;letter-spacing:.15pt;
+font-weight:normal'>Setup</span></h2>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>The steps in
+this tutorial require the user to have root privileges. You can see how to set
+that up in the<a
+href="https://www.digitalocean.com/community/articles/initial-server-setup-with-ubuntu-12-04"
+style='box-sizing: border-box'><span style='color:black'>Initial Server Setup
+Tutorial</span></a><span class=apple-converted-space>&nbsp;</span>in steps 3
+and 4.</span></p>
+
+<h2 style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;margin-left:
+0cm;background:white;box-sizing: border-box'><span lang=EN-US style='font-size:
+21.0pt;font-family:"Arial","sans-serif";color:#2D2D2D;letter-spacing:.15pt;
+font-weight:normal'>Step One - Update Apt-Get</span></h2>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>Throughout this
+tutorial we will be using apt-get as an installer for all the server programs.
+On May 8th, 2012, a serious php vulnerability was discovered, and it is
+important that we download all of the latest patched software to protect the
+virtual private server.</span></p>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>Let's do a
+thorough update.</span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>sudo apt-get update</span></pre>
+
+<h2 style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;margin-left:
+0cm;background:white;box-sizing: border-box'><span lang=EN-US style='font-size:
+21.0pt;font-family:"Arial","sans-serif";color:#2D2D2D;letter-spacing:.15pt;
+font-weight:normal'>Step Two - Install MySQL</span></h2>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>MySQL is a
+powerful database management system used for organizing and retrieving data</span></p>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>To install
+MySQL, open terminal and type in these commands:</span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>sudo apt-get install mysql-server php5-mysql</span></pre>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>During the
+installation, MySQL will ask you to set a root password. If you miss the chance
+to set the password while the program is installing, it is very easy to set the
+password later from within the MySQL shell.</span></p>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white'><span lang=EN-US style='font-family:
+"Arial","sans-serif";color:black'>Once you're done with that you can finish up
+by installing PHP.</span></p>
+
+<h2 style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;margin-left:
+0cm;background:white;box-sizing: border-box'><span lang=EN-US style='font-size:
+21.0pt;font-family:"Arial","sans-serif";color:#2D2D2D;letter-spacing:.15pt;
+font-weight:normal'>Step Three - Install nginx</span></h2>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>Once MySQL is
+all set up, we can move on to installing nginx on the VPS.</span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>echo &quot;deb http://ppa.launchpad.net/nginx/stable/ubuntu $(lsb_release -sc) main&quot; | sudo tee /etc/apt/sources.list.d/nginx-stable.list</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C300EE8C</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>sudo apt-get update</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>sudo apt-get install nginx</span></pre>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>nginx does not
+start on its own. To get nginx running, type:</span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>sudo service nginx start</span></pre>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>You can confirm
+that nginx has installed an your web server by directing your browser to your
+IP address.</span></p>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>You can run the
+following command to reveal your VPS's IP address.</span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>ifconfig eth0 | grep inet | awk '{ print $2 }'</span></pre>
+
+<h2 style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;margin-left:
+0cm;background:white;box-sizing: border-box'><span lang=EN-US style='font-size:
+21.0pt;font-family:"Arial","sans-serif";color:#2D2D2D;letter-spacing:.15pt;
+font-weight:normal'>Step Four - Install PHP</span></h2>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>To install
+PHP-FPM, open terminal and type in these commands. We will configure the
+details of nginx and php details in the next step:</span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>sudo apt-get install php5-fpm</span></pre>
+
+<h2 style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;margin-left:
+0cm;background:white;box-sizing: border-box'><span lang=EN-US style='font-size:
+21.0pt;font-family:"Arial","sans-serif";color:#2D2D2D;letter-spacing:.15pt;
+font-weight:normal'>Step Five - Configure php</span></h2>
+
+<p class=MsoNormal style='background:white'><span lang=EN-US style='font-size:
+14.5pt;font-family:"Arial","sans-serif";color:black'>We need to make one small
+change in the php configuration.Open up php.ini:</span></p>
+
+<pre style='margin-top:21.0pt;margin-right:0cm;margin-bottom:21.0pt;margin-left:
+0cm;background:white'><span lang=EN-US style='font-size:10.5pt;font-family:
+"Courier New";color:black'>&nbsp;sudo nano /etc/php5/fpm/php.ini</span></pre>
+
+<p class=MsoNormal style='background:white'><span lang=EN-US style='font-size:
+14.5pt;font-family:"Arial","sans-serif";color:black'>Find the line,
+cgi.fix_pathinfo=1, and change the 1 to 0.</span></p>
+
+<pre style='margin-top:21.0pt;margin-right:0cm;margin-bottom:21.0pt;margin-left:
+0cm;background:white'><span lang=EN-US style='font-size:10.5pt;font-family:
+"Courier New";color:black'>cgi.fix_pathinfo=0</span></pre>
+
+<p class=MsoNormal style='background:white'><span lang=EN-US style='font-size:
+14.5pt;font-family:"Arial","sans-serif";color:black'>If this number is kept as
+1, the php interpreter will do its best to process the file that is as near to
+the requested file as possible. This is a possible security risk. If this
+number is set to 0, conversely, the interpreter will only process the exact
+file path - a much safer alternative. Save and Exit. We need to make another
+small change in the php5-fpm configuration.Open up www.conf:</span></p>
+
+<pre style='margin-top:21.0pt;margin-right:0cm;margin-bottom:21.0pt;margin-left:
+0cm;background:white'><span lang=EN-US style='font-size:10.5pt;font-family:
+"Courier New";color:black'>&nbsp;sudo nano /etc/php5/fpm/pool.d/www.conf</span></pre>
+
+<p class=MsoNormal style='background:white'><span lang=EN-US style='font-size:
+14.5pt;font-family:"Arial","sans-serif";color:black'>Find the line, listen =
+127.0.0.1:9000, and change the 127.0.0.1:9000 to /var/run/php5-fpm.sock.</span></p>
+
+<pre style='margin-top:21.0pt;margin-right:0cm;margin-bottom:21.0pt;margin-left:
+0cm;background:white'><span lang=EN-US style='font-size:10.5pt;font-family:
+"Courier New";color:black'>listen = /var/run/php5-fpm.sock</span></pre>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>Save and Exit.</span></p>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>Restart
+php-fpm:</span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>sudo service php5-fpm restart</span></pre>
+
+<h2 style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;margin-left:
+0cm;background:white;box-sizing: border-box'><span lang=EN-US style='font-size:
+21.0pt;font-family:"Arial","sans-serif";color:#2D2D2D;letter-spacing:.15pt;
+font-weight:normal'>Step Six - Configure nginx</span></h2>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>Open up the
+default virtual host file.</span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>sudo nano /etc/nginx/sites-available/default</span></pre>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>The
+configuration should include the changes below (the details of the changes are
+under the config information):</span></p>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><strong
+style='box-sizing: border-box'><span lang=EN-US style='font-family:"Arial","sans-serif";
+color:black'>UPDATE:</span></strong><span class=apple-converted-space><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>&nbsp;</span></span><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>Newer Ubuntu
+versions create a directory called 'html' instead of 'www' by default. If
+/usr/share/nginx/www does not exist, it's probably called html. Make sure you
+update your configuration appropriately.</span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>&nbsp;[...]</span></pre><pre style='margin-bottom:21.0pt;
+background:white'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>server {</span></pre><pre style='margin-bottom:21.0pt;background:
+white'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; listen&nbsp;&nbsp; 80;</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; root /usr/share/nginx/www;</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; index index.php index.html index.htm;</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; server_name example.com;</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; location / {</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;try_files $uri $uri/ /index.html;</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; error_page 404 /404.html;</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; error_page 500 502 503 504 /50x.html;</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; location = /50x.html {</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; root /usr/share/nginx/www;</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # pass the PHP scripts to FastCGI server listening on the php-fpm socket</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; location ~ \.php$ {</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; try_files $uri =404;</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fastcgi_pass unix:/var/run/php5-fpm.sock;</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fastcgi_index index.php;</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; include fastcgi_params;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>}</span></pre><pre
+style='margin-bottom:21.0pt;background:white'><span lang=EN-US
+style='font-size:10.5pt;font-family:"Courier New";color:black'>[...]</span></pre>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>Save and Exit</span></p>
+
+<h2 style='margin-top:7.5pt;margin-right:0cm;margin-bottom:7.5pt;margin-left:
+0cm;background:white;box-sizing: border-box'><span lang=EN-US style='font-size:
+21.0pt;font-family:"Arial","sans-serif";color:#2D2D2D;letter-spacing:.15pt;
+font-weight:normal'>Step Seven - Create a php Info Page</span></h2>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>We can quickly
+see all of the details of the new php configuration.</span></p>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>To set this up,
+first create a new file:</span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>sudo nano /usr/share/nginx/www/info.php</span></pre>
+
+<p class=MsoNormal style='background:white'><span lang=EN-US style='font-size:
+14.5pt;font-family:"Arial","sans-serif";color:black'>Add in the following line:</span></p>
+
+<pre style='margin-top:21.0pt;margin-right:0cm;margin-bottom:21.0pt;margin-left:
+0cm;background:white'><span lang=EN-US style='font-size:10.5pt;font-family:
+"Courier New";color:black'>&lt;?php</span></pre><pre style='margin-top:21.0pt;
+margin-right:0cm;margin-bottom:21.0pt;margin-left:0cm;background:white'><span
+lang=EN-US style='font-size:10.5pt;font-family:"Courier New";color:black'>phpinfo();</span></pre><pre
+style='margin-top:21.0pt;margin-right:0cm;margin-bottom:21.0pt;margin-left:
+0cm;background:white'><span lang=EN-US style='font-size:10.5pt;font-family:
+"Courier New";color:black'>?&gt;</span></pre>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>Then Save and
+Exit.</span></p>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>Restart nginx</span></p>
+
+<pre style='margin-bottom:21.0pt;background:white;box-sizing: border-box;
+word-wrap: normal;border-radius: 3px;background-color:rgba(0, 0, 0, 0.0470588);
+overflow:auto'><span lang=EN-US style='font-size:10.5pt;font-family:"Courier New";
+color:black'>sudo service nginx restart</span></pre>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>You can see the
+nginx and php-fpm configuration details by visiting
+http://youripaddress/info.php</span></p>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white;box-sizing: border-box'><span
+lang=EN-US style='font-family:"Arial","sans-serif";color:black'>Your LEMP stack
+is now set up and configured on your virtual private server.</span></p>
+
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:16.5pt;margin-left:
+0cm;line-height:21.0pt;background:white'><span lang=EN-US style='font-family:
+"Arial","sans-serif";color:black'>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+</div>
+
+</body>
+
+</html>

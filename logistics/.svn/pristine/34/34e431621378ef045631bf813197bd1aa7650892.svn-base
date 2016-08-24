@@ -1,0 +1,273 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=gb2312">
+<meta name=Generator content="Microsoft Word 12 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:宋体;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:"\@宋体";
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:10.5pt;
+	font-family:"Calibri","sans-serif";}
+h1
+	{mso-style-link:"Heading 1 Char";
+	margin-top:17.0pt;
+	margin-right:0cm;
+	margin-bottom:16.5pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:240%;
+	page-break-after:avoid;
+	font-size:22.0pt;
+	font-family:"Calibri","sans-serif";
+	font-weight:bold;}
+h2
+	{mso-style-link:"Heading 2 Char";
+	margin-right:0cm;
+	margin-left:0cm;
+	font-size:18.0pt;
+	font-family:宋体;
+	font-weight:bold;}
+h3
+	{mso-style-link:"Heading 3 Char";
+	margin-right:0cm;
+	margin-left:0cm;
+	font-size:13.5pt;
+	font-family:宋体;
+	font-weight:bold;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;}
+p
+	{margin-right:0cm;
+	margin-left:0cm;
+	font-size:12.0pt;
+	font-family:宋体;}
+pre
+	{mso-style-link:"HTML Preformatted Char";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:宋体;}
+span.Heading1Char
+	{mso-style-name:"Heading 1 Char";
+	mso-style-link:"Heading 1";
+	font-family:"Calibri","sans-serif";
+	font-weight:bold;}
+span.Heading2Char
+	{mso-style-name:"Heading 2 Char";
+	mso-style-link:"Heading 2";
+	font-family:宋体;
+	font-weight:bold;}
+span.Heading3Char
+	{mso-style-name:"Heading 3 Char";
+	mso-style-link:"Heading 3";
+	font-family:宋体;
+	font-weight:bold;}
+span.HTMLPreformattedChar
+	{mso-style-name:"HTML Preformatted Char";
+	mso-style-link:"HTML Preformatted";
+	font-family:宋体;}
+span.apple-converted-space
+	{mso-style-name:apple-converted-space;}
+span.meta-section
+	{mso-style-name:meta-section;}
+span.tutorial-date
+	{mso-style-name:tutorial-date;}
+.MsoChpDefault
+	{font-size:10.0pt;}
+@page Section1
+	{size:595.3pt 841.9pt;
+	margin:72.0pt 90.0pt 72.0pt 90.0pt;
+	layout-grid:15.6pt;}
+div.Section1
+	{page:Section1;}
+-->
+</style>
+
+</head>
+
+<body lang=ZH-CN link=blue vlink=purple style='text-justify-trim:punctuation'>
+
+<div class=Section1 style='layout-grid:15.6pt'>
+
+<p class=MsoNormal><b><span lang=EN-US style='font-size:14.0pt'>Install
+Memcache</span></b></p>
+
+<p class=MsoNormal><span lang=EN-US>To start, install memcached via apt-get.</span></p>
+
+<p class=MsoNormal><span lang=EN-US>sudo apt-get install memcached</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US>The next step is to install php-pear, the
+repository that stores memcache.</span></p>
+
+<p class=MsoNormal><span lang=EN-US>sudo apt-get install php-pear</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US>If you do not have a compiler on your server,
+you can download build-essential in order to install memcache:</span></p>
+
+<p class=MsoNormal><span lang=EN-US>sudo apt-get install build-essential</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US>Finally use PECL (PHP Extension Community
+Library) to install memcache:</span></p>
+
+<p class=MsoNormal><span lang=EN-US>sudo pecl install memcache</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US>Once you have completed the installation of
+memcache with PECL on the VPS, add memcached to memcache.ini:</span></p>
+
+<p class=MsoNormal><span lang=EN-US>echo &quot;extension=memcache.so&quot; |
+sudo tee /etc/php5/conf.d/memcache.ini</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US>Configration files are loated at
+/etc/memcached.conf</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US># memcached default config file</span></p>
+
+<p class=MsoNormal><span lang=EN-US># 2003 - Jay Bonci
+&lt;jaybonci@debian.org&gt;</span></p>
+
+<p class=MsoNormal><span lang=EN-US># This configuration file is read by the
+start-memcached script provided as</span></p>
+
+<p class=MsoNormal><span lang=EN-US># part of the Debian GNU/Linux
+distribution.</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US># Run memcached as a daemon. This command
+is implied, and is not needed for the</span></p>
+
+<p class=MsoNormal><span lang=EN-US># daemon to run. See the README.Debian that
+comes with this package for more</span></p>
+
+<p class=MsoNormal><span lang=EN-US># information.</span></p>
+
+<p class=MsoNormal><span lang=EN-US>-d</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US># Log memcached's output to
+/var/log/memcached</span></p>
+
+<p class=MsoNormal><span lang=EN-US>logfile /var/log/memcached.log</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US># Be verbose</span></p>
+
+<p class=MsoNormal><span lang=EN-US># -v</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US># Be even more verbose (print client
+commands as well)</span></p>
+
+<p class=MsoNormal><span lang=EN-US># -vv</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US># Start with a cap of 64 megs of memory. It's
+reasonable, and the daemon default</span></p>
+
+<p class=MsoNormal><span lang=EN-US># Note that the daemon will grow to this
+size, but does not start out holding this much</span></p>
+
+<p class=MsoNormal><span lang=EN-US># memory</span></p>
+
+<p class=MsoNormal><span lang=EN-US>-m 1000</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US># Default connection port is 11211</span></p>
+
+<p class=MsoNormal><span lang=EN-US>-p 11211</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US># Run the daemon as root. The
+start-memcached will default to running as root if no</span></p>
+
+<p class=MsoNormal><span lang=EN-US># -u command is present in this config file</span></p>
+
+<p class=MsoNormal><span lang=EN-US>-u memcache</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US># Specify which IP address to listen on.
+The default is to listen on all IP addresses</span></p>
+
+<p class=MsoNormal><span lang=EN-US># This parameter is one of the only
+security measures that memcached has, so make sure</span></p>
+
+<p class=MsoNormal><span lang=EN-US># it's listening on a firewalled interface.</span></p>
+
+<p class=MsoNormal><span lang=EN-US>-l 127.0.0.1</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US># Limit the number of simultaneous incoming
+connections. The daemon default is 1024</span></p>
+
+<p class=MsoNormal><span lang=EN-US># -c 1024</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US># Lock down all paged memory. Consult with
+the README and homepage before you do this</span></p>
+
+<p class=MsoNormal><span lang=EN-US># -k</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US># Return error when memory is exhausted
+(rather than removing items)</span></p>
+
+<p class=MsoNormal><span lang=EN-US># -M</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US># Maximize core file limit</span></p>
+
+<p class=MsoNormal><span lang=EN-US># -r</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,45 @@
+<?php $this->beginContent('//layouts/main'); ?>
+<nav class="navbar navbar-default" role="navigation">
+	<div class="collapse navbar-collapse">
+		<?php
+		$navs = array (
+				array (
+						'label' => 'Config',
+						'url' => array (
+								'admin/config'
+						)
+				),
+				array (
+						'label' => 'Nodes',
+						'url' => array (
+								'node/admin'
+						)
+				),
+				array(
+						"label"=>"Link",
+						"url"=>array(
+								"model/index","modelClass"=>"Link"
+						)
+				),
+				array (
+						'label' => 'Refresh',
+						'url' => array (
+								'admin/refresh'
+						)
+				),
+		);
+
+		$this->widget ( 'zii.widgets.CMenu', array (
+				'items' => $navs,
+				'htmlOptions' => array (
+						"class" => 'nav navbar-nav'
+				)
+		) );
+		?>
+	</div>
+</nav>
+
+<div class='inner'>
+	<?php echo $content?>
+</div>
+<?php $this->endContent(); ?>

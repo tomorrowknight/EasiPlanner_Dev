@@ -1,0 +1,97 @@
+2015/09/24 18:06:39 [error] [exception.CDbException] exception 'CDbException' with message 'CDbConnection failed to open the DB connection: SQLSTATE[42000] [1049] Unknown database 'book'' in /home/safe/www/yii/yiilite.php:8586
+Stack trace:
+#0 /home/safe/www/yii/yiilite.php(8558): CDbConnection->open()
+#1 /home/safe/www/yii/yiilite.php(8547): CDbConnection->setActive(true)
+#2 /home/safe/www/yii/yiilite.php(1070): CDbConnection->init()
+#3 /home/safe/www/yii/caching/CDbCache.php(152): CModule->getComponent('db')
+#4 /home/safe/www/yii/caching/CDbCache.php(77): CDbCache->getDbConnection()
+#5 /home/safe/www/yii/yiilite.php(1070): CDbCache->init()
+#6 /home/safe/www/yii/yiilite.php(3071): CModule->getComponent('cache')
+#7 /home/safe/www/yii/yiilite.php(3065): CUrlManager->processRules()
+#8 /home/safe/www/yii/yiilite.php(1070): CUrlManager->init()
+#9 /home/safe/www/yii/yiilite.php(1359): CModule->getComponent('urlManager')
+#10 /home/safe/www/yii/yiilite.php(1680): CApplication->getUrlManager()
+#11 /home/safe/www/yii/yiilite.php(1202): CWebApplication->processRequest()
+#12 /home/safe/www/help/index.php(10): CApplication->run()
+#13 {main}
+REQUEST_URI=/
+---
+2015/09/24 18:06:41 [error] [exception.CDbException] exception 'CDbException' with message 'CDbConnection failed to open the DB connection: SQLSTATE[42000] [1049] Unknown database 'book'' in /home/safe/www/yii/yiilite.php:8586
+Stack trace:
+#0 /home/safe/www/yii/yiilite.php(8558): CDbConnection->open()
+#1 /home/safe/www/yii/yiilite.php(8547): CDbConnection->setActive(true)
+#2 /home/safe/www/yii/yiilite.php(1070): CDbConnection->init()
+#3 /home/safe/www/yii/caching/CDbCache.php(152): CModule->getComponent('db')
+#4 /home/safe/www/yii/caching/CDbCache.php(77): CDbCache->getDbConnection()
+#5 /home/safe/www/yii/yiilite.php(1070): CDbCache->init()
+#6 /home/safe/www/yii/yiilite.php(3071): CModule->getComponent('cache')
+#7 /home/safe/www/yii/yiilite.php(3065): CUrlManager->processRules()
+#8 /home/safe/www/yii/yiilite.php(1070): CUrlManager->init()
+#9 /home/safe/www/yii/yiilite.php(1359): CModule->getComponent('urlManager')
+#10 /home/safe/www/yii/yiilite.php(1680): CApplication->getUrlManager()
+#11 /home/safe/www/yii/yiilite.php(1202): CWebApplication->processRequest()
+#12 /home/safe/www/help/index.php(10): CApplication->run()
+#13 {main}
+REQUEST_URI=/
+---
+2015/09/24 18:09:58 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "robots.txt".' in /home/safe/www/yii/yiilite.php:1765
+Stack trace:
+#0 /home/safe/www/yii/yiilite.php(1681): CWebApplication->runController('robots.txt')
+#1 /home/safe/www/yii/yiilite.php(1202): CWebApplication->processRequest()
+#2 /home/safe/www/help/index.php(10): CApplication->run()
+#3 {main}
+REQUEST_URI=/robots.txt
+---
+2015/09/24 18:28:14 [error] [php] move_uploaded_file(/home/safe/www/help/protected/..//imgs/node/35.jpg): failed to open stream: Permission denied (/home/safe/www/yii/web/CUploadedFile.php:198)
+Stack trace:
+#0 unknown(0): NodeController->actionAdmin()
+#1 /home/safe/www/yii/yiilite.php(4121): ReflectionMethod->invokeArgs()
+#2 /home/safe/www/yii/yiilite.php(4138): CInlineAction->runWithParamsInternal()
+#3 /home/safe/www/yii/yiilite.php(3652): CInlineAction->runWithParams()
+#4 /home/safe/www/yii/yiilite.php(6895): NodeController->runAction()
+#5 /home/safe/www/yii/yiilite.php(6904): CFilterChain->run()
+#6 /home/safe/www/yii/yiilite.php(4030): CAccessControlFilter->filter()
+#7 /home/safe/www/yii/yiilite.php(6937): NodeController->filterAccessControl()
+#8 /home/safe/www/yii/yiilite.php(6892): CInlineFilter->filter()
+#9 /home/safe/www/yii/yiilite.php(3642): CFilterChain->run()
+#10 /home/safe/www/yii/yiilite.php(3627): NodeController->runActionWithFilters()
+#11 /home/safe/www/yii/yiilite.php(1761): NodeController->run()
+#12 /home/safe/www/yii/yiilite.php(1681): CWebApplication->runController()
+#13 /home/safe/www/yii/yiilite.php(1202): CWebApplication->processRequest()
+#14 /home/safe/www/help/index.php(10): CWebApplication->run()
+REQUEST_URI=/admin?id=242
+2015/09/24 18:28:54 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "imgs/default/node.jpg".' in /home/safe/www/yii/yiilite.php:1765
+Stack trace:
+#0 /home/safe/www/yii/yiilite.php(1681): CWebApplication->runController('imgs/default/no...')
+#1 /home/safe/www/yii/yiilite.php(1202): CWebApplication->processRequest()
+#2 /home/safe/www/help/index.php(10): CApplication->run()
+#3 {main}
+REQUEST_URI=/imgs/default/node.jpg
+HTTP_REFERER=http://help.logistics.lol/admin?id=242
+---
+2015/09/24 18:28:55 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "imgs/default/node.jpg".' in /home/safe/www/yii/yiilite.php:1765
+Stack trace:
+#0 /home/safe/www/yii/yiilite.php(1681): CWebApplication->runController('imgs/default/no...')
+#1 /home/safe/www/yii/yiilite.php(1202): CWebApplication->processRequest()
+#2 /home/safe/www/help/index.php(10): CApplication->run()
+#3 {main}
+REQUEST_URI=/imgs/default/node.jpg
+HTTP_REFERER=http://help.logistics.lol/admin?id=242
+---
+2015/09/25 18:15:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "imgs/node/59.jpg".' in /home/safe/www/yii/yiilite.php:1765
+Stack trace:
+#0 /home/safe/www/yii/yiilite.php(1681): CWebApplication->runController('imgs/node/59.jp...')
+#1 /home/safe/www/yii/yiilite.php(1202): CWebApplication->processRequest()
+#2 /home/safe/www/help/index.php(10): CApplication->run()
+#3 {main}
+REQUEST_URI=/imgs/node/59.jpg
+---
+2015/09/30 14:02:01 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "244.htm".' in /home/safe/www/yii/yiilite.php:1765
+Stack trace:
+#0 /home/safe/www/yii/yiilite.php(1681): CWebApplication->runController('244.htm')
+#1 /home/safe/www/yii/yiilite.php(1202): CWebApplication->processRequest()
+#2 /home/safe/www/help/index.php(10): CApplication->run()
+#3 {main}
+REQUEST_URI=/244.htm
+HTTP_REFERER=http://help.logistics.lol/249.html
+---

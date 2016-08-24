@@ -1,0 +1,194 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=gb2312">
+<meta name=Generator content="Microsoft Word 12 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:宋体;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:"\@宋体";
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:10.5pt;
+	font-family:"Calibri","sans-serif";}
+h1
+	{mso-style-link:"Heading 1 Char";
+	margin-top:17.0pt;
+	margin-right:0cm;
+	margin-bottom:16.5pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:240%;
+	page-break-after:avoid;
+	font-size:22.0pt;
+	font-family:"Calibri","sans-serif";
+	font-weight:bold;}
+h2
+	{mso-style-link:"Heading 2 Char";
+	margin-right:0cm;
+	margin-left:0cm;
+	font-size:18.0pt;
+	font-family:宋体;
+	font-weight:bold;}
+h3
+	{mso-style-link:"Heading 3 Char";
+	margin-right:0cm;
+	margin-left:0cm;
+	font-size:13.5pt;
+	font-family:宋体;
+	font-weight:bold;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;}
+p
+	{margin-right:0cm;
+	margin-left:0cm;
+	font-size:12.0pt;
+	font-family:宋体;}
+code
+	{font-family:宋体;}
+pre
+	{mso-style-link:"HTML Preformatted Char";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:宋体;}
+span.Heading1Char
+	{mso-style-name:"Heading 1 Char";
+	mso-style-link:"Heading 1";
+	font-family:"Calibri","sans-serif";
+	font-weight:bold;}
+span.Heading2Char
+	{mso-style-name:"Heading 2 Char";
+	mso-style-link:"Heading 2";
+	font-family:宋体;
+	font-weight:bold;}
+span.Heading3Char
+	{mso-style-name:"Heading 3 Char";
+	mso-style-link:"Heading 3";
+	font-family:宋体;
+	font-weight:bold;}
+span.HTMLPreformattedChar
+	{mso-style-name:"HTML Preformatted Char";
+	mso-style-link:"HTML Preformatted";
+	font-family:宋体;}
+p.msochpdefault, li.msochpdefault, div.msochpdefault
+	{mso-style-name:msochpdefault;
+	margin-right:0cm;
+	margin-left:0cm;
+	font-size:10.0pt;
+	font-family:宋体;}
+span.apple-converted-space
+	{mso-style-name:apple-converted-space;}
+span.meta-section
+	{mso-style-name:meta-section;}
+span.tutorial-date
+	{mso-style-name:tutorial-date;}
+.MsoChpDefault
+	{font-size:10.0pt;}
+@page Section1
+	{size:595.3pt 841.9pt;
+	margin:72.0pt 90.0pt 72.0pt 90.0pt;
+	layout-grid:15.6pt;}
+div.Section1
+	{page:Section1;}
+-->
+</style>
+
+</head>
+
+<body lang=ZH-CN link=blue vlink=purple style='text-justify-trim:punctuation'>
+
+<div class=Section1 style='layout-grid:15.6pt'>
+
+<p class=MsoNormal><b><span lang=EN-US style='font-size:18.0pt'>Install
+Subversion</span></b></p>
+
+<p class=MsoNormal><span lang=EN-US>Step 1</span></p>
+
+<p class=MsoNormal><span lang=EN-US>Make sure that svn is installed on your web
+host.&nbsp; Just ssh into your account and type</span></p>
+
+<p class=MsoNormal><span lang=EN-US>which svn</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US>Step 2</span></p>
+
+<p class=MsoNormal><span lang=EN-US>svnadmin create ~/myrepository</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US>Step 3</span></p>
+
+<p class=MsoNormal><span lang=EN-US>Create your SVN user: Now that your
+repository is successfully set up, you'll need to create an svn user.&nbsp;
+Simply open the svnserve.conf file in the editor of your choice:</span></p>
+
+<p class=MsoNormal><span lang=EN-US>pico ~/myrepository/conf/svnserve.conf</span></p>
+
+<p class=MsoNormal><span lang=EN-US>and add the following:</span></p>
+
+<p class=MsoNormal><span lang=EN-US>anon-access = none</span></p>
+
+<p class=MsoNormal><span lang=EN-US>auth-access = write</span></p>
+
+<p class=MsoNormal><span lang=EN-US>password-db = passwd</span></p>
+
+<p class=MsoNormal><span lang=EN-US>Now you'll need to create a password file:</span></p>
+
+<p class=MsoNormal><span lang=EN-US>pico ~/myrepository/conf/passwd</span></p>
+
+<p class=MsoNormal><span lang=EN-US>Add a line in that file for your user in
+the format =</span></p>
+
+<p class=MsoNormal><span lang=EN-US>exampleuser = examplepassword</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US>Step 4</span></p>
+
+<p class=MsoNormal><span lang=EN-US>Run the svn server as daemon:</span></p>
+
+<p class=MsoNormal><span lang=EN-US>svnserve -d</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US>Step 6</span></p>
+
+<p class=MsoNormal><span lang=EN-US>Check out your repository onto your local
+machine: Back on your local machine, go to where you keep your nerd
+stuff.&nbsp; In my case it's in ~/workspace.&nbsp; Then use the svn co command
+to check out a copy of your project.</span></p>
+
+<p class=MsoNormal><span lang=EN-US>cd ~/workspace</span></p>
+
+<p class=MsoNormal><span lang=EN-US>svn co svn://username@hostname/path to
+repository/myrepository/d6</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+</div>
+
+</body>
+
+</html>

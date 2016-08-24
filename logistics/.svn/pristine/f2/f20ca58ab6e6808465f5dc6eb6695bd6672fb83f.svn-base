@@ -1,0 +1,92 @@
+<?php
+
+namespace app\models;
+
+use Yii;
+
+/**
+ * This is the model class for table "horizon".
+ *
+ * @property integer $id
+ * @property integer $user_id
+ * @property integer $start
+ * @property integer $end
+ */
+class Horizon extends BelongToUser {
+	/**
+	 * @inheritdoc
+	 */
+	public static function tableName() {
+		return 'horizon';
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function rules() {
+		return [
+				[
+						[
+								'start',
+								'end'
+						],
+						'required'
+				],
+				[
+						[
+								'user_id',
+								'start',
+								'end'
+						],
+						'integer'
+				],
+				[
+						[
+								'start',
+								'end'
+						],
+						'validateHorizon'
+				]
+		];
+	}
+	public function validateHorizon($attribute, $param) {
+		if ($this->start < 0 || $this->end > 24) {
+			$this->addError ( $attribute, 'Hour is out of bounds!' );
+		}
+		if ($this->start >= $this->end) {
+			$this->addError ( $attribute, 'Start hour must less than end hour!' );
+		}
+		$horizons = Horizon::find ()->where ( [
+				'user_id' => Yii::$app->user->id
+		] );
+		if (! $this->isNewRecord)
+			$horizons = $horizons->andWhere ( [
+					"!=",
+					"id",
+					$this->id
+			] );
+		foreach ( $horizons->each () as $horizon ) {
+			if ($this->conflict ( $horizon )) {
+				$this->addError ( $attribute, 'Horizon conflicted!' );
+			}
+		}
+	}
+	private function conflict($horizon) {
+		return $this->cover ( $horizon->start ) || $this->cover ( $horizon->end ) || $horizon->cover ( $this->start ) || $horizon->cover ( $this->end );
+	}
+	private function cover($hour) {
+		return $this->start < $hour && $this->end > $hour;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function attributeLabels() {
+		return [
+				'id' => 'ID',
+				'user_id' => 'User ID',
+				'start' => 'Start',
+				'end' => 'End'
+		];
+	}
+}

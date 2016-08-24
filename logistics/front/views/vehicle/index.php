@@ -1,0 +1,86 @@
+<?php
+use yii\helpers\Html;
+use yii\grid\GridView;
+use yii\db\ActiveRecord;
+use yii\bootstrap\ActiveForm;
+use app\models\VehicleType;
+
+/* @var $this yii\web\View */
+/* @var $dataProvider yii\data\ActiveDataProvider */
+
+$this->title = 'Vehicles';
+$this->params ['breadcrumbs'] [] = $this->title;
+?>
+<div class="vehicle-index">
+
+	<h1><?= Html::encode($this->title) ?></h1>
+
+	<p>
+        <?= Html::a('Create Vehicle', ['create'], ['class' => 'btn btn-success'])?>
+    </p>
+
+    <?
+
+				echo GridView::widget ( [
+						'dataProvider' => $dataProvider,
+						'columns' => [
+								[
+										'class' => 'yii\grid\SerialColumn'
+								],
+								'name',
+								[
+										'attribute' => 'driver',
+										'label' => 'Driver',
+										'value' => 'driver.username'
+								],
+								'capacity_volume',
+								'capacity_weight',
+
+								[
+										'label' => 'Flag',
+										'format' => 'raw',
+										'attribute' => 'flag',
+										'value' => function ($model) {
+											$labelClass = ! $model->flag ? "danger" : "success";
+											return Html::tag ( 'label', ! $model->flag ? "Inactive" : "Active", [
+													'class' => "label label-$labelClass"
+											] );
+										}
+								],
+								[
+										'label' => 'Parcles',
+										'format' => 'raw',
+										'value' => function ($model) {
+											return Html::a ( "Parcels", [
+													'vehicle/parcels',
+													"id" => $model->id
+											] );
+										}
+								],
+								[
+										'label' => 'Types',
+										'format' => 'raw',
+										'value' => function ($model) {
+											return VehicleType::getTexts($model->types);
+										}
+								],
+								[
+										'class' => 'yii\grid\ActionColumn'
+								]
+						]
+				] );
+				?>
+
+</div>
+
+<?php $form = ActiveForm::begin(['action'=>["vehicle/batch-update"],'method'=>'post']); ?>
+<div class='form-group'>
+	<label>Set Capacity Volume</label> <input name='capacity_volume'
+		class='form-control'>
+</div>
+<div class='form-group'>
+	<label>Set Capacity Weight</label> <input name='capacity_weight'
+		class='form-control'>
+</div>
+<input type='submit' class='btn btn-primary' value='Batch Set'>
+<?php ActiveForm::end(); ?>

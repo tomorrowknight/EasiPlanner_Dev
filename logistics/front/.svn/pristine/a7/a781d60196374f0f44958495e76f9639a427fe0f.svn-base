@@ -1,0 +1,142 @@
+<?php
+
+namespace app\commands;
+
+use app\models\Vehicle;
+use app\models\Geocode;
+use app\models\Parcel;
+use yii\helpers\Url;
+use chief725\libs\Log;
+use Yii;
+use yii\console\Controller;
+use yii\base\Object;
+use amnah\yii2\user\models\User;
+use amnah\yii2\user\models\Role;
+use amnah\yii2\user\models\UserKey;
+use amnah\yii2\user\models\UserAuth;
+use amnah\yii2\user\models\Profile;
+use app\models\Driver;
+use app\models\MyUser;
+
+class DevController extends Controller {
+	public function actionPopulate($user_id) {
+		Log::info ( "Start" );
+
+		$domains = json_decode ( file_get_contents ( "http://ditu.sg/infos/5.json" ), true );
+		foreach ( $domains as $domain => $infos ) {
+			foreach ( $infos as $info ) {
+				$parcel = new Parcel ();
+				$parcel->user_id = $user_id;
+				$parcel->identifier = $user_id . $info ['id'];
+				$parcel->phone = $info ['phone'];
+				$parcel->lat = $info ['lat'];
+				$parcel->lng = $info ['lng'];
+				$parcel->postal = ( string ) rand ( 100000, 999999 );
+				$parcel->address = "Singapore $parcel->postal";
+				$parcel->customer_name = "Customer $parcel->phone";
+				$parcel->volume = rand ( 1, 100 ) / 100;
+				$parcel->weight = rand ( 1, 100 ) / 100;
+				$parcel->service_time = rand ( 1, 3 ) * 10;
+
+				if ($parcel->save ()) {
+					Log::info ( "Insert parcel at $parcel->lat, $parcel->lng" );
+				} else {
+					print_r ( $parcel->getErrors () );
+					exit ();
+				}
+			}
+		}
+		$this->actionAddWindow ();
+	}
+	public function actionAddVehicles($user_id, $start, $num_vehicles, $volume, $weight) {
+		foreach ( range ( $start, $start - 1 + $num_vehicles ) as $index ) {
+			$vehicle = new Vehicle ();
+			$vehicle->user_id = $user_id;
+			$vehicle->capacity_volume = $volume;
+			$vehicle->capacity_weight = $weight;
+			$vehicle->name = "Vehicle $index";
+			$vehicle->save ( false );
+			Log::info ( "Creating $vehicle->name" );
+		}
+	}
+	public function actionAddDrivers($user_id, $num) {
+		foreach ( range ( 1, $num ) as $i ) {
+			$driver = new Driver ();
+			$driver->user_id = $user_id;
+			$driver->username = "driver$i";
+			$driver->password = 'test';
+			$driver->licence = "2A";
+			$driver->save ( false );
+			Log::info ( "Creating driver $i" );
+		}
+	}
+	public function actionFix() {
+		$parcels = Parcel::find ()->where ( [
+				'failed' => 1
+		] )->all ();
+		Log::info ( "Count: " . count ( $parcels ) );
+		foreach ( $parcels as $parcel ) {
+			Log::info ( $parcel->postal );
+			$latlng = Geocode::guessGeocode ( $parcel->postal );
+			if (! empty ( $latlng )) {
+				Log::info ( "{$latlng['lat']}-{$latlng['lng']}" );
+				$parcel->lat = $latlng ['lat'];
+				$parcel->lng = $latlng ['lng'];
+				$parcel->save ();
+			} else {
+				Log::info ( "Failed" );
+			}
+		}
+	}
+	public function actionCreateUsers($num) {
+		$this->actionCleanUsers ();
+		foreach ( range ( 1, $num ) as $i ) {
+			$username = "test$i";
+			Log::info ( "Creating user $username" );
+			MyUser::createUser("$username@gmail.com", "111", Role::ROLE_USER);
+			$this->actionAddDrivers ( $user->id, 20 );
+			$this->actionAddVehicles ( $user->id, 1, 20, 10, 10 );
+		}
+	}
+	public function actionCleanUsers() {
+		$users = User::find ()->where ( [
+				'like',
+				"email",
+				"test"
+		] )->all ();
+		foreach ( $users as $user ) {
+			Log::info ( "Deleting $user->email" );
+			$profile = $user->profile;
+			UserKey::deleteAll ( [
+					'user_id' => $user->id
+			] );
+			UserAuth::deleteAll ( [
+					'user_id' => $user->id
+			] );
+			Log::info ( "deleting drivers" );
+			Driver::deleteAll ( [
+					'user_id' => $user->id
+			] );
+			Log::info ( "deleting vehicles" );
+			Vehicle::deleteAll ( [
+					'user_id' => $user->id
+			] );
+			Log::info ( "deleting parcels" );
+			Parcel::deleteAll ( [
+					'user_id' => $user->id
+			] );
+			if (! empty ( $profile ))
+				$profile->delete ();
+			$user->delete ();
+		}
+	}
+
+	public function actionImportGeocodes() {
+		$csv = new \parseCSV ();
+		$csv->parse ( Yii::getAlias("@webroot/geocodes.csv"));
+		foreach ( $csv->data as $d ) {
+			Geocode::updateGeocode($d['postal'], $d['lat'], $d['lng']);
+			Log::info($d['postal']);
+		}
+	}
+}

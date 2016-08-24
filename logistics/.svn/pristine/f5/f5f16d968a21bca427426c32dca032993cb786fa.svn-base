@@ -1,0 +1,293 @@
+//variables
+Spinner.prototype.show = function() {
+	this.spin(document.getElementById("map_canvas"));
+};
+var spinner = new Spinner();
+var site = new Site();
+var map;
+var markers = [];
+var vehicles = [];
+var depotMarker;
+var profile;
+var overlays = [];
+var drawingManager;
+
+// functions
+function initialize() {
+	var myOptions = {
+		zoom : parseInt(12),
+		center : new google.maps.LatLng(1.34, 103.82),
+		zoomControl : false
+	};
+	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+	drawingManager = new google.maps.drawing.DrawingManager({
+		drawingControl : true,
+		drawingControlOptions : {
+			position : google.maps.ControlPosition.LEFT_TOP,
+			drawingModes : [google.maps.drawing.OverlayType.RECTANGLE, google.maps.drawing.OverlayType.MARKER]
+		}
+	});
+	drawingManager.setMap(map);
+	google.maps.event.addListener(drawingManager, 'overlaycomplete', function(event) {
+		console.log("complete");
+		window.overlay = event.overlay;
+		if (event.type == google.maps.drawing.OverlayType.MARKER) {
+			overlays.forEach(function(lay, i) {
+				if (lay.getBounds().contains(overlay.getPosition())) {
+					lay.setMap(null);
+					selectMarkers(lay.getBounds(), false);
+				}
+			});
+			overlay.setMap(null);
+		} else {
+			overlays.push(overlay);
+			selectMarkers(overlay.getBounds(), true);
+		}
+		var selectedMarkers = getSelectedMarkers();
+		if (selectedMarkers.length == 0) {
+			$("#assignDiv").hide();
+		} else {
+			$("#assignDiv").show();
+			$("#parcel_ids").val(getMarkerIds(selectedMarkers));
+		}
+		setStatus(selectedMarkers.length + " parcels selected. Total volume: " + getSelectedTotalCapacity().toFixed(2));
+	});
+
+	google.maps.event.addListener(map, 'click', function(event) {
+		setStatus(event.latLng.lat().toPrecision(6) + " : " + event.latLng.lng().toPrecision(6));
+	});
+}
+
+function getIcon(vehicleId) {
+	if (vehicleId > 0) {
+		var index = vehicleId % 6 + 1;
+	} else {
+		var index = vehicleId;
+	}
+	var iconSize = 26;
+	return {
+		url : site.urlTo("/icon/parcel-" + index + ".png"),
+		anchor : new google.maps.Point(iconSize / 2, iconSize / 2),
+		size : new google.maps.Size(iconSize, iconSize)
+	};
+}
+
+function plotMarkers(dots) {
+	window.dots = dots;
+	for (var index in dots) {
+		var dot = dots[index];
+		window.dot = dot;
+		var marker = new google.maps.Marker({
+			position : new google.maps.LatLng(dot.lat, dot.lng),
+			map : map,
+			selected : false,
+			vehicle_id : dot.vehicle_id,
+			id : dot.id,
+			title : dot.id,
+			parcel : dot,
+			volume : parseFloat(dot.volume)
+		});
+		marker.setIcon(getIcon(dot.vehicle_id));
+		markers.push(marker);
+
+		google.maps.event.addListener(marker, 'click', function() {
+			var infoWindow = new google.maps.InfoWindow({
+				content : _.template($("#tmpl_parcel_window").html())(this.parcel)
+			});
+			infoWindow.open(map, this);
+		});
+	}
+}
+
+function plotProfile(dot) {
+	depotMarker = new google.maps.Marker({
+		position : new google.maps.LatLng(dot.lat, dot.lng),
+		map : map,
+		profile : dot,
+		id : dot.id,
+		title : dot.address,
+		icon : site.urlTo("/icon/depot.png")
+	});
+}
+
+function getSelectedMarkers() {
+	return _.filter(markers, function(marker) {
+		return marker.map != null & marker.selected;
+	});
+}
+
+function getSelectedTotalCapacity() {
+	return _.reduce(getSelectedMarkers(), function(memo, marker) {
+		return memo + parseFloat(marker.parcel.volume);
+	}, 0);
+}
+
+function getMarkerIds(markers) {
+	return _.map(markers, function(marker) {
+		return marker.id;
+	});
+}
+
+function selectMarkers(bounds, selected) {
+	markers.forEach(function(marker, i) {
+		if (bounds.contains(marker.getPosition())) {
+			selectMarker(marker, selected);
+		}
+	});
+}
+
+function selectMarker(marker, selected) {
+	console.log("select a marker");
+	marker.selected = selected;
+	marker.setIcon(getIcon( selected ? -1 : marker.vehicle_id));
+}
+
+function setStatus(status) {
+	$("#statusLabel").text(status);
+}
+
+function findMarkersByVehicle(id) {
+	return _.filter(markers, function(marker) {
+		return marker.vehicle_id == id;
+	});
+}
+
+function calDistance(pos1, pos2) {
+	return google.maps.geometry.spherical.computeDistanceBetween(pos1, pos2);
+}
+
+function planRoutes() {
+	_.each(vehicles, function(vehicle) {
+		planRoute(vehicle);
+	});
+}
+
+function planRoute(vehicle) {
+	vehicle.capacity = Number.MAX_VALUE;
+	var parcelMarkers = findMarkersByVehicle(vehicle.id);
+	var routes = clarkeRoute(depotMarker, parcelMarkers, [vehicle]);
+	_.each(routes, function(route) {
+		plotRoute(route.markers, route.vehicle);
+	});
+}
+
+function planClustersRoutes() {
+	var routes = clarkeRoute(depotMarker, markers, vehicles);
+	_.each(routes, function(route) {
+		plotRoute(route.markers, route.vehicle);
+	});
+}
+
+function plotRoute(markers, vechile) {
+	var colors = ["#00C81A", "#007CC6", "#00BE94", "#00A3C6", "#CB7100", "#C000B2"];
+	var coordinates = _.map(markers, function(routeMarker) {
+		return routeMarker.position;
+	});
+
+	var routePath = new google.maps.Polyline({
+		path : coordinates,
+		geodesic : true,
+		strokeColor : colors[vechile.id % 6],
+		strokeOpacity : 1.0,
+		strokeWeight : 8
+	});
+
+	routePath.setMap(map);
+}
+
+function onFilterParcels() {
+	var vehicle_id = $("#vehicle_id").val();
+	var window_start = $("#window_start").val();
+	var window_end = $("#window_end").val();
+	markers.forEach(function(marker, i) {
+		var parcel = marker.parcel;
+		var startHour = new Date(Date.parse(parcel.window_start)).getHours();
+		var endHour = new Date(Date.parse(parcel.window_end)).getHours();
+		if ((vehicle_id == "" || marker.vehicle_id == vehicle_id) && (window_start < startHour && window_end > endHour)) {
+			marker.setMap(map);
+		} else {
+			marker.setMap(null);
+		}
+	});
+}
+
+function onHorizonChanged(){
+	var horizonArr = ($("#time_horizon").val()||"0-24").split("-");
+	var horizonStart = parseInt(horizonArr[0]);
+	var horizonEnd = parseInt(horizonArr[1]);
+	$("#window_start").val(horizonStart);
+	$("#window_end").val(horizonEnd);
+	$(".time-window option").each(function(){
+			if($(this).val()>=horizonStart && $(this).val()<=horizonEnd){
+				$(this).removeAttr("disabled");
+				console.log($(this).val());
+			}else{
+				console.log($(this).val()+";");
+				$(this).attr("disabled", "disabled");
+			}
+	});
+	onFilterParcels();
+}
+
+$(function() {
+	// execute
+	initialize();
+	spinner.show();
+	$('#datetimepicker').datetimepicker({
+		pickTime : false
+	});
+	$("#datetimepicker").change(function() {
+		$("#datetimepickerForm").submit();
+	});
+	$.get(site.urlTo("/map/api-parcels"), {
+		date : getParameterByName("date")
+	}, function(dots) {
+		plotMarkers(dots);
+		spinner.stop();
+	});
+	$.get(site.urlTo("/map/api-vehicles"), function(dots) {
+		vehicles = dots;
+	});
+	$.get(site.urlTo("/map/api-profile"), function(dot) {
+		plotProfile(dot);
+	});
+
+	$("#assignForm button").click(function() {
+		//find vehicle
+		var vehicleId = $("#assignForm select").val();
+		var vehicle = _.find(vehicles, function(vehicle) {
+			return vehicleId == vehicle.id;
+		});
+		if (vehicle == null)
+			vehicle = {
+				id : 0
+			};
+
+		// check capacity
+		if (vehicleId != "" && getSelectedTotalCapacity() > vehicle.capacityLeft) {
+			if (false == confirm("Vehicle overloaded. Capacity left  "+vehicle.capacityLeft+". Confirm to assign?")) {
+				return false;
+			}
+		}
+
+		// save to server
+		var form = $("#assignForm");
+		$.ajax({
+			type : form.attr('method'),
+			url : form.attr('action'),
+			data : form.serialize(),
+			success : function(data) {
+				_.each(getSelectedMarkers(), function(marker) {
+					marker.vehicle_id = vehicle.id;
+					marker.setIcon(getIcon(vehicle.id));
+					marker.selected = false;
+					_.each(overlays, function(overlay) {
+						overlay.setMap(null);
+					});
+				});
+			}
+		});
+
+		return false;
+	});
+});

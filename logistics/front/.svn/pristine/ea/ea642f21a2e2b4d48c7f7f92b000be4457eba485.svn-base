@@ -1,0 +1,209 @@
+<?php
+
+namespace app\controllers;
+
+use yii\data\Pagination;
+use app\models\ParcelSearch;
+use yii\web\UploadedFile;
+use app\models\ImportForm;
+use chief725\libs\__;
+use Yii;
+use app\models\Parcel;
+use yii\data\ActiveDataProvider;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
+use parseCSV;
+use app\models\Driver;
+
+/**
+ * ParcelController implements the CRUD actions for Parcel model.
+ */
+class ParcelController extends BaseController {
+
+	/**
+	 * Lists all Parcel models.
+	 *
+	 * @return mixed
+	 */
+	public function actionIndex() {
+		if (empty($_GET)){
+			return $this->redirect(['index',"ParcelSearch[window_start]"=>date("Y-m-d"),"Parcel[window_start]"=>date("Y-m-d")]);
+		}
+		$searchModel = new ParcelSearch ();
+		$dataProvider = $searchModel->search ( Yii::$app->request->queryParams );
+
+		return $this->render ( 'index', [
+				'searchModel' => $searchModel,
+				'dataProvider' => $dataProvider
+		] );
+	}
+
+	/**
+	 * Displays a single Parcel model.
+	 *
+	 * @param integer $id
+	 * @return mixed
+	 */
+	public function actionView($id) {
+		return $this->render ( 'view', [
+				'model' => $this->findModel ( $id )
+		] );
+	}
+
+	/**
+	 * Creates a new Parcel model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 *
+	 * @return mixed
+	 */
+	public function actionCreate() {
+		$model = new Parcel ();
+
+		if ($model->load ( Yii::$app->request->post () ) && $model->save ()) {
+			return $this->redirect ( [
+					'view',
+					'id' => $model->id
+			] );
+		} else {
+			return $this->render ( 'create', [
+					'model' => $model
+			] );
+		}
+	}
+
+	/**
+	 * Updates an existing Parcel model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 *
+	 * @param integer $id
+	 * @return mixed
+	 */
+	public function actionUpdate($id) {
+		$model = $this->findModel ( $id );
+
+		if ($model->load ( Yii::$app->request->post () ) && $model->save ()) {
+			return $this->redirect ( [
+					'view',
+					'id' => $model->id
+			] );
+		} else {
+			return $this->render ( 'update', [
+					'model' => $model
+			] );
+		}
+	}
+
+	/**
+	 * Deletes an existing Parcel model.
+	 * If deletion is successful, the browser will be redirected to the 'index' page.
+	 *
+	 * @param integer $id
+	 * @return mixed
+	 */
+	public function actionDelete($id) {
+		$this->findModel ( $id )->delete ();
+
+		return $this->redirect ( [
+				'index'
+		] );
+	}
+	public function actionDeliver($id){
+		$model = $this->findModel($id);
+
+		return $this->render("deliver",['model'=>$model]);
+	}
+	public function actionImport() {
+		$model = new ImportForm ();
+		if (Yii::$app->request->isPost) {
+			$model->file = UploadedFile::getInstance ( $model, 'file' );
+			if (! empty ( $model->file )) {
+				$csv = new parseCSV ();
+				$csv->parse ( $model->file->tempName );
+				foreach ( $csv->data as $d ) {
+					$parcel = new Parcel ();
+					$parcel->attributes = $d;
+					$parcel->window_start = date ( "Y-m-d H:i:s", strtotime ( str_replace ( "/", "-", $parcel->window_start ) ) );
+					$parcel->window_end = date ( "Y-m-d H:i:s", strtotime ( str_replace ( "/", "-", $parcel->window_end ) ) );
+					if (! $parcel->save ()) {
+						$errorMsgs = [ ];
+						foreach ( $parcel->getErrors () as $errs )
+							$errorMsgs [] = join ( ", ", $errs );
+						Yii::$app->session->setFlash ( "danger", join ( "; ", $errorMsgs ) );
+						return $this->render ( 'import', [
+								'model' => $model
+						] );
+					}
+				}
+				Yii::$app->session->setFlash ( "success", "Uploaded successfully" );
+			}
+		}
+		return $this->render ( 'import', [
+				'model' => $model
+		] );
+	}
+	public function actionExport() {
+		if (isset ( $_GET ['empty'] )) {
+			$parcels = [ ];
+		} else {
+			$searchModel = new ParcelSearch ();
+			$dataProvider = $searchModel->search ( Yii::$app->request->queryParams );
+			$dataProvider->query->orderBy ( "route asc, seq asc" );
+			$dataProvider->setPagination ( [
+					'pageSize' => 10000
+			] );
+			$parcels = $dataProvider->getModels ();
+		}
+		$csv = new parseCSV ();
+		$keys = explode ( ",", "vehicle_id,identifier,address,postal,volume,service_time,phone,customer_name,window_start,window_end,seq,deliver_time,planned_deliver_time,lat,lng" );
+		$parcels = __::from ( $parcels )->map ( function ($parcel) use($keys) {
+			$newParcel = [ ];
+			foreach ( $keys as $key ) {
+				if ($key == "planned_deliver_time") {
+					$newParcel [$key] = date ( "H:i:s", $parcel->$key * 60 );
+				} else {
+					$newParcel [$key] = $parcel->$key;
+				}
+			}
+			$newParcel ['seq'] += 1;
+			$newParcel ['vehicle_id'] = empty ( $parcel->vehicle ) ? "Not assigned" : $parcel->vehicle->name;
+			return $newParcel;
+		} );
+		$csv->output ( "parcels.csv", $parcels, $keys );
+	}
+
+	/**
+	 * Finds the Parcel model based on its primary key value.
+	 * If the model is not found, a 404 HTTP exception will be thrown.
+	 *
+	 * @param integer $id
+	 * @return Parcel the loaded model
+	 * @throws NotFoundHttpException if the model cannot be found
+	 */
+	protected function findModel($id) {
+		if (($model = Parcel::findOne ( $id )) !== null) {
+			return $model;
+		} else {
+			throw new NotFoundHttpException ( 'The requested page does not exist.' );
+		}
+	}
+	public function actionDeleteAll() {
+		Parcel::deleteAll ( [
+				'user_id' => Yii::$app->user->id
+		] );
+		$this->redirect ( [
+				'index'
+		] );
+	}
+	public function actionDriver($date=null) {
+		if (empty($date)){
+			$date = date("Y-m-d");
+		}
+		$driver = Driver::findOne ( Yii::$app->user->id );
+		echo $this->render ( "driver", [
+				'driver' => $driver,
+				'vehicle' => $driver->vehicle,
+				'date'=>$date
+		] );
+	}
+}

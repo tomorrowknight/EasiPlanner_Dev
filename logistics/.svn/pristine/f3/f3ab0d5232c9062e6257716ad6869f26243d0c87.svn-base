@@ -1,0 +1,35 @@
+var matrix = {
+	cache : {},
+	table : [],
+	load : function(depot, parcels, callback) {
+		if (this.cache[parcels.length] != undefined) {
+			this.table = this.cache[parcels.length];
+			callback();
+			return;
+		}
+		for (var i = 0; i < parcels.length; i++) {
+			parcels.at(i).set("i", i + 1);
+		}
+		var locs = parcels.map(function(parcel) {
+			return "loc=" + parcel.get("lat") + "," + parcel.get("lng");
+		});
+		locs.unshift("loc=" + depot.get("lat") + "," + depot.get("lng"))
+
+		var thisUrl = "http://dev.logistics.lol:5000/table?" + locs.join("&");
+		console.log(thisUrl);
+		var self = this;
+		$.ajax({
+			url : thisUrl,
+			success : function(resp) {
+				self.table = resp.distance_table;
+				self.cache[parcels.length] = resp.distance_table;
+				callback();
+			},
+			dataType : "json",
+		});
+	},
+	travelTime:function(parcel1,parcel2){
+		//return parcel1.distance(parcel2);
+		return Math.round(this.table[parcel1.get("i")][parcel2.get("i")] / 600) / speedFactor;
+	}
+}

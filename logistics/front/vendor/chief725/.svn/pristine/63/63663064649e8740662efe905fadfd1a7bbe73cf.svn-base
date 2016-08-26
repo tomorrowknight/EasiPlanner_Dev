@@ -1,0 +1,127 @@
+<?php
+
+namespace chief725\models;
+
+use chief725\libs\Utils;
+use Yii;
+use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
+
+class User extends BaseRecord implements IdentityInterface {
+	const FLAG_CLOSE = - 1;
+	const FLAG_BAN = 0;
+	const FLAG_ACTIVE = 1;
+	const FLAG_EDITOR = 5;
+	const FLAG_ADMIN = 10;
+	public static function tableName() {
+		return 'user';
+	}
+	public static function createOrFindUser($client) {
+		$attributes = $client->getUserAttributes ();
+		$user = static::findOne ( [
+				'facebook_id' => $attributes ['id']
+		] );
+		if (empty ( $user )) {
+			$user = new self ();
+			$user->facebook_id = $attributes ['id'];
+			$user->flag = self::FLAG_ACTIVE;
+			$user->auth_key = Yii::$app->getSecurity ()->generateRandomString ();
+		}
+
+		$userArr = $client->api ( "/me?fields=email,name,gender,birthday,location,hometown" );
+		foreach ( $userArr as $key => $value ) {
+			if ($key == "id" || ! $user->hasAttribute ( $key )) {
+				continue;
+			}
+			if ($key == "birthday") {
+				$user->$key = date ( "Y-m-d", strtotime ( $userArr [$key] ) );
+			} elseif ($key == "location" || $key == "hometown") {
+				$user->$key = $userArr [$key] ['name'];
+			} elseif ($user->$key != $userArr [$key]) {
+				$user->$key = $userArr [$key];
+			}
+		}
+		$user->save ();
+		return $user;
+	}
+	public function canAccess() {
+		if (! Yii::$app->user->isGuest) {
+			if (Yii::$app->user->identity->isEditor ())
+				return true;
+			if ($this->id == Yii::$app->user->id)
+				return true;
+			return false;
+		}
+		return true;
+	}
+	// interface functions
+	public static function findIdentity($id) {
+		return static::findOne ( $id );
+	}
+	public static function findIdentityByAccessToken($token, $type = null) {
+		throw new NotSupportedException ( 'findIdentityByAccessToken is not implemented.' );
+	}
+	public static function getIP() {
+		if (isset ( $_SERVER ["HTTP_CF_CONNECTING_IP"] )) {
+			return $_SERVER ["HTTP_CF_CONNECTING_IP"];
+		} elseif (isset ( $_SERVER ["REMOTE_ADDR"] )) {
+			return $_SERVER ["REMOTE_ADDR"];
+		}
+	}
+	public function getId() {
+		return $this->id;
+	}
+	public function getAuthKey() {
+		return $this->auth_key;
+	}
+	public function validateAuthKey($authKey) {
+		return $authKey == $this->getAuthKey ();
+	}
+	public function isMale() {
+		return $this->gender == "male";
+	}
+	public function isAdmin() {
+		return $this->is ( self::FLAG_ADMIN );
+	}
+	public function isEditor() {
+		return $this->is ( [
+				self::FLAG_ADMIN,
+				self::FLAG_EDITOR
+		] );
+	}
+	public function isBan() {
+		return $this->is ( self::FLAG_BAN );
+	}
+	public function isClose() {
+		return $this->is ( self::FLAG_CLOSE );
+	}
+	public static function is_admin() {
+		return ! Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin ();
+	}
+	public function getNodes() {
+		return self::hasMany ( Node::className (), [
+				'user_id' => "id"
+		] );
+	}
+	public function getFavoriteNodes() {
+		return $this->hasMany ( Node::className (), [
+				'id' => 'node_id'
+		] )->viaTable ( 'favorite', [
+				'user_id' => 'id'
+		] );
+	}
+	public function getFollowers() {
+		return $this->hasMany ( static::className (), [
+				'id' => 'follower_id'
+		] )->viaTable ( 'follow', [
+				'followee_id' => 'id'
+		] );
+	}
+	public function getFollowees() {
+		return $this->hasMany ( static::className (), [
+				'id' => 'followee_id'
+		] )->viaTable ( 'follow', [
+				'follower_id' => 'id'
+		] );
+	}
+}

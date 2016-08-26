@@ -1,0 +1,132 @@
+<?php
+
+namespace chief725\models;
+
+use yii\helpers\Html;
+use chief725\models\Image;
+use Yii;
+use yii\helpers\Url;
+use yii\db\Expression;
+use yii\web\HttpException;
+use yii\helpers\Inflector;
+use yii\data\Pagination;
+
+class BaseRecord extends \yii\db\ActiveRecord {
+	public $classShortName;
+	public $data = [ ];
+	public function init() {
+		parent::init ();
+		$this->classShortName = Inflector::camel2id ( (new \ReflectionClass ( $this ))->getShortName () );
+	}
+	public function beforeValidate() {
+		if (parent::beforeValidate ()) {
+			$this->checkAccess ();
+			if ($this->isNewRecord) {
+				if ($this->hasAttribute ( "created" )) {
+					$this->created = new Expression ( 'NOW()' );
+				}
+			}
+			if ($this->hasAttribute ( "modified" )) {
+				$this->modified = new Expression ( 'NOW()' );
+			}
+			if ($this->hasAttribute ( "ip" )) {
+				$this->ip = isset ( $_SERVER ["HTTP_CF_CONNECTING_IP"] ) ? $_SERVER ['HTTP_CF_CONNECTING_IP'] : $_SERVER ['REMOTE_ADDR'];
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+	public function beforeDelete() {
+		$this->checkAccess ();
+		return parent::beforeDelete ();
+	}
+	public static function get($id) {
+		$model = self::findOne ( $id );
+		if (empty ( $model )) {
+			throw new HttpException ( 404, "Not found" );
+		}
+		return $model;
+	}
+	public function hit($col = 'hits') {
+		$this->updateCounters ( array (
+				$col => 1
+		) );
+	}
+	public function getUrl($absolute = true) {
+		return Url::to ( [
+				static::tableName () . "/view",
+				"id" => $this->id
+		], $absolute );
+	}
+	public function getLink($options = []) {
+		return Html::a ( $this->title, $this->getUrl (), $options );
+	}
+	public function getUser() {
+		return $this::hasOne ( User::className (), [
+				"id" => "user_id"
+		] );
+	}
+	public function canAccess() {
+		if (php_sapi_name () == "cli")
+			return true;
+		if (Yii::$app->user->isGuest)
+			return false;
+		if ($this->isNewRecord)
+			return true;
+		if (Yii::$app->user->identity->isEditor ())
+			return true;
+		if (! $this->hasAttribute ( "user_id" ))
+			return true;
+		return $this->user_id == Yii::$app->user->id;
+	}
+	public function checkAccess() {
+		if (! $this->canAccess ()) {
+			throw new HttpException ( 403, 'Deny' );
+		}
+	}
+	public function is($flag) {
+		return is_array ( $flag ) ? in_array ( $this->flag, $flag ) : $this->flag == $flag;
+	}
+	public function formatCreated($format) {
+		return date ( $format, strtotime ( $this->created ) );
+	}
+	public function formatModified($format) {
+		return date ( $format, strtotime ( $this->modified ) );
+	}
+	public function createdAgo() {
+		return time () - strtotime ( $this->created );
+	}
+	public function modifiedAgo() {
+		return time () - strtotime ( $this->modified );
+	}
+	public static function paginate($query, $pageSize = 24, $cacheTime = null) {
+		if ($cacheTime != null) {
+			$queryCount = self::getDb ()->cache ( function ($db) use($query) {
+				return $query->count ();
+			} );
+		} else {
+			$queryCount = $query->count ();
+		}
+
+		$pages = new Pagination ( [
+				'totalCount' => $queryCount,
+				'pageSize' => $pageSize
+		] );
+
+		$query->offset ( $pages->offset )->limit ( $pages->limit );
+
+		if ($cacheTime != null) {
+			$nodes = Node::getDb ()->cache ( function ($db) use($query, $pages) {
+				return $query->all ();
+			}, $cacheTime );
+		} else {
+			$nodes = $query->all ();
+		}
+
+		return [
+				$nodes,
+				$pages
+		];
+	}
+}

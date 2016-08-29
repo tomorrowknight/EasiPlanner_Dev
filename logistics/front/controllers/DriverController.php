@@ -64,7 +64,7 @@ class DriverController extends Controller {
 	public function actionCreate() {
 		if (! empty ( $_POST )) {
 			$post = empty($_POST['Driver'])?$_POST['User']:$_POST['Driver'];
-			$model = MyUser::createUser ($post ['username'], $post ['password'], Role::ROLE_DRIVER );
+			$model = MyUser::createDriver($post ['username'], $post ['password'], Role::ROLE_DRIVER );
 			if (!$model->hasErrors()) {
 				$model->user_id = Yii::$app->user->id;
 				$authKey = Utils::apiKeyGen();	

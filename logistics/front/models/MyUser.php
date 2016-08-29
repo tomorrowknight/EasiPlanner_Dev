@@ -85,11 +85,7 @@ class MyUser extends User {
 	}
 	public static function createUser($email, $username, $password, $role_id) {
 		$user = new User ();
-		if($role_id==3){
-		$user->email = "";
-		}else{
-			$user->email = $email;
-		}
+		$user->email = $email;
 		$user->username = $username;
 		$user->newPassword = $password;
 		$user->role_id = $role_id;
@@ -97,6 +93,22 @@ class MyUser extends User {
 		if ($user->save ()) {
 			$profile = new Profile ();
 			$profile->full_name = $email;
+			$profile->user_id = $user->id;
+			$profile->save ();
+		}
+		return $user;
+	}
+	public static function createDriver($username, $password, $role_id) {
+		$user = new User ();
+		$email = "";
+		$user->email = $email;
+		$user->username = $username;
+		$user->newPassword = $password;
+		$user->role_id = $role_id;
+		$user->status = User::STATUS_ACTIVE;
+		if ($user->save ()) {
+			$profile = new Profile ();
+			$profile->full_name = $username;
 			$profile->user_id = $user->id;
 			$profile->save ();
 		}

@@ -67,6 +67,8 @@ class DriverController extends Controller {
 			$model = MyUser::createUser ( $post ['email'],$post ['username'], $post ['password'], Role::ROLE_DRIVER );
 			if (!$model->hasErrors()) {
 				$model->user_id = Yii::$app->user->id;
+				$authKey = Utils::apiKeyGen();	
+				$model->auth_key = $authKey;
 				$model->save();
 				return $this->redirect ( [
 						'view',

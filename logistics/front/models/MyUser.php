@@ -85,7 +85,11 @@ class MyUser extends User {
 	}
 	public static function createUser($email, $username, $password, $role_id) {
 		$user = new User ();
-		$user->email = $email;
+		if($role_id==3){
+		$user->email = "";
+		}else{
+			$user->email = $email;
+		}
 		$user->username = $username;
 		$user->newPassword = $password;
 		$user->role_id = $role_id;

@@ -100,7 +100,7 @@ class MyUser extends User {
 	}
 	public static function createDriver($username, $password, $role_id) {
 		$user = new User ();
-		$fakeEmail = strval($username) + "@easiplanner.net";
+		$fakeEmail = "123@easiplanner.net";
 		$email = $fakeEmail ;
 		$user->email = $email;
 		$user->username = $username;

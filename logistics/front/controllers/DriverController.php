@@ -75,7 +75,7 @@ class DriverController extends Controller {
 						'id' => $model->id
 				] );
 			} else {
-				#Utils::print_d($model->getErrors());exit;
+				Utils::print_d($model->getErrors());exit;
 				return $this->render ( 'create', [
 						'model' => $model
 				] );

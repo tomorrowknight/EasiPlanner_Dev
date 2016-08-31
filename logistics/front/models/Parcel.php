@@ -78,6 +78,7 @@ class Parcel extends BelongToUser {
 								'volume',
 								'weight',
 								'vehicle_id',
+								'driver_id',
 								'service_time'
 						],
 						'number'
@@ -136,6 +137,7 @@ class Parcel extends BelongToUser {
 				'id' => 'ID',
 				'identifier' => 'Identifier',
 				'vehicle_id' => "Vehicle",
+				'driver_id' => "Driver",
 				'address' => 'Address',
 				'lat' => 'Lat',
 				'lng' => 'Lng',

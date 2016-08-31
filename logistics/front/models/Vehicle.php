@@ -38,7 +38,6 @@ class Vehicle extends BelongToUser {
 				[
 						[
 								'user_id',
-								'auth_key',
 								'driver_id',
 								'flag'
 						],

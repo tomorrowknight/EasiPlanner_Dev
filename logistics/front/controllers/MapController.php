@@ -74,11 +74,11 @@ class MapController extends Controller
 
 	public function actionAssignParcels(){
 		$vehicle = Vehicle::findOne(Yii::$app->request->post("vehicle_id"));
-		$driver = Vehicle::findOne(Yii::$app->request->post("driver_id"));
+		$driver = Vehicle::findOne(Yii::$app->request->get("driver_id"));
 		$parcels = Parcel::findAll(explode(",", Yii::$app->request->post("parcel_ids")));
 		foreach ($parcels as $parcel){
 			$parcel->vehicle_id = empty($vehicle)?0: $vehicle->id;
-			$parcel->driver_id = empty($driver)?0: $driver->driver_id;
+			$parcel->driver_id = empty($vehicle)?0: $vehicle->driver_id;
 			$parcel->save(false);
 		}
 		//$this->redirect(["map/index"]);

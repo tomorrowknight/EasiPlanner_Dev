@@ -1,1 +1,1 @@
-svn.exe update
+git pull https://github.com/tomorrowknight/easiplanner

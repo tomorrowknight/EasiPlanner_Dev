@@ -90,7 +90,7 @@ class Parcel extends BelongToUser {
 								'service_time',
 								'window_start',
 								'window_end',
-								'vehicle_types'
+								'vehicle_types',
 						],
 						'safe'
 				],

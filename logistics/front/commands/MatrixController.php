@@ -13,14 +13,11 @@ use chief725\models\Node;
 class MatrixController extends Controller {
 	const GOOGLE_CLIENT = "gme-republicpolytechnic";
 	const GOOGLE_KEY = "nJxJLqiWuL68EBCc_nPpepmGmKE=";
-<<<<<<< .mine
 	const COLLECT_HOURS = "3,8,15,18";
 	const PARCELS_PER_ZONE = 10;
-=======
 	const COLLECT_HOURS = "8,15,18";
 	// const COLLECT_HOURS = "18";
 	const PARCELS_PER_ZONE = 100;
->>>>>>> .r10294
 	public function actionPopulate() {
 		MatrixPostal::deleteAll ();
 		foreach ( MatrixPostal::zoneMapping () as $zone => $prefixs ) {

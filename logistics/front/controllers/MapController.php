@@ -79,6 +79,7 @@ class MapController extends Controller
 		foreach ($parcels as $parcel){
 			$parcel->vehicle_id = empty($vehicle)?0: $vehicle->id;
 			$parcel->driver_id = empty($vehicle)?0: $vehicle->driver_id;
+			Utils::print_d($parcel->driver_id);
 			$parcel->save(false);
 		}
 		//$this->redirect(["map/index"]);

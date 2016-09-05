@@ -68,8 +68,11 @@ MapAsset::register ( $this );
 	transition: all 0.5s;
 	padding: 10px;
 }
-#left_panel{
+
+#left_panel {
+	
 }
+
 #left_panel.hide1 {
 	left: -300px;
 	transition: all 0.5s;
@@ -96,10 +99,10 @@ window.onload = function(){$('#jstree_demo_div').jstree();};
 		$items = [ ];
 		foreach ( Yii::$app->user->identity->activeVehicles as $vehicle ) {
 			$sub_items = [ ];
-			foreach ( $vehicle->parcels as $index=> $parcel ) {
+			foreach ( $vehicle->parcels as $index => $parcel ) {
 				$time = date ( "H:i", $parcel->planned_deliver_time * 60 );
 				$sub_items [] = [ 
-						'label' => ($index+1).": $parcel->identifier ($time)",
+						'label' => ($index + 1) . ": $parcel->identifier ($time)",
 						'options' => [ 
 								"data-jstree" => '{"icon":"glyphicon glyphicon-gift"}' 
 						],
@@ -222,8 +225,13 @@ window.onload = function(){$('#jstree_demo_div').jstree();};
 			<?= Html::dropDownList('vehicle_id',null,ArrayHelper::map(Yii::$app->user->identity->activeVehicles, 'id', 'name'),['class'=>"form-control",'prompt'=>"None","id"=>"vehicle_id2"])?>
 		</div>
 		<?= Html::hiddenInput('parcel_ids',null,['id'=>'parcel_ids'])?>
-		<? Html::hiddenInput('driver_ids',null,['driver_id'=>'driver_id'])?>
-		
+		<?= Html::hiddenInput('driver_ids',null,['driver_id'=>'driver_id'])?>
+		<script>
+		function myFunction() {
+   			alert(driver_ids);
+		}
+		</script>
+
 		<div class="form-group">
 			<?= Html::submitButton("Assign", ['class' => 'btn btn-success',"id"=>"assignBtn"])?>
 			<button type='button' onclick='autoFill()' class='btn btn-info'

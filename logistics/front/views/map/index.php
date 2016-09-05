@@ -227,7 +227,7 @@ window.onload = function(){$('#jstree_demo_div').jstree();};
 		<?= Html::hiddenInput('parcel_ids',null,['id'=>'parcel_ids'])?>
 		<?= Html::hiddenInput('driver_ids',null,['driver_id'=>'driver_id'])?>
 		<script>
-		function myFunction() {
+		function showDriverIDs() {
    			alert(driver_ids);
 		}
 		</script>
@@ -236,6 +236,8 @@ window.onload = function(){$('#jstree_demo_div').jstree();};
 			<?= Html::submitButton("Assign", ['class' => 'btn btn-success',"id"=>"assignBtn"])?>
 			<button type='button' onclick='autoFill()' class='btn btn-info'
 				id='autoFillBtn'>Auto Fill</button>
+				<button type='button' onclick='showDriverIDs()' class='btn btn-info'
+				id='autoFillBtn02'>Auto Fill</button>
 		</div>
 		<?ActiveForm::end()?>
 	</div>

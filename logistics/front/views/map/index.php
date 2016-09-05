@@ -225,9 +225,10 @@ window.onload = function(){$('#jstree_demo_div').jstree();};
 			<?= Html::dropDownList('vehicle_id',null,ArrayHelper::map(Yii::$app->user->identity->activeVehicles, 'id', 'name'),['class'=>"form-control",'prompt'=>"None","id"=>"vehicle_id2"])?>
 		</div>
 		<?= Html::hiddenInput('parcel_ids',null,['id'=>'parcel_ids'])?>
-		<?= Html::hiddenInput('driver_ids',null,['driver_id'=>'driver_id'])?>
+		<?= Html::hiddenInput('driver_ids',null,['name'=>'driver_id'])?>
 		<script>
 		function showDriverIDs() {
+			var driver_ID = <?php echo $vehicle?> 
    			alert(driver_ids);
 		}
 		</script>

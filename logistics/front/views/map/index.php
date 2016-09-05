@@ -228,7 +228,7 @@ window.onload = function(){$('#jstree_demo_div').jstree();};
 		<?= Html::hiddenInput('driver_ids',null,['name'=>'driver_id'])?>
 		<script>
 		function showDriverIDs() {
-			var driver_ID = <?php echo $vehicle?> 
+			var driver_ID = <?php echo $vehicle.driver_id?> 
    			alert(driver_ids);
 		}
 		</script>

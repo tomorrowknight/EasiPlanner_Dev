@@ -229,7 +229,7 @@ window.onload = function(){$('#jstree_demo_div').jstree();};
 		<script>
 		function showDriverIDs() {
 			var driver_ID = <?php echo 'driver_id'?> 
-   			alert(driver_ids);
+   			alert(driver_ID);
 		}
 		</script>
 

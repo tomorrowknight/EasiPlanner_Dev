@@ -225,20 +225,11 @@ window.onload = function(){$('#jstree_demo_div').jstree();};
 			<?= Html::dropDownList('vehicle_id',null,ArrayHelper::map(Yii::$app->user->identity->activeVehicles, 'id', 'name'),['class'=>"form-control",'prompt'=>"None","id"=>"vehicle_id2"])?>
 		</div>
 		<?= Html::hiddenInput('parcel_ids',null,['id'=>'parcel_ids'])?>
-		<?= Html::hiddenInput('driver_ids',null,['name'=>'driver_id'])?>
-		<script>
-		function showDriverIDs() {
-			var driver_ID = <?php echo 'driver_id'?> 
-   			alert(driver_ID);
-		}
-		</script>
 
 		<div class="form-group">
 			<?= Html::submitButton("Assign", ['class' => 'btn btn-success',"id"=>"assignBtn"])?>
 			<button type='button' onclick='autoFill()' class='btn btn-info'
 				id='autoFillBtn'>Auto Fill</button>
-				<button type='button' onclick='showDriverIDs()' class='btn btn-info'
-				id='autoFillBtn02'>Auto Fill</button>
 		</div>
 		<?ActiveForm::end()?>
 	</div>

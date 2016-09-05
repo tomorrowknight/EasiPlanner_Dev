@@ -79,7 +79,8 @@ class MapController extends Controller
 		foreach ($parcels as $parcel){
 			$parcel->vehicle_id = empty($vehicle)?0: $vehicle->id;
 			$parcel->driver_id = empty($vehicle)?0: $vehicle->driver_id;
-			Yii::app()->user->setFlash('success',$parcel->driver_id);
+			$stuff = $parcel->driver_id;
+			echo "<script type='text/javascript'>alert('$stuff');</script>";
 			Utils::print_d($parcel->driver_id);
 			$parcel->save(false);
 		}

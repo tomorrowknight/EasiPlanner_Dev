@@ -15,17 +15,16 @@ var drawingManager;
 
 //functions
 function initialize() {
-	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 	var myOptions = {
 			zoom : parseInt(12),
 			center : new google.maps.LatLng(1.34, 103.82),
 			zoomControl : true,
 			mapTypeControl: true,
 			mapTypeControlOptions: {
-				style: google.maps.MapTypeControlStyle.LEFT_BOTTOM,
-				mapTypeIds: ['roadmap', 'terrain']
+				position: google.maps.ControlPosition.LEFT_BOTTOM
 			},
-	}
+	};
+	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 	drawingManager = new google.maps.drawing.DrawingManager({
 		drawingControl : true,
 		drawingControlOptions : {

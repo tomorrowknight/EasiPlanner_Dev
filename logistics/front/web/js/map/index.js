@@ -25,7 +25,7 @@ function initialize() {
 		drawingControl : true,
 		mapTypeControl: true,
 		mapTypeControlOptions: {
-			style: google.maps.MapTypeControlStyle.BOTTOM_RIGHT,
+			style: google.maps.MapTypeControlStyle.LEFT_BOTTOM,
 			mapTypeIds: ['roadmap', 'terrain']
 		},
 		drawingControlOptions : {

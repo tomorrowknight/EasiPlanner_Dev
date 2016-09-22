@@ -17,7 +17,7 @@ body {
 	margin: 0;
 }
 
-#map_canvas .div > .gm-style > .gmnoprint > div > div[title="Stop drawing"] {
+#map .gm-style > .gmnoprint > .gmnoprint > div > img { 
 	display: none !important;
 }
 

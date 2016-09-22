@@ -24,8 +24,7 @@ function initialize() {
 	drawingManager = new google.maps.drawing.DrawingManager({
 		drawingControl : true,
 		drawingControlOptions : {
-			 style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-             position: google.maps.ControlPosition.TOP_CENTER,
+			position : google.maps.ControlPosition.TOP_LEFT,
 			drawingModes : [ google.maps.drawing.OverlayType.RECTANGLE,
 					google.maps.drawing.OverlayType.MARKER ]
 		}
@@ -66,6 +65,7 @@ function initialize() {
 		setStatus(event.latLng.lat().toPrecision(6) + " : "
 				+ event.latLng.lng().toPrecision(6));
 	});
+
 
 	var trafficLayer = new google.maps.TrafficLayer();
 	trafficLayer.setMap(map);

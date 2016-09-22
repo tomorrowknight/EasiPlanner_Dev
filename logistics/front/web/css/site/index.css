@@ -17,7 +17,7 @@ body {
 	margin: 0;
 }
 
-#map_controls[title="Stop drawing"] { 
+.gm-style[title="Stop drawing"] { 
     display: none !important; 
 }
 

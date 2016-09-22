@@ -24,7 +24,8 @@ function initialize() {
 	drawingManager = new google.maps.drawing.DrawingManager({
 		drawingControl : true,
 		drawingControlOptions : {
-			position : google.maps.ControlPosition.LEFT_TOP,
+			 style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+             position: google.maps.ControlPosition.TOP_CENTER,
 			drawingModes : [ google.maps.drawing.OverlayType.RECTANGLE,
 					google.maps.drawing.OverlayType.MARKER ]
 		}
@@ -127,11 +128,11 @@ function planClustersRoutes() {
 function calRoute(profile, planedParcels, vehicles, anchor, callback) {
 	if (planedParcels.length == 0)
 		return;
-	log("start load distance matrix");
+	log("Loading distance matrix");
 	matrix.load(profile, parcels, function() {
 		var startTime = time();
 		setStatus("StartTime: " + startTime);
-		log("start routing");
+		log("Begin routing");
 		if(/near/.test(location.hash)){
 			var routes =near(profile, planedParcels, vehicles, anchor);
 		}else{
@@ -139,7 +140,7 @@ function calRoute(profile, planedParcels, vehicles, anchor, callback) {
 		}
 		
 		setStatus("Time taken: " + (time() - startTime) );
-		log("routing finished");
+		log("Routing complete");
 		callback(routes);
 	});
 }

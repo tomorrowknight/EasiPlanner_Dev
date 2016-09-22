@@ -118,6 +118,12 @@ var Parcel = SuperModel.Model
 				return this.get("planned_deliver_time")
 						+ this.get("service_time");
 			},
+			getDeliverTime : function() {
+				if(this.get(deliver.time != null)){
+				return createDate(this.get("deliver_time")).getHours()
+						+ new Date().getTimezoneOffset() / 60;
+				}
+			},
 			onFilter : function(vehicle_id, window_start, window_end) {
 				var isWithIn = (this.getWindowStart() >= window_start && this
 						.getWindowStart() <= window_end)

@@ -17,9 +17,6 @@ body {
 	margin: 0;
 }
 
-#map .gm-style > .gmnoprint > .gmnoprint > div > img { 
-	display: none !important;
-}
 
 .toolbox {
 	position: absolute;

@@ -1,4 +1,4 @@
-//Author: Evan Lee, Email: chief725@gmail.com
+
 function tsptw(depot, parcels, vehicles, anchor) {
 	var routes = [];
 	var depotParcel = createDepotParcel(depot);

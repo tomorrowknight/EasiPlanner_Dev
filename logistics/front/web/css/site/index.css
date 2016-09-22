@@ -17,7 +17,7 @@ body {
 	margin: 0;
 }
 
-.gm-style[title="Stop drawing"] { 
+.gmnoprint[title="Stop drawing"] { 
     display: none !important; 
 }
 

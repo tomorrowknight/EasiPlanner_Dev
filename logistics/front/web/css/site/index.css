@@ -17,7 +17,7 @@ body {
 	margin: 0;
 }
 
-#map-canvas[title="Stop drawing"] { 
+#map[title="Stop drawing"] { 
     display: none !important; 
 }
 

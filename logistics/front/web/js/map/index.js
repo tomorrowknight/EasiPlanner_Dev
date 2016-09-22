@@ -13,60 +13,59 @@ var shadowLays = [];
 var routesLays = [];
 var drawingManager;
 
-// functions
+//functions
 function initialize() {
 	var myOptions = {
-		zoom : parseInt(12),
-		center : new google.maps.LatLng(1.34, 103.82),
-		zoomControl : true
+			zoom : parseInt(12),
+			center : new google.maps.LatLng(1.34, 103.82),
+			zoomControl : true
 	};
 	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 	drawingManager = new google.maps.drawing.DrawingManager({
 		drawingControl : true,
+		mapTypeControl: true,
 		drawingControlOptions : {
 			position : google.maps.ControlPosition.TOP_LEFT,
 			drawingModes : [ google.maps.drawing.OverlayType.RECTANGLE,
-					google.maps.drawing.OverlayType.MARKER ]
+			                 google.maps.drawing.OverlayType.MARKER ]
+		},
+		mapTypeControlOptions: {
+			style: google.maps.MapTypeControlStyle.LEFT_TOP,
+			mapTypeIds: ['roadmap', 'terrain']
 		}
 	});
-	mapTypeControlOptions = new google.maps.MapTypeControlOptions({
-	 mapTypeControl: true,
-	    mapTypeControlOptions: {
-	      style: google.maps.MapTypeControlStyle.LEFT_TOP,
-	      mapTypeIds: ['roadmap', 'terrain']
-	    }
-	  });
+
 	drawingManager.setMap(map);
 	google.maps.event
-			.addListener(
-					drawingManager,
-					'overlaycomplete',
-					function(event) {
-						var overlay = event.overlay;
-						if (event.type == google.maps.drawing.OverlayType.MARKER) {
-							shadowLays.forEach(function(lay, i) {
-								if (lay.getBounds().contains(
-										overlay.getPosition())) {
-									lay.setMap(null);
-									parcels.triggerEach("onSelect", lay
-											.getBounds(), false);
-								}
-							});
-							overlay.setMap(null);
-						} else {
-							if ($("#time_horizon").val() == "") {
-								alert("You need to select time horizon before doing assignment.");
-								overlay.setMap(null);
-								return;
-							} else {
-								onHorizonChanged();
-								shadowLays.push(overlay);
-								parcels.triggerEach("onSelect", overlay
-										.getBounds(), true);
-							}
+	.addListener(
+			drawingManager,
+			'overlaycomplete',
+			function(event) {
+				var overlay = event.overlay;
+				if (event.type == google.maps.drawing.OverlayType.MARKER) {
+					shadowLays.forEach(function(lay, i) {
+						if (lay.getBounds().contains(
+								overlay.getPosition())) {
+							lay.setMap(null);
+							parcels.triggerEach("onSelect", lay
+									.getBounds(), false);
 						}
-						onSelect();
 					});
+					overlay.setMap(null);
+				} else {
+					if ($("#time_horizon").val() == "") {
+						alert("You need to select time horizon before doing assignment.");
+						overlay.setMap(null);
+						return;
+					} else {
+						onHorizonChanged();
+						shadowLays.push(overlay);
+						parcels.triggerEach("onSelect", overlay
+								.getBounds(), true);
+					}
+				}
+				onSelect();
+			});
 
 	google.maps.event.addListener(map, 'click', function(event) {
 		setStatus(event.latLng.lat().toPrecision(6) + " : "
@@ -82,7 +81,7 @@ function onSelect() {
 	$("#assignDiv").toggle(parcels.getSelectedParcels().length > 0);
 	$("#autoFillBtn").toggle(
 			parcels.getSelectedParcels().length <= 2
-					&& $("#vehicle_id2").val() != "");
+			&& $("#vehicle_id2").val() != "");
 	setStatus(parcels.getSelectedParcels().length
 			+ " parcels selected. Total volume: "
 			+ parcels.getSelectedTotalVolume().toFixed(2));
@@ -95,7 +94,7 @@ function setStatus(status) {
 function planRoutes() {
 	spinner.show();
 	onHorizonChanged();
-	
+
 	vehicles.each(function(vehicle) {
 		planRoute(vehicle);
 	});
@@ -107,11 +106,11 @@ function planRoute(vehicle) {
 	vehicle.capacity_volume = Number.MAX_VALUE;
 	calRoute(profile, vehicle.parcels().getVisibleModels(), [ vehicle ], null,
 			function(routes) {
-				_.each(routes, function(route) {
-					plotRoute(route);
-					saveRoute(route);
-				});
-			});
+		_.each(routes, function(route) {
+			plotRoute(route);
+			saveRoute(route);
+		});
+	});
 }
 
 function planClustersRoutes() {
@@ -145,7 +144,7 @@ function calRoute(profile, planedParcels, vehicles, anchor, callback) {
 		}else{
 			var routes =tsptw(profile, planedParcels, vehicles, anchor);	
 		}
-		
+
 		setStatus("Time taken: " + (time() - startTime) );
 		log("Routing complete");
 		callback(routes);
@@ -161,7 +160,7 @@ function time(){
 function autoFill() {
 	var anchor = parcels.getSelectedParcels().at(0);
 	calRoute(profile, parcels.getIdleParcels(), [ vehicles
-			.get($("#vehicle_id2").val()) ], anchor, function(route) {
+	                                              .get($("#vehicle_id2").val()) ], anchor, function(route) {
 		plotRoute(route);
 		_.each(route.parcels, function(parcel) {
 			parcel.set("selected", true);
@@ -171,7 +170,7 @@ function autoFill() {
 
 function plotRoute(route) {
 	var colors = [ "#00C81A", "#007CC6", "#00BE94", "#00A3C6", "#CB7100",
-			"#C000B2" ];
+	               "#C000B2" ];
 	var coordinates = _.map(route.parcels, function(parcel) {
 		return parcel.marker.position;
 	});
@@ -245,7 +244,7 @@ function createParcelMarker(parcel) {
 	var numParcelsPerCircle = 8;
 	var radius = Math.ceil(sameParcelsCount / numParcelsPerCircle);
 	var degree = 2 * Math.PI / numParcelsPerCircle
-			* (sameParcelsCount % numParcelsPerCircle);
+	* (sameParcelsCount % numParcelsPerCircle);
 	parcel.set("lng", parcel.get("lng") + radius * 0.0001 * Math.sin(degree));
 	parcel.set("lat", parcel.get("lat") + radius * 0.0001 * Math.cos(degree));
 	parcel.set("identifier", parcel.get("identifier") + "-" + sameParcelsCount);
@@ -369,7 +368,7 @@ $(function() {
 			function() {
 				$("#autoFillBtn").toggle(
 						parcels.getSelectedParcels().length <= 2
-								&& $("#vehicle_id2").val() != "");
+						&& $("#vehicle_id2").val() != "");
 			});
 
 	$("#autoFillBtn").click(function(e) {
@@ -377,71 +376,71 @@ $(function() {
 	});
 
 	$("#assignBtn")
-			.click(
-					function(e) {
-						e.preventDefault();
+	.click(
+			function(e) {
+				e.preventDefault();
 
-						// find vehicle
-						var vehicleId = $("#vehicle_id2").val();
-						var vehicle = vehicles.get(vehicleId);
-						if (vehicle == null)
-							vehicle = {
-								id : 0
-							};
+				// find vehicle
+				var vehicleId = $("#vehicle_id2").val();
+				var vehicle = vehicles.get(vehicleId);
+				if (vehicle == null)
+					vehicle = {
+						id : 0
+				};
 
-						// check capacity
+				// check capacity
 
-						if (vehicleId != "") {
-							var leftVolume = vehicle.getCapacityVolumeLeft()
-									- parcels.getSelectedTotalVolume();
-							var leftWeight = vehicle.getCapacityWeightLeft()
-									- parcels.getSelectedTotalWeight();
-							if ((leftVolume < 0 || leftWeight < 0)
-									&& false == confirm("Vehicle overloaded. Volume left  "
-											+ leftVolume.toFixed(2)
-											+ ". Weight left "
-											+ leftWeight.toFixed(2)
-											+ ". Confirm to assign?")) {
-								return false;
-							}
-						}
+				if (vehicleId != "") {
+					var leftVolume = vehicle.getCapacityVolumeLeft()
+					- parcels.getSelectedTotalVolume();
+					var leftWeight = vehicle.getCapacityWeightLeft()
+					- parcels.getSelectedTotalWeight();
+					if ((leftVolume < 0 || leftWeight < 0)
+							&& false == confirm("Vehicle overloaded. Volume left  "
+									+ leftVolume.toFixed(2)
+									+ ". Weight left "
+									+ leftWeight.toFixed(2)
+									+ ". Confirm to assign?")) {
+						return false;
+					}
+				}
 
-						hide(shadowLays);
-						spinner.show();
-						var selectedParcels = parcels.getSelectedParcels();
-						selectedParcels
-								.each(function(parcel) {
-									parcel.set("selected", false);
-									if (parcel.get("vehicle_id") != vehicle.id) {
+				hide(shadowLays);
+				spinner.show();
+				var selectedParcels = parcels.getSelectedParcels();
+				selectedParcels
+				.each(function(parcel) {
+					parcel.set("selected", false);
+					if (parcel.get("vehicle_id") != vehicle.id) {
+						parcel
+						.save(
+								{
+									vehicle_id : vehicle.id,
+									seq : 0
+								},
+								{
+									patch : true,
+									success : function() {
+										setStatus("Updated parcel "
+												+ (selectedParcels
+														.indexOf(parcel) + 1)
+														+ "/"
+														+ selectedParcels.length);
 										parcel
-												.save(
-														{
-															vehicle_id : vehicle.id,
-															seq : 0
-														},
-														{
-															patch : true,
-															success : function() {
-																setStatus("Updated parcel "
-																		+ (selectedParcels
-																				.indexOf(parcel) + 1)
-																		+ "/"
-																		+ selectedParcels.length);
-																parcel
-																		.set(
-																				"vehicle_id",
-																				vehicle.id);
-																if (selectedParcels.length
-																		- selectedParcels
-																				.indexOf(parcel) < 6) {
-																	spinner
-																			.stop();
-																}
-															}
-														});
+										.set(
+												"vehicle_id",
+												vehicle.id);
+										if (selectedParcels.length
+												- selectedParcels
+												.indexOf(parcel) < 6) {
+											spinner
+											.stop();
+										}
 									}
 								});
-						onSelect();
-						return false;
-					});
+					}
+				});
+				onSelect();
+				return false;
+			});
 });

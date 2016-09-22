@@ -24,15 +24,16 @@ function initialize() {
 	drawingManager = new google.maps.drawing.DrawingManager({
 		drawingControl : true,
 		mapTypeControl: true,
+		mapTypeControlOptions: {
+			style: google.maps.MapTypeControlStyle.BOTTOM_RIGHT,
+			mapTypeIds: ['roadmap', 'terrain']
+		},
 		drawingControlOptions : {
 			position : google.maps.ControlPosition.TOP_LEFT,
 			drawingModes : [ google.maps.drawing.OverlayType.RECTANGLE,
 			                 google.maps.drawing.OverlayType.MARKER ]
 		},
-		mapTypeControlOptions: {
-			style: google.maps.MapTypeControlStyle.BOTTOM_RIGHT,
-			mapTypeIds: ['roadmap', 'terrain']
-		}
+		
 	});
 
 	drawingManager.setMap(map);

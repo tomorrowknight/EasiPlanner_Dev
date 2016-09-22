@@ -18,16 +18,17 @@ function initialize() {
 	var myOptions = {
 			zoom : parseInt(12),
 			center : new google.maps.LatLng(1.34, 103.82),
-			zoomControl : true
+			zoomControl : true,
+			mapTypeControl: true,
+			mapTypeControlOptions: {
+				style: google.maps.MapTypeControlStyle.LEFT_BOTTOM,
+				mapTypeIds: ['roadmap', 'terrain']
+			},
 	};
 	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
 	drawingManager = new google.maps.drawing.DrawingManager({
 		drawingControl : true,
-		mapTypeControl: true,
-		mapTypeControlOptions: {
-			style: google.maps.MapTypeControlStyle.LEFT_BOTTOM,
-			mapTypeIds: ['roadmap', 'terrain']
-		},
 		drawingControlOptions : {
 			position : google.maps.ControlPosition.TOP_LEFT,
 			drawingModes : [ google.maps.drawing.OverlayType.RECTANGLE,

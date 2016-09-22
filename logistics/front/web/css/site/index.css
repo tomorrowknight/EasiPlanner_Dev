@@ -17,7 +17,7 @@ body {
 	margin: 0;
 }
 
-#map[title="Stop drawing"] { 
+#map_controls[title="Stop drawing"] { 
     display: none !important; 
 }
 

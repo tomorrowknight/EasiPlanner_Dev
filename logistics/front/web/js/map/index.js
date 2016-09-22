@@ -29,6 +29,13 @@ function initialize() {
 					google.maps.drawing.OverlayType.MARKER ]
 		}
 	});
+	mapTypeControlOptions = new google.maps.MapTypeControlOptions({
+	 mapTypeControl: true,
+	    mapTypeControlOptions: {
+	      style: google.maps.MapTypeControlStyle.LEFT_TOP,
+	      mapTypeIds: ['roadmap', 'terrain']
+	    }
+	  });
 	drawingManager.setMap(map);
 	google.maps.event
 			.addListener(

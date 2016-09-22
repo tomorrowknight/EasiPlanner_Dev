@@ -28,7 +28,7 @@ MapAsset::register ( $this );
 		<div class="btn-group">
 			<button type="button" class="btn btn-primary navbar-btn"
 				data-toggle="tooltip" data-placement="bottom"
-				title="Refresh the page" onclick='location.reload();'>
+				title="Refresh the page" onclick='completedDelivery();'>
 				<span class="glyphicon glyphicon-refresh"></span>
 			</button>
 		</div>

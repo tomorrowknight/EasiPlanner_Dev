@@ -31,10 +31,10 @@ function initialize() {
 			position : google.maps.ControlPosition.TOP_LEFT,
 			drawingModes : [ google.maps.drawing.OverlayType.RECTANGLE,
 			                 google.maps.drawing.OverlayType.MARKER ]
-	
-	
+
+
 		},
-		
+
 	});
 
 	drawingManager.setMap(map);
@@ -205,6 +205,24 @@ function clearAll() {
 	});
 }
 
+function completedDelivery(){
+	parcels.each(function(parcel) {
+		if(parcel.get("deliver_time")!=null){
+			var lat1  = parcel.get("lat");
+			var lng1 = parcel.get("lng");
+			var loc = lat1 + "," + lng1;
+			addMarkerDelivered(loc,map);
+			google.maps.event.addListener(parcel.marker, 'click', function() {
+				var infoWindow = new google.maps.InfoWindow({
+					content : _.template($("#tmpl_parcel_window").html())(this.model)
+				});
+				infoWindow.open(map, this);
+			});
+		}
+	});
+	location.reload();
+}
+
 function hide(lays) {
 	_(lays).each(function(overlay) {
 		overlay.setMap(null);
@@ -236,6 +254,17 @@ function onHorizonChanged() {
 			$(this).attr("disabled", "disabled");
 		}
 	});
+}
+
+// Adds a marker to the map.
+function addMarkerDelivered(location, map) {
+  // Add the marker at the clicked location, and add the next-available label
+  // from the array of alphabetical characters.
+  var marker = new google.maps.Marker({
+    position: location,
+    label: 'D',
+    map: map
+  });
 }
 
 function createParcelMarker(parcel) {

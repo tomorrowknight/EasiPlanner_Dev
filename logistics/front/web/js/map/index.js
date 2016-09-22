@@ -30,7 +30,7 @@ function initialize() {
 			                 google.maps.drawing.OverlayType.MARKER ]
 		},
 		mapTypeControlOptions: {
-			style: google.maps.MapTypeControlStyle.LEFT_TOP,
+			style: google.maps.MapTypeControlStyle.BOTTOM_RIGHT,
 			mapTypeIds: ['roadmap', 'terrain']
 		}
 	});

@@ -31,6 +31,8 @@ function initialize() {
 			position : google.maps.ControlPosition.TOP_LEFT,
 			drawingModes : [ google.maps.drawing.OverlayType.RECTANGLE,
 			                 google.maps.drawing.OverlayType.MARKER ]
+	
+	
 		},
 		
 	});

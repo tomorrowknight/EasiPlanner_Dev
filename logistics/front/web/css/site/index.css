@@ -17,6 +17,10 @@ body {
 	margin: 0;
 }
 
+#map-canvas[title="Stop drawing"] { 
+    display: none !important; 
+}
+
 .toolbox {
 	position: absolute;
 	padding: 10px;

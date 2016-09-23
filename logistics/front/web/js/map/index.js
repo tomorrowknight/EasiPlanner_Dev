@@ -252,18 +252,6 @@ function onHorizonChanged() {
 	});
 }
 
-//Adds a marker to the map.
-function addDeliverMarker(location, map) {
-	// Add the marker at the clicked location, and add the next-available label
-	// from the array of alphabetical characters.
-	var marker = new google.maps.Marker({
-		position: location,
-		label: 'D',
-		map: map,
-		icon: new google.maps.MarkerImage("Green")
-	});
-}
-
 function createParcelMarker(parcel) {
 
 	var sameParcelsCount = parcels.where({

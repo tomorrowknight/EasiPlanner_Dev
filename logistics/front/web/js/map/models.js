@@ -19,6 +19,16 @@ var SuperModel = {
 			});
 			this.marker.setIcon(this.getIcon());
 		},
+		addDeliverMarker: function(location, map) {
+			// Add the marker at the clicked location, and add the next-available label
+			// from the array of alphabetical characters.
+			var marker = new google.maps.Marker({
+				position: location,
+				label: 'D',
+				map: map,
+				icon: new google.maps.MarkerImage("Green")
+			});
+		},
 		getIcon : function() {
 			return this.getIconUrl(this.id);
 		},

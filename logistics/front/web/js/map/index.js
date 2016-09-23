@@ -266,10 +266,11 @@ function createParcelMarker(parcel) {
 	parcel.set("lat", parcel.get("lat") + radius * 0.0001 * Math.cos(degree));
 	parcel.set("identifier", parcel.get("identifier") + "-" + sameParcelsCount);
 
-	if(parcel.get("deliver_time")==null){
-		parcel.createMarker(map);
-	}else{
+	if(parcel.get("deliver_time")!=null){
 		parcel.addDeliverMarker(new google.maps.LatLng(parcel.get("lat"),parcel.get("lng")),map);
+	}else{
+		parcel.createMarker(map);
+		
 	}
 	google.maps.event.addListener(parcel.marker, 'click', function() {
 		var infoWindow = new google.maps.InfoWindow({

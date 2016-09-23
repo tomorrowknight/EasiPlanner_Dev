@@ -28,7 +28,7 @@ MapAsset::register ( $this );
 		<div class="btn-group">
 			<button type="button" class="btn btn-primary navbar-btn"
 				data-toggle="tooltip" data-placement="bottom"
-				title="Refresh the page" onclick='completedDelivery();'>
+				title="Refresh the page" onclick='location.reload();'>
 				<span class="glyphicon glyphicon-refresh"></span>
 			</button>
 		</div>
@@ -47,6 +47,11 @@ MapAsset::register ( $this );
 				data-toggle="tooltip" data-placement="bottom"
 				title="Remove route overlay" onclick='clearAll()'>
 				<span class="glyphicon glyphicon-remove"></span>
+			</button>
+			<button type="button" class="btn btn-success navbar-btn"
+				data-toggle="tooltip" data-placement="bottom"
+				title="Refresh Delivered Jobs" onclick='completedDelivery()'>
+				<span class="glyphicon glyphicon-pushpin"></span>
 			</button>
 		</div>
 		<?

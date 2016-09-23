@@ -208,6 +208,7 @@ function clearAll() {
 function completedDelivery(){
 	parcels.each(function(parcel) {
 		if(parcel.get("deliver_time")!=null){
+			console.log("Entered");
 			var lat1  = parcel.get("lat");
 			var lng1 = parcel.get("lng");
 			var loc = lat1 + "," + lng1;

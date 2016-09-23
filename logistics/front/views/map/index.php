@@ -256,8 +256,9 @@ window.onload = function(){$('#jstree_demo_div').jstree();};
 <tr><td>Weight</td><td><%=obj.get("weight")%></td></tr>
 <tr><td>Time Window Start</td><td><%=obj.get("window_start")%></td></tr>
 <tr><td>Time Window End</td><td><%=obj.get("window_end")%></td></tr>
-<tr><td>ServiceTime</td><td><%=obj.get("service_time")%></td></tr>
-<tr><td>DeliverTime</td><td><%=new Date((parseInt(obj.get("planned_deliver_time")) + new Date().getTimezoneOffset() )*60000)%></td></tr>
+<tr><td>Service Time</td><td><%=obj.get("service_time")%></td></tr>
+<tr><td>Planned Time</td><td><%=new Date((parseInt(obj.get("planned_deliver_time")) + new Date().getTimezoneOffset() )*60000)%></td></tr>
+<tr><td>Deliver Time</td><td><%=new Date((parseInt(obj.get("deliver_time")) + new Date().getTimezoneOffset() )*60000)%></td></tr>
 </table>
 </script>
 

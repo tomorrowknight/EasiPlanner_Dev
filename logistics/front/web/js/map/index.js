@@ -212,7 +212,7 @@ function completedDelivery(){
 			var lat1  = parcel.get("lat");
 			var lng1 = parcel.get("lng");
 			var loc = lat1 + "," + lng1;
-			addMarkerDelivered(loc,map);
+			addMarkerDelivered(new google.maps.LatLng(lat1,lng1),map);
 			google.maps.event.addListener(parcel.marker, 'click', function() {
 				var infoWindow = new google.maps.InfoWindow({
 					content : _.template($("#tmpl_parcel_window").html())(this.model)

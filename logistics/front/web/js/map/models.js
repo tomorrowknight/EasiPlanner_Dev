@@ -22,11 +22,15 @@ var SuperModel = {
 		addDeliverMarker: function(location, map) {
 			// Add the marker at the clicked location, and add the next-available label
 			// from the array of alphabetical characters.
+			var delivered = "green";
+			var failed = "red";
+			var rejected = "orange";
+			var icon = "http://maps.google.com/mapfiles/ms/icons/" + delivered + ".png";
 			var marker = new google.maps.Marker({
 				position: location,
 				label: 'D',
 				map: map,
-				icon: new google.maps.MarkerImage("Green")
+				icon: new google.maps.MarkerImage(icon)
 			});
 		},
 		getIcon : function() {

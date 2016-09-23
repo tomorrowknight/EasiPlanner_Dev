@@ -221,7 +221,7 @@ function completedDelivery(){
 			});
 		}
 	});
-	location.reload();
+	//location.reload();
 }
 
 function hide(lays) {

@@ -253,7 +253,6 @@ function onHorizonChanged() {
 }
 
 function createParcelMarker(parcel) {
-
 	var sameParcelsCount = parcels.where({
 		lat : parcel.get("lat"),
 		lng : parcel.get("lng")
@@ -268,6 +267,12 @@ function createParcelMarker(parcel) {
 
 	if(parcel.get("deliver_time")!=null){
 		parcel.addDeliverMarker(new google.maps.LatLng(parcel.get("lat"),parcel.get("lng")),map);
+		google.maps.event.addListener(parcel.marker, 'click', function() {
+			var infoWindow = new google.maps.InfoWindow({
+				content : _.template($("#tmpl_parcel_window").html())(this.model)
+			});
+			infoWindow.open(map, this);
+		});
 	}else{
 		parcel.createMarker(map);
 		google.maps.event.addListener(parcel.marker, 'click', function() {

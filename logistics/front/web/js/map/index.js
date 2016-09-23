@@ -279,7 +279,7 @@ function createParcelMarker(parcel) {
 	parcel.set("identifier", parcel.get("identifier") + "-" + sameParcelsCount);
 
 	if(parcel.get("deliver_time")==null){
-		parcel.createMarker(map);
+		parcel.createMarker(new google.maps.LatLng(parcel.get("lat"),parcel.get("lng")),map);
 	}else{
 		parcel.addDeliverMarker(map);
 	}

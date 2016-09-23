@@ -48,11 +48,6 @@ MapAsset::register ( $this );
 				title="Remove route overlay" onclick='clearAll()'>
 				<span class="glyphicon glyphicon-remove"></span>
 			</button>
-			<button type="button" class="btn btn-success navbar-btn"
-				data-toggle="tooltip" data-placement="bottom"
-				title="Refresh Delivered Jobs" onclick='completedDelivery()'>
-				<span class="glyphicon glyphicon-pushpin"></span>
-			</button>
 		</div>
 		<?
 		echo $this->render ( "/layouts/_nav" );

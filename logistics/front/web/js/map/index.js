@@ -205,19 +205,6 @@ function clearAll() {
 	});
 }
 
-function completedDelivery(){
-	parcels.each(function(parcel) {
-		if(parcel.get("deliver_time")!=null){
-			console.log("Entered");
-			var lat1  = parcel.get("lat");
-			var lng1 = parcel.get("lng");
-			var loc = lat1 + "," + lng1;
-			addMarkerDelivered(new google.maps.LatLng(lat1,lng1),map);
-
-		}
-	});
-	//location.reload();
-}
 
 function hide(lays) {
 	_(lays).each(function(overlay) {
@@ -258,12 +245,13 @@ function createParcelMarker(parcel) {
 		lng : parcel.get("lng")
 	}).length - 1;
 	var numParcelsPerCircle = 8;
+	var randomSN = Math.floor((Math.random() * 100) + 1);
 	var radius = Math.ceil(sameParcelsCount / numParcelsPerCircle);
 	var degree = 2 * Math.PI / numParcelsPerCircle
 	* (sameParcelsCount % numParcelsPerCircle);
 	parcel.set("lng", parcel.get("lng") + radius * 0.0001 * Math.sin(degree));
 	parcel.set("lat", parcel.get("lat") + radius * 0.0001 * Math.cos(degree));
-	parcel.set("identifier", parcel.get("identifier") + "-" + sameParcelsCount);
+	parcel.set("identifier", parcel.get("identifier") + "-" + randomSN);
 
 	if(parcel.get("deliver_time")!=null){
 		parcel.addDeliverMarker(new google.maps.LatLng(parcel.get("lat"),parcel.get("lng")),map);

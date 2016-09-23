@@ -28,7 +28,7 @@ var SuperModel = {
 			var rejected = "orange";
 			var icon = "http://maps.google.com/mapfiles/ms/icons/" + delivered + ".png";
 			this.marker = new google.maps.Marker({
-				position: location,
+				position: this.getPosition(),
 				label: 'D',
 				map: map,
 				icon: new google.maps.MarkerImage(icon)

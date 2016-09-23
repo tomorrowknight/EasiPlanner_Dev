@@ -31,7 +31,7 @@ var SuperModel = {
 				position: this.getPosition(),
 				label: 'D',
 				map: map,
-				mode: this,
+				model: this,
 				icon: new google.maps.MarkerImage(icon)
 			});
 		},

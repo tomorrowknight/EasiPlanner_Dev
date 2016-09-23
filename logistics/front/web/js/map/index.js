@@ -213,12 +213,7 @@ function completedDelivery(){
 			var lng1 = parcel.get("lng");
 			var loc = lat1 + "," + lng1;
 			addMarkerDelivered(new google.maps.LatLng(lat1,lng1),map);
-			google.maps.event.addListener(parcel.marker, 'click', function() {
-				var infoWindow = new google.maps.InfoWindow({
-					content : _.template($("#tmpl_parcel_window").html())(this.model)
-				});
-				infoWindow.open(map, this);
-			});
+
 		}
 	});
 	//location.reload();
@@ -257,18 +252,20 @@ function onHorizonChanged() {
 	});
 }
 
-// Adds a marker to the map.
-function addMarkerDelivered(location, map) {
-  // Add the marker at the clicked location, and add the next-available label
-  // from the array of alphabetical characters.
-  var marker = new google.maps.Marker({
-    position: location,
-    label: 'D',
-    map: map
-  });
+//Adds a marker to the map.
+function addDeliverMarker(location, map) {
+	// Add the marker at the clicked location, and add the next-available label
+	// from the array of alphabetical characters.
+	var marker = new google.maps.Marker({
+		position: location,
+		label: 'D',
+		map: map,
+		icon: new google.maps.MarkerImage("Green")
+	});
 }
 
 function createParcelMarker(parcel) {
+
 	var sameParcelsCount = parcels.where({
 		lat : parcel.get("lat"),
 		lng : parcel.get("lng")
@@ -280,7 +277,12 @@ function createParcelMarker(parcel) {
 	parcel.set("lng", parcel.get("lng") + radius * 0.0001 * Math.sin(degree));
 	parcel.set("lat", parcel.get("lat") + radius * 0.0001 * Math.cos(degree));
 	parcel.set("identifier", parcel.get("identifier") + "-" + sameParcelsCount);
-	parcel.createMarker(map);
+
+	if(parcel.get("deliver_time")==null){
+		parcel.createMarker(map);
+	}else{
+		parcel.addDeliverMarker(map);
+	}
 	google.maps.event.addListener(parcel.marker, 'click', function() {
 		var infoWindow = new google.maps.InfoWindow({
 			content : _.template($("#tmpl_parcel_window").html())(this.model)

@@ -279,9 +279,9 @@ function createParcelMarker(parcel) {
 	parcel.set("identifier", parcel.get("identifier") + "-" + sameParcelsCount);
 
 	if(parcel.get("deliver_time")==null){
-		parcel.createMarker(new google.maps.LatLng(parcel.get("lat"),parcel.get("lng")),map);
+		parcel.createMarker(map);
 	}else{
-		parcel.addDeliverMarker(map);
+		parcel.addDeliverMarker(new google.maps.LatLng(parcel.get("lat"),parcel.get("lng")),map);
 	}
 	google.maps.event.addListener(parcel.marker, 'click', function() {
 		var infoWindow = new google.maps.InfoWindow({

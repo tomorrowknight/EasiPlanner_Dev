@@ -270,14 +270,15 @@ function createParcelMarker(parcel) {
 		parcel.addDeliverMarker(new google.maps.LatLng(parcel.get("lat"),parcel.get("lng")),map);
 	}else{
 		parcel.createMarker(map);
+		google.maps.event.addListener(parcel.marker, 'click', function() {
+			var infoWindow = new google.maps.InfoWindow({
+				content : _.template($("#tmpl_parcel_window").html())(this.model)
+			});
+			infoWindow.open(map, this);
+		});
 		
 	}
-	google.maps.event.addListener(parcel.marker, 'click', function() {
-		var infoWindow = new google.maps.InfoWindow({
-			content : _.template($("#tmpl_parcel_window").html())(this.model)
-		});
-		infoWindow.open(map, this);
-	});
+
 }
 
 function geocodeParcel() {

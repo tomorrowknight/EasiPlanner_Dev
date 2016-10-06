@@ -61,7 +61,7 @@ $this->params ['breadcrumbs'] [] = $this->title;
 					'lat',
 					'lng',
 					[ 
-							'label' => 'Status',
+							'label' => 'Geocode Status',
 							'format' => 'raw',
 							'attribute' => 'failed',
 							'value' => function ($model) {

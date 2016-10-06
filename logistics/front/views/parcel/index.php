@@ -23,7 +23,6 @@ $this->params ['breadcrumbs'] [] = $this->title;
 		<?= Html::a('Import Parcels', ['import'], ['class' => 'btn btn-warning'])?>
 		<?= Html::a('Export Parcels', array_merge(['export'],$_GET), ['class' => 'btn btn-info','target'=>"_blank"])?>
 		<?= Html::a('Delete All Parcels', ['delete-all'], ['class' => 'btn btn-danger','onclick'=>"return confirm('Confirm delete?')"])?>
-		<?= Html::a("signature", "www.google.com");?>
 		<button id='deleteSelectedBtn' class='btn btn-primary'
 			onclick='deleteSelected()'>Delete Selected</button>
 	</p>
@@ -59,6 +58,7 @@ $this->params ['breadcrumbs'] [] = $this->title;
 					'window_start',
 					'window_end',
 					'deliver_time',
+					'signature',
 					'lat',
 					'lng',
 					[ 

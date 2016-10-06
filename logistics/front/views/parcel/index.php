@@ -81,7 +81,7 @@ $this->params ['breadcrumbs'] [] = $this->title;
 					],
 					[		'label' => 'Signature',
 							'value' => function($model){
-							return Html::a('label', $model->signature);
+							return Html::a('label', "signture",$model->signature);
 					}
 					],
 					[ 

@@ -81,7 +81,7 @@ $this->params ['breadcrumbs'] [] = $this->title;
 					],
 					[		'label' => 'Signature',
 							'value' => function($model){
-							return Html::a("signature", "data:image/jpeg;base64," . $model->signature);
+							return Html::a("signature", "www.google.com");
 					}
 					],
 					[ 

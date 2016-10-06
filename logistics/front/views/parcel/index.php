@@ -59,14 +59,14 @@ $this->params ['breadcrumbs'] [] = $this->title;
 					'window_start',
 					'window_end',
 					'deliver_time',
+					'Signature',
 					'lat',
 					'lng',
-					
 					[ 
 							'label' => 'Signature',
 							'format' => 'raw',
 							'value' => function ($model) {
-								return Html::a ( "signature", "www.google.com" );
+								return Html::a ( "sign", $model->signature );
 							} 
 					],
 					

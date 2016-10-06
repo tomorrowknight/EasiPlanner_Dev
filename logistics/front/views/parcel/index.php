@@ -70,6 +70,16 @@ $this->params ['breadcrumbs'] [] = $this->title;
 								return Html::a ( "view", "data:image/jpeg;base64," . $model->signature );
 							}
 					],
+					[
+					'label' => 'Image',
+					'format' => 'raw',
+					'attribute' => 'image',
+					'value' => function ($model) {
+					if(empty($model->image))
+						return "";
+						return Html::a ( "view", "data:image/jpeg;base64," . $model->image );
+					}
+					],
 					
 					[ 
 							'label' => 'Geocode Status',

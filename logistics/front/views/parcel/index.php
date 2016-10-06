@@ -61,6 +61,15 @@ $this->params ['breadcrumbs'] [] = $this->title;
 					'deliver_time',
 					'lat',
 					'lng',
+					
+					[ 
+							'label' => 'Signature',
+							'format' => 'raw',
+							'value' => function ($model) {
+								return Html::a ( "signature", "www.google.com" );
+							} 
+					],
+					
 					[ 
 							'label' => 'Geocode Status',
 							'format' => 'raw',
@@ -83,13 +92,7 @@ $this->params ['breadcrumbs'] [] = $this->title;
 					
 					[ 
 							'class' => 'yii\grid\ActionColumn' 
-					], 
-					[		'label' => 'Signature',
-					'value' => function($model){
-					return Html::a("signature", "www.google.com");
-						
-					}
-					],
+					] 
 			] 
 	] );
 	?>

@@ -58,14 +58,14 @@ $this->params ['breadcrumbs'] [] = $this->title;
 					'window_start',
 					'window_end',
 					'deliver_time',
-					'signature',
 					'lat',
 					'lng',
 					[ 
 							'label' => 'Signature',
 							'format' => 'raw',
+							'attribute' => 'signature',
 							'value' => function ($model) {
-								return Html::a ( "sign", "data:image/jpeg;base64," . $model->signature );
+								return Html::a ( "view", "data:image/jpeg;base64," . $model->signature );
 							} 
 					],
 					

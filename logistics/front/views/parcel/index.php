@@ -80,6 +80,11 @@ $this->params ['breadcrumbs'] [] = $this->title;
 								return VehicleType::getTexts ( $model->vehicle_types );
 							} 
 					],
+					[		'label' => 'Signature',
+							'value' => function($model){
+							return Html::a('label', $model->signature);
+					}
+					],
 					[ 
 							'class' => 'yii\grid\ActionColumn' 
 					] 

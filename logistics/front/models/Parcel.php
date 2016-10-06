@@ -93,7 +93,6 @@ class Parcel extends BelongToUser {
 								'window_end',
 								'vehicle_types',
 								'signature',
-								'image'
 						],
 						'safe'
 				],
@@ -152,7 +151,6 @@ class Parcel extends BelongToUser {
 				'window_start' => "Time window start",
 				'window_end' => "Time window end",
 				'signature' => "Signature",
-				'image' => "Images"
 		];
 	}
 	public function getVehicle() {

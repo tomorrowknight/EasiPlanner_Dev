@@ -59,7 +59,6 @@ $this->params ['breadcrumbs'] [] = $this->title;
 					'window_end',
 					'deliver_time',
 					'signature',
-					'images',
 					'lat',
 					'lng',
 					[ 

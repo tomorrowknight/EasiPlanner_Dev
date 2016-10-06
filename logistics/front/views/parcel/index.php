@@ -65,8 +65,10 @@ $this->params ['breadcrumbs'] [] = $this->title;
 							'format' => 'raw',
 							'attribute' => 'signature',
 							'value' => function ($model) {
+							if(empty($model->signature))
+								return "Empty";
 								return Html::a ( "view", "data:image/jpeg;base64," . $model->signature );
-							} 
+							}
 					],
 					
 					[ 

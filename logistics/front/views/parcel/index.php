@@ -95,6 +95,19 @@ $this->params ['breadcrumbs'] [] = $this->title;
 								] );
 							} 
 					],
+					[
+					'label' => 'Delivery Status',
+					'format' => 'raw',
+					'attribute' => 'status',
+					'value' => function ($model) {
+					if ($model->lat == 0)
+						return "Pending";
+						$labelClass = $model->status ? 1 : 2 ;
+						return Html::tag ( 'label', $model->status ? "OK" : "Fail", [
+								'class' => "label label-$labelClass"
+						] );
+					}
+					],
 					[ 
 							'label' => 'Types',
 							'value' => function ($model) {

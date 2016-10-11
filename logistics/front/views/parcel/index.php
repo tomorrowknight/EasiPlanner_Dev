@@ -100,7 +100,7 @@ $this->params ['breadcrumbs'] [] = $this->title;
 							'label' => 'Delivery Status',
 							'attribute' => 'status',
 							'value' => function ($model) {
-								return Parcel::getStatusLabels ( $model->status );
+								return Parcel::getStatusLabels();
 							} 
 					],
 					[ 

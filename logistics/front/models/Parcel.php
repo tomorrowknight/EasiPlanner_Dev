@@ -75,6 +75,7 @@ class Parcel extends BelongToUser {
 						[
 								'lat',
 								'lng',
+								'status',
 								'volume',
 								'weight',
 								'vehicle_id',
@@ -136,6 +137,7 @@ class Parcel extends BelongToUser {
 	public function attributeLabels() {
 		return [
 				'id' => 'ID',
+				'status' => 'status',
 				'identifier' => 'Identifier',
 				'vehicle_id' => "Vehicle",
 				'driver_id' => "Driver",

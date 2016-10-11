@@ -1,5 +1,4 @@
 <?php
-use app\models\Parcel;
 use app\models\VehicleType;
 use yii\grid\GridView;
 use yii\helpers\Html;

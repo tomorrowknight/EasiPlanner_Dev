@@ -245,13 +245,13 @@ function createParcelMarker(parcel) {
 		lng : parcel.get("lng")
 	}).length - 1;
 	var numParcelsPerCircle = 8;
-	var randomSN = Math.floor((Math.random() * 100) + 1);
+	//var randomSN = Math.floor((Math.random() * 100) + 1);
 	var radius = Math.ceil(sameParcelsCount / numParcelsPerCircle);
 	var degree = 2 * Math.PI / numParcelsPerCircle
 	* (sameParcelsCount % numParcelsPerCircle);
 	parcel.set("lng", parcel.get("lng") + radius * 0.0001 * Math.sin(degree));
 	parcel.set("lat", parcel.get("lat") + radius * 0.0001 * Math.cos(degree));
-	parcel.set("identifier", parcel.get("identifier") + "-" + randomSN);
+	parcel.set("identifier", parcel.get("identifier"));
 
 	if(parcel.get("deliver_time")!=null){
 		parcel.addDeliverMarker(new google.maps.LatLng(parcel.get("lat"),parcel.get("lng")),map);

@@ -75,7 +75,6 @@ class Parcel extends BelongToUser {
 						[
 								'lat',
 								'lng',
-								'status',
 								'volume',
 								'weight',
 								'vehicle_id',
@@ -117,6 +116,7 @@ class Parcel extends BelongToUser {
 				[
 						[
 								'failed',
+								'status',
 								'seq',
 								'route'
 						],

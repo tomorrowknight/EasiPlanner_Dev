@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use app\assets\AppAsset;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
+use app\models\Parcel;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -66,20 +67,20 @@ $this->params ['breadcrumbs'] [] = $this->title;
 							'format' => 'raw',
 							'attribute' => 'signature',
 							'value' => function ($model) {
-							if(empty($model->signature))
-								return "";
+								if (empty ( $model->signature ))
+									return "";
 								return Html::a ( "view", "data:image/jpeg;base64," . $model->signature );
-							}
+							} 
 					],
-					[
-					'label' => 'Image',
-					'format' => 'raw',
-					'attribute' => 'image',
-					'value' => function ($model) {
-					if(empty($model->image))
-						return "";
-						return Html::a ( "view", "data:image/jpeg;base64," . $model->image );
-					}
+					[ 
+							'label' => 'Image',
+							'format' => 'raw',
+							'attribute' => 'image',
+							'value' => function ($model) {
+								if (empty ( $model->image ))
+									return "";
+								return Html::a ( "view", "data:image/jpeg;base64," . $model->image );
+							} 
 					],
 					
 					[ 
@@ -95,18 +96,12 @@ $this->params ['breadcrumbs'] [] = $this->title;
 								] );
 							} 
 					],
-					[
-					'label' => 'Delivery Status',
-					'format' => 'raw',
-					'attribute' => 'status',
-					'value' => function ($model) {
-					if ($model->lat == 0)
-						return "Pending";
-						$labelClass = $model->status ? 1 : 2 ;
-						return Html::tag ( 'label', $model->status ? "OK" : "Fail", [
-								'class' => "label label-$labelClass"
-						] );
-					}
+					[ 
+							'label' => 'Delivery Status',
+							'attribute' => 'status',
+							'value' => function ($model) {
+								return Parcel::getStatusLabels ( $model->status );
+							} 
 					],
 					[ 
 							'label' => 'Types',

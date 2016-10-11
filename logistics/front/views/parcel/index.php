@@ -100,7 +100,15 @@ $this->params ['breadcrumbs'] [] = $this->title;
 							'label' => 'Delivery Status',
 							'attribute' => 'status',
 							'value' => function ($model) {
-								return Parcel::getStatusLabels();
+								if($model->status == 1){
+									return "DONE";
+								}else if($model->status == 2){
+									return "REJECTED";
+								}else if($model->status == 3){
+									return "FAILED";
+								}else{
+									return "PENDING";
+								}
 							} 
 					],
 					[ 

@@ -77,10 +77,14 @@ $this->params ['breadcrumbs'] [] = $this->title;
 							'format' => 'raw',
 							'attribute' => 'image',
 							'value' => function ($model) {
-								if (empty ( $model->image) || $model->image == null)
+								if (empty ( $model->image)){
 									return "";
+								}else if( $model->image == null){
+									return "";
+								}else{
 								return Html::a ( "view", "data:image/jpeg;base64," . $model->image );
-							} 
+								}
+								} 
 					],
 					
 					[ 

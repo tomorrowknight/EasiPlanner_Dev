@@ -23,7 +23,7 @@ use yii\helpers\Html;
 class Parcel extends BelongToUser {
 	const STATUS_REJECTED = 2;
 	const STATUS_FAIL = 3;
-	const STATUS_PENGING = 0;
+	const STATUS_PENDING = 0;
 	const STATUS_DONE = 1;
 	public $csv_file;
 

@@ -43,7 +43,7 @@ class Parcel extends BelongToUser {
 						'text' => "FAIL",
 						'color' => "warning"
 				],
-				self::STATUS_PENGING => [
+				self::STATUS_PENDING => [
 						'text' => "PENDING",
 						'color' => "info"
 				],

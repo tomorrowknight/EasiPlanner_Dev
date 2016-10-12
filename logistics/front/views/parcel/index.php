@@ -105,14 +105,16 @@ $this->params ['breadcrumbs'] [] = $this->title;
 							'label' => 'Delivery Status',
 							'attribute' => 'status',
 							'value' => function ($model) {
-								if ($model->status == 0) {
+								if ($model->status == 1) {
 									$arr = Parcel::getStatusLabels();
-									return Html::tag ( "label", $arr ['STATUS_PENDING'] ['PENDING'], [ 
-											'class' => "label label-" . $arr ['STATUS_PENDING'] ['info'] 
+									$done = Parcel::STATUS_DONE;
+									return Html::tag ( "label", $arr [$done] ['text'], [ 
+											'class' => "label label-" . $arr [$done] ['color'] 
 									] );
-								} else if ($model->status == 1) {
-									return Html::tag ( "label", $arr [$this->status] ['DONE'], [ 
-											'class' => "label label-" . $arr [$this->status] ['success'] 
+								} else if ($model->status == 0) {
+									$pending = Parcel::STATUS_PENDING;
+									return Html::tag ( "label", $arr [$pending] ['text'], [ 
+											'class' => "label label-" . $arr [$pending] ['color'] 
 									] );
 								}
 							} 

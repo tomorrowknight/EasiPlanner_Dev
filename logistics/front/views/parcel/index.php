@@ -106,8 +106,8 @@ $this->params ['breadcrumbs'] [] = $this->title;
 							'attribute' => 'status',
 							'value' => function ($model) {
 								if ($model->status == 0) {
-									return Html::tag ( "label", $arr [$this->status] ['PENDING'], [ 
-											'class' => "label label-" . $arr [$this->status] ['info'] 
+									return Html::tag ( "label", $arr ['STATUS_PENGING'] ['PENDING'], [ 
+											'class' => "label label-" . $arr ['STATUS_PENGING'] ['info'] 
 									] );
 								} else if ($model->status == 1) {
 									return Html::tag ( "label", $arr [$this->status] ['DONE'], [ 

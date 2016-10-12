@@ -107,11 +107,26 @@ $this->params ['breadcrumbs'] [] = $this->title;
 							'attribute' => 'status',
 							'value' => function ($model) {
 								$arr = Parcel::getStatusLabels ();
-								if ($model->status == 0) {
+								if ($model->status == 1) {
+									$done = Parcel::STATUS_DONE;
+									return Html::tag ( "label", $arr [$done] ['text'], [ 
+											'class' => "label label-" . $arr [$done] ['color'] 
+									] );
+								} else if ($model->status == 2) {
+									$rejected = Parcel::STATUS_REJECTED;
+									return Html::tag ( "label", $arr [$rejected] ['text'], [ 
+											'class' => "label label-" . $arr [$rejected] ['color'] 
+									] );
+								} else if ($model->status == 3) {
+									$failed = Parcel::STATUS_FAIL;
+									return Html::tag ( "label", $arr [$failed] ['text'], [ 
+											'class' => "label label-" . $arr [$failed] ['color'] 
+									] );
+								} else {
 									$pending = Parcel::STATUS_PENDING;
-									return Html::tag ( 'label', "PENDING", [ 
-											'class' => "label label-info"	
-									 ]);
+									return Html::tag ( "label", $arr [$pending] ['text'], [ 
+											'class' => "label label-" . $arr [$pending] ['color'] 
+									] );
 								}
 							} 
 					],

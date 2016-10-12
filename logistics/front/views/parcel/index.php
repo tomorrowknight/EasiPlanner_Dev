@@ -105,8 +105,9 @@ $this->params ['breadcrumbs'] [] = $this->title;
 							'label' => 'Delivery Status',
 							'attribute' => 'status',
 							'value' => function ($model) {
+							$arr = Parcel::getStatusLabels();
 								if ($model->status == 1) {
-									$arr = Parcel::getStatusLabels();
+									
 									$done = Parcel::STATUS_DONE;
 									return Html::tag ( "label", $arr [$done] ['text'], [ 
 											'class' => "label label-" . $arr [$done] ['color'] 

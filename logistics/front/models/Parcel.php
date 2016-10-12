@@ -53,9 +53,9 @@ class Parcel extends BelongToUser {
 				]
 		];
 	}
-	public function getStatusLabel($statusCode) {
+	public function getStatusLabel() {
 		$arr = self::getStatusLabels ();
-		return Html::tag ( "label", $arr [$statusCode] ['text'], [
+		return Html::tag ( "label", $arr [$this->status] ['text'], [
 				'class' => "label label-" . $arr [$this->status] ['color']
 		] );
 	}

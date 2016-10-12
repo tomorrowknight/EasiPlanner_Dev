@@ -12,10 +12,7 @@ use app\models\Parcel;
 
 $this->title = 'Parcels';
 $this->params ['breadcrumbs'] [] = $this->title;
-const STATUS_REJECTED = 2;
-const STATUS_FAIL = 3;
-const STATUS_PENGING = 0;
-const STATUS_DONE = 1;
+
 ?>
 <div class="parcel-index">
 
@@ -108,13 +105,7 @@ const STATUS_DONE = 1;
 							'label' => 'Delivery Status',
 							'attribute' => 'status',
 							'value' => function ($model) {
-								$arr = self::getStatusLabels ();
-								if (! empty ( $model->status )) {
-									return Html::tag ( "label", $arr [$this->status] ['text'], [ 
-											'class' => "label label-" . $arr [$this->status] ['color'] 
-									]
-									 );
-								}
+								return Parcel::getStatusLabels ( $model->status );
 							} 
 					],
 					[ 
@@ -152,35 +143,6 @@ EOT;
 
 $this->registerJs ( $js );
 
-?>
-
-<?
-function getStatusLabels() {
-	return [ 
-			self::STATUS_REJECTED => [ 
-					'text' => "REJECTED",
-					'color' => "danger" 
-			],
-			self::STATUS_FAIL => [ 
-					'text' => "FAIL",
-					'color' => "warning" 
-			],
-			self::STATUS_PENGING => [ 
-					'text' => "PENDING",
-					'color' => "info" 
-			],
-			self::STATUS_DONE => [ 
-					'text' => "DONE",
-					'color' => "success" 
-			] 
-	];
-}
-function getStatusLabel() {
-	$arr = self::getStatusLabels ();
-	return Html::tag ( "label", $arr [$this->status] ['text'], [ 
-			'class' => "label label-" . $arr [$this->status] ['color'] 
-	] );
-}
 ?>
 
 <script>

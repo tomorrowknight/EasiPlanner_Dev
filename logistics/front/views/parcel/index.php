@@ -107,8 +107,8 @@ $this->params ['breadcrumbs'] [] = $this->title;
 							'value' => function ($model) {
 								if ($model->status == 0) {
 									$arr = Parcel::getStatusLabels();
-									return Html::tag ( "label", $arr ['STATUS_PENGING'] ['PENDING'], [ 
-											'class' => "label label-" . $arr ['STATUS_PENGING'] ['info'] 
+									return Html::tag ( "label", $arr ['STATUS_PENDING'] ['PENDING'], [ 
+											'class' => "label label-" . $arr ['STATUS_PENDING'] ['info'] 
 									] );
 								} else if ($model->status == 1) {
 									return Html::tag ( "label", $arr [$this->status] ['DONE'], [ 

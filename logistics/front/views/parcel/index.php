@@ -103,6 +103,7 @@ $this->params ['breadcrumbs'] [] = $this->title;
 					],
 					[ 
 							'label' => 'Delivery Status',
+							'format' => raw,
 							'attribute' => 'status',
 							'value' => function ($model) {
 								$arr = Parcel::getStatusLabels ();

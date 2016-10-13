@@ -68,7 +68,7 @@ $this->params ['breadcrumbs'] [] = $this->title;
 							'format' => 'raw',
 							'attribute' => 'signature',
 							'value' => function ($model) {
-								if ($model->signature == NULL || $model->image == null)
+								if (is_null($model->signature))
 									return "";
 								return Html::a ( "view", "data:image/jpeg;base64," . $model->signature , ['target'=>'_blank'] );
 							} 
@@ -80,7 +80,7 @@ $this->params ['breadcrumbs'] [] = $this->title;
 							'value' => function ($model) {
 								if (empty ( $model->image )) {
 									return "";
-								} else if ($model->image == NULL || $model->image == null) {
+								} else if (is_null($model->image) ) {
 									return "";
 								} else {
 									return Html::a ( "view", "data:image/jpeg;base64," . $model->image , ['target'=>'_blank']);
@@ -96,7 +96,7 @@ $this->params ['breadcrumbs'] [] = $this->title;
 								if (empty ( $model->lat ))
 									return "";
 								$labelClass = $model->failed ? "danger" : "success";
-								return Html::tag ( 'label', $model->failed ? "Fail" : "OK", [ 
+								return Html::tag ( 'label', $model->failed ? "Fail" : "Success", [ 
 										'class' => "label label-$labelClass" 
 								] );
 							} 

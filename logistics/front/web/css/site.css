@@ -26,10 +26,11 @@ body {
 .jumbotron {
     text-align: center;
     background-color: transparent;
+    font-size: 18px;
 }
 
 .jumbotron .btn {
-    font-size: 21px;
+    font-size: 18px;
     padding: 14px 24px;
 }
 

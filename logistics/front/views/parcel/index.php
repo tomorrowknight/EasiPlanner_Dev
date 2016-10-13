@@ -83,7 +83,7 @@ $this->params ['breadcrumbs'] [] = $this->title;
 								} else if ($model->image == null) {
 									return "";
 								} else {
-									return Html::a ( "view", "data:image/jpeg;base64," . $model->image );
+									return Html::a ( "view", "data:image/jpeg;base64," . $model->image . 'target="_blank" ');
 								}
 							} 
 					],

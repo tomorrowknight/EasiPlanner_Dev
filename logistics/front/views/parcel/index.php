@@ -68,7 +68,7 @@ $this->params ['breadcrumbs'] [] = $this->title;
 							'format' => 'raw',
 							'attribute' => 'signature',
 							'value' => function ($model) {
-								if (is_null($model->signature))
+								if (is_null($model->signature) || strcmp('null',$model->signature)==0)
 									return "";
 								return Html::a ( "view", "data:image/jpeg;base64," . $model->signature , ['target'=>'_blank'] );
 							} 

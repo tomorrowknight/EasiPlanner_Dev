@@ -23,28 +23,19 @@ var SuperModel = {
 				// Add the marker at the clicked location, and add the next-available label
 				// from the array of alphabetical characters.
 				this.map = map;
-				var delivered = "green";
-				var failed = "orange";
-				var rejected = "red";
-				var baseURL = "http://maps.google.com/mapfiles/ms/icons/"
-				var labelChar =' ';	
+				var baseURL = "http://dev.logistics.lol/icon/"
 				if(status==1){
-					labelChar = 'D';
-					var icon = baseURL + delivered + ".png";
+					var icon = baseURL + "delivered.png";
 				}else if (status==2){
-					labelChar = 'R';
-					var icon = baseURL + rejected + ".png";	
+					var icon = baseURL +"rejected.png";	
 				}else if(status==3){
-					labelChar = 'F';
-					var icon = baseURL + failed + ".png";	
+					var icon = baseURL + "failed.png";	
 				}
 				this.marker = new google.maps.Marker({
 					position: this.getPosition(),
-					label: labelChar,
 					map: map,
 					model: this,
-					icon: new google.maps.MarkerImage(icon),
-					labelAnchor: new google.maps.Point(33, 200)
+					icon: new google.maps.MarkerImage(icon)
 				});
 			},
 			getIcon : function() {

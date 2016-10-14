@@ -26,20 +26,25 @@ var SuperModel = {
 				var delivered = "green";
 				var failed = "orange";
 				var rejected = "red";
-				var baseURL = "http://dev.logistics.lol/icon/"
+				var baseURL = "http://maps.google.com/mapfiles/ms/icons/"
+				var labelChar =' ';	
 				if(status==1){
-					var icon = baseURL + "delivered.png";
+					labelChar = 'D';
+					var icon = baseURL + delivered + ".png";
 				}else if (status==2){
-					var icon = baseURL + "rejected.png";	
+					labelChar = 'R';
+					var icon = baseURL + rejected + ".png";	
 				}else if(status==3){
-					var icon = baseURL + "failed.png";	
+					labelChar = 'F';
+					var icon = baseURL + failed + ".png";	
 				}
 				this.marker = new google.maps.Marker({
 					position: this.getPosition(),
+					label: labelChar,
 					map: map,
 					model: this,
-					color: green,
 					icon: new google.maps.MarkerImage(icon),
+					labelAnchor: new google.maps.Point(33, 200)
 				});
 			},
 			getIcon : function() {

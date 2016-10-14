@@ -30,17 +30,16 @@ var SuperModel = {
 				var labelChar =' ';	
 				if(status==1){
 					labelChar = 'D';
-					var icon = baseURL + delivered + ".png";
+					var icon = "https://www.google.com/mapfiles/markerD.png";
 				}else if (status==2){
 					labelChar = 'R';
-					var icon = baseURL + rejected + ".png";	
+					var icon = "https://www.google.com/mapfiles/markerR.png";	
 				}else if(status==3){
 					labelChar = 'F';
-					var icon = baseURL + failed + ".png";	
+					var icon = "https://www.google.com/mapfiles/markerD.png";	
 				}
 				this.marker = new google.maps.Marker({
 					position: this.getPosition(),
-					label: labelChar,
 					map: map,
 					model: this,
 					icon: new google.maps.MarkerImage(icon),

@@ -255,7 +255,7 @@ function createParcelMarker(parcel) {
 
 	if(parcel.get("deliver_time")!=null){
 		var parcelStatus = parcel.get("status");
-		parcel.addDeliverMarker(new google.maps.LatLng(parcel.get("lat"),parcel.get("lng")),map,parcelStatus);
+		parcel.addDeliveryStatusMarker(new google.maps.LatLng(parcel.get("lat"),parcel.get("lng")),map,parcelStatus);
 		google.maps.event.addListener(parcel.marker, 'click', function() {
 			var infoWindow = new google.maps.InfoWindow({
 				content : _.template($("#tmpl_parcel_window").html())(this.model)

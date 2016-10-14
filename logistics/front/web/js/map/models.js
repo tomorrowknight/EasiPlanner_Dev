@@ -19,7 +19,7 @@ var SuperModel = {
 				});
 				this.marker.setIcon(this.getIcon());
 			},
-			addDeliverMarker: function(location, map, status) {
+			addDeliveryStatusMarker: function(location, map, status) {
 				// Add the marker at the clicked location, and add the next-available label
 				// from the array of alphabetical characters.
 				this.map = map;

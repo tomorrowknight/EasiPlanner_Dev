@@ -42,7 +42,7 @@ var SuperModel = {
 					position: this.getPosition(),
 					label: labelChar,
 					map: map,
-					labelAnchor: new google.maps.Point(3, 50),
+					labelAnchor: new google.maps.Point(3, 200),
 					model: this,
 					icon: new google.maps.MarkerImage(icon)
 				});

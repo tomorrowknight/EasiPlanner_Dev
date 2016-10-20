@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">js/libs/supermodel.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  </ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">js/libs/supermodel.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">(function (root, callback) {
+
+  // AMD
+  if (typeof define !== &apos;undefined&apos; &amp;&amp; define.amd) {
+    define([&apos;exports&apos;, &apos;backbone&apos;, &apos;underscore&apos;], callback);
+  }
+
+  // CommonJS
+  else if (typeof exports !== &apos;undefined&apos;) {
+    callback(exports, require(&apos;backbone&apos;), require(&apos;underscore&apos;));
+  }
+
+  // Globals
+  else {
+    callback(root.Supermodel = {}, root.Backbone, root._);
+  }
+
+}(this, function (Supermodel, Backbone, _) {
+
+  // Current version.
+  Supermodel.VERSION = &apos;0.0.4&apos;;
+
+  // # Association
+  //
+  // Track associations between models.  Associated attributes are used and
+  // then removed during `parse`.
+  var Association = function(model, options) {
+    this.required(options, &apos;name&apos;);
+    _.extend(this, _.pick(options, &apos;name&apos;, &apos;where&apos;, &apos;source&apos;, &apos;store&apos;));
+    _.defaults(this, {
+      source: this.name,
+      store: &apos;_&apos; + this.name
+    });
+
+    // Store a reference to this association by name after ensuring it&apos;s
+    // unique.
+    var ctor = model;
+    do {
+      if (!ctor.associations()[this.name]) continue;
+      throw new Error(&apos;Association already exists: &apos; + this.name);
+    } while (ctor = ctor.parent);
+    model.associations()[this.name] = this;
+
+    // Listen for relevant events.
+    if (this.initialize) model.all().on(&apos;initialize&apos;, this.initialize, this);
+    if (this.change) model.all().on(&apos;change&apos;, this.change, this);
+    if (this.parse) model.all().on(&apos;parse&apos;, this.parse, this);
+    if (this.destroy) model.all().on(&apos;destroy&apos;, this.destroy, this);
+    if (this.create) model.all().on(&apos;add&apos;, this.create, this);
+  };
+
+  _.extend(Association.prototype, {
+
+    // Notify `model` of its association with `other` using the `inverse`
+    // option.
+    associate: function(model, other) {
+      if (!this.inverse) return;
+      model.trigger(&apos;associate:&apos; + this.inverse, model, other);
+    },
+
+    // Notify `model` of its dissociation with `other` using the `inverse`
+    // option.
+    dissociate: function(model, other) {
+      if (!this.inverse) return;
+      model.trigger(&apos;dissociate:&apos; + this.inverse, model, other);
+    },
+
+    // Throw if the specified options are not provided.
+    required: function(options) {
+      var option;
+      for (var i = 1; i &lt; arguments.length; i++) {
+        if (options[option = arguments[i]]) continue;
+        throw new Error(&apos;Option required: &apos; + option);
+      }
+    },
+
+    // Wrap a function in order to capture it&apos;s context, prepend it to the
+    // arguments and call it with the current context.
+    andThis: function(func) {
+      var context = this;
+      return function() {
+        return func.apply(context, [this].concat(_.toArray(arguments)));
+      };
+    }
+
+  });
+
+  // ## One
+  //
+  // One side of a one-to-one or one-to-many association.
+  var One = function(model, options) {
+    this.required(options, &apos;inverse&apos;, &apos;model&apos;);
+    Association.apply(this, arguments);
+    _.extend(this, _.pick(options, &apos;inverse&apos;, &apos;model&apos;, &apos;id&apos;));
+    _.defaults(this, {
+      id: this.name + &apos;_id&apos;
+    });
+    model.all()
+      .on(&apos;associate:&apos; + this.name, this.replace, this)
+      .on(&apos;dissociate:&apos; + this.name, this.remove, this);
+  };
+
+  _.extend(One.prototype, Association.prototype, {
+
+    // Assign the getter/setter when a model is created.
+    create: function(model) {
+      model[this.name] = _.bind(this.access, this, model);
+    },
+
+    // Return or replace the associated model.
+    access: function(model, other) {
+      if (arguments.length &lt; 2) return model[this.store];
+      this.replace(model, other);
+    },
+
+    // Parse the models attributes.  If `source` isn&apos;t found use the `id`
+    // attribute.
+    initialize: function(model) {
+      this.parse(model, model.attributes);
+      var id = model.get(this.id);
+      if (id != null) this.replace(model, id);
+    },
+
+    // If `source` is provided, use it to initialize the association after
+    // removing it from the response object.
+    parse: function(model, resp) {
+      if (!resp || !_.has(resp, this.source)) return;
+      var attrs = resp[this.source];
+      delete resp[this.source];
+      this.replace(model, attrs);
+    },
+
+    // Update the association when the `id` attribute changes.
+    change: function(model) {
+      if (!model.hasChanged(this.id)) return;
+      this.replace(model, model.get(this.id));
+    },
+
+    // Remove the current association.
+    remove: function(model) {
+      this.replace(model, null);
+    },
+
+    // When a model is destroyed, its association should be removed.
+    destroy: function(model) {
+      var other = model[this.store];
+      if (!other) return;
+      this.remove(model);
+      this.dissociate(other, model);
+    },
+
+    // Replace the current association with `other`, taking care to remove the
+    // current association first.
+    replace: function(model, other) {
+      var id, current;
+
+      if (!model) return;
+      current = model[this.store];
+
+      // If `other` is a primitive, assume it&apos;s an id.
+      if (other != null &amp;&amp; !_.isObject(other)) {
+        id = other;
+        (other = {})[this.model.prototype.idAttribute] = id;
+      }
+
+      // Is `other` already the current model?
+      if (other &amp;&amp; !(other instanceof Model)) other = this.model.create(other);
+      if (current === other) return;
+
+      // Tear down the current association.
+      if (!other) model.unset(this.id);
+      if (current) {
+        delete model[this.store];
+        this.dissociate(current, model);
+      }
+
+      if (!other) return;
+
+      // Set up the new association.
+      model.set(this.id, other.id);
+      model[this.store] = other;
+      this.associate(other, model);
+    }
+
+  });
+
+  // # ManyToOne
+  // The many side of a one-to-many association.
+  var ManyToOne = function(model, options) {
+    this.required(options, &apos;inverse&apos;, &apos;collection&apos;);
+    Association.apply(this, arguments);
+    _.extend(this, _.pick(options, &apos;collection&apos;, &apos;inverse&apos;, &apos;id&apos;));
+    model.all()
+      .on(&apos;associate:&apos; + this.name, this._associate, this)
+      .on(&apos;dissociate:&apos; + this.name, this._dissociate, this);
+  };
+
+  _.extend(ManyToOne.prototype, Association.prototype, {
+
+    // When a model is created, instantiate the associated collection and
+    // assign it using `store`.
+    create: function(model) {
+      if (!model[this.name]) model[this.name] = _.bind(this.get, this, model);
+    },
+
+    // Return the associated collection.
+    get: function(model) {
+      var collection = model[this.store];
+      if (collection) return collection;
+
+      // Create the collection for storing the associated models.  Listen for
+      // &quot;add&quot;, &quot;remove&quot;, and &quot;reset&quot; events and act accordingly.
+      collection = model[this.store] = new this.collection()
+      .on(&apos;add&apos;, this.add, this)
+      .on(&apos;remove&apos;, this.remove, this)
+      .on(&apos;reset&apos;, this.reset, this);
+
+      // We&apos;ll need to know what model &quot;owns&quot; this collection in order to
+      // handle events that it triggers.
+      collection.owner = model;
+
+      return collection;
+    },
+
+    // Use the `source` property to reset the collection with the given models
+    // after removing it from the response object.
+    parse: function(model, resp) {
+      if (!resp) return;
+      var attrs = resp[this.source];
+      if (!attrs) return;
+      delete resp[this.source];
+      var collection = this.get(model);
+      attrs = collection.parse(attrs);
+
+      // If `where` is not specified, reset the collection and bail.
+      if (!this.where) {
+        collection.reset(attrs);
+        return;
+      }
+
+      // Reset the collection after filtering the models from `attrs`.
+      collection.reset(_.filter(_.map(attrs, function(attrs) {
+        return new collection.model(attrs);
+      }), this.where));
+    },
+
+    // Parse the attributes to initialize a new model.
+    initialize: function(model) {
+      this.parse(model, model.attributes);
+    },
+
+    // Models added to the collection should be associated with the owner.
+    add: function(model, collection) {
+      if (!model || !collection) return;
+      this.associate(model, collection.owner);
+    },
+
+    // Models removed from the collection should be dissociated from the owner.
+    remove: function(model, collection) {
+      if (!model || !collection) return;
+      this.dissociate(model, collection.owner);
+    },
+
+    // After a reset, all new models should be associated with the owner.
+    reset: function(collection) {
+      if (!collection) return;
+      collection.each(function(model) {
+        this.associate(model, collection.owner);
+      }, this);
+    },
+
+    // If the owner is destroyed, all models in the collection should be
+    // dissociated from it.
+    destroy: function(model) {
+      var collection;
+      if (!model || !(collection = model[this.store])) return;
+      collection.each(function(other) {
+        this.dissociate(other, model);
+      }, this);
+    },
+
+    // Associated models should be added to the collection.
+    _associate: function(model, other) {
+      if (!model || !other) return;
+      if (this.where &amp;&amp; !this.where(other)) return;
+      this.get(model).add(other);
+    },
+
+    // Dissociated models should be removed from the collection.
+    _dissociate: function(model, other) {
+      if (!model || !other || !model[this.store]) return;
+      model[this.store].remove(other);
+    }
+
+  });
+
+  // # ManyToMany
+  //
+  // One side of a many-to-many association.
+  var ManyToMany = function(model, options) {
+    this.required(options, &apos;collection&apos;, &apos;through&apos;, &apos;source&apos;);
+    Association.apply(this, arguments);
+    _.extend(this, _.pick(options, &apos;collection&apos;, &apos;through&apos;));
+    this._associate = this.andThis(this._associate);
+    this._dissociate = this.andThis(this._dissociate);
+  };
+
+  _.extend(ManyToMany.prototype, Association.prototype, {
+
+    // When a new model is created, assign the getter.
+    create: function(model) {
+      if (!model[this.name]) model[this.name] = _.bind(this.get, this, model);
+    },
+
+    // Lazy load the associated collection to avoid initialization costs.
+    get: function(model) {
+      var collection = model[this.store];
+      if (collection) return collection;
+
+      // Create a new collection.
+      collection = new this.collection();
+
+      // We&apos;ll need to know what model &quot;owns&quot; this collection in order to
+      // handle events that it triggers.
+      collection.owner = model;
+      model[this.store] = collection;
+
+      // Initialize listeners and models.
+      this.reset(model[this.through]()
+        .on(&apos;add&apos;, this.add, this)
+        .on(&apos;remove&apos;, this.remove, this)
+        .on(&apos;reset&apos;, this.reset, this)
+        .on(&apos;associate:&apos; + this.source, this._associate)
+        .on(&apos;dissociate:&apos; + this.source, this._dissociate));
+
+      return collection;
+    },
+
+    // Add models to the collection when added to the through collection.
+    add: function(model, through) {
+      if (!model || !through || !(model = model[this.source]())) return;
+      if (this.where &amp;&amp; !this.where(model)) return;
+      through.owner[this.name]().add(model);
+    },
+
+    // Remove models from the collection when removed from the through
+    // collection after checking for other instances.
+    remove: function(model, through) {
+      if (!model || !through || !(model = model[this.source]())) return;
+      var exists = through.any(function(o) {
+        return o[this.source]() === model;
+      }, this);
+      if (!exists) through.owner[this.name]().remove(model);
+    },
+
+    // Reset when the through collection is reset.
+    reset: function(through) {
+      if (!through) return;
+      var models = _.compact(_.uniq(_.invoke(through.models, this.source)));
+      if (this.where) models = _.filter(models, this.where);
+      through.owner[this.name]().reset(models);
+    },
+
+    // Add associated models.
+    _associate: function(through, model, other) {
+      if (!through || !model || !other) return;
+      if (this.where &amp;&amp; !this.where(other)) return;
+      through.owner[this.name]().add(other);
+    },
+
+    // Remove dissociated models, taking care to check for other instances.
+    _dissociate: function(through, model, other) {
+      if (!through || !model || !other) return;
+      var exists = through.any(function(o) {
+        return o[this.source]() === other;
+      }, this);
+      if (!exists) through.owner[this.name]().remove(other);
+    }
+
+  });
+
+  // # has
+  // Avoid naming collisions by providing one entry point for associations.
+  var Has = function(model) {
+    this.model = model;
+  };
+
+  _.extend(Has.prototype, {
+
+    // ## one
+    // *Create a one-to-one or one-to-many association.*
+    //
+    // Options:
+    //
+    // * **inverse** - (*required*) The name of the inverse association.
+    // * **model** - (*required*) The model constructor for the association.
+    // * **id** - The associated id is stored here.
+    //   Defaults to `name` + &apos;_id&apos;.
+    // * **source** - The attribute where nested data is stored.
+    //   Defaults to `name`.
+    // * **store** - The property to store the association in.
+    //   Defaults to &apos;_&apos; + `name`.
+    one: function(name, options) {
+      options.name = name;
+      new One(this.model, options);
+      return this;
+    },
+
+    // ## many
+    // *Create a many-to-one or many-to-many association.*
+    //
+    // Options:
+    //
+    // * **collection** - (*required*) The collection constructor.
+    // * **inverse** - (*required for many-to-one associations*) The name of the
+    //   inverse association.
+    // * **through** - (*required for many-to-many associations*) The name of the
+    //   through association.
+    // * **source** - (*required for many-to-many associations*) For many-to-one
+    //   associations, the attribute where nested data is stored. For many-to-many
+    //   associations, the name of the indirect association.
+    // * **store** - The property to store the association in.
+    //   Defaults to &apos;_&apos; + `name`.
+    many: function(name, options) {
+      options.name = name;
+      var Association = options.through ? ManyToMany : ManyToOne;
+      new Association(this.model, options);
+      return this;
+    }
+
+  });
+
+  // # Model
+  var Model = Supermodel.Model = Backbone.Model.extend({
+
+    // The attribute to store the cid in for lookup.
+    cidAttribute: &apos;cid&apos;,
+
+    initialize: function() {
+      // Use `&quot;cid&quot;` for retrieving models by `attributes.cid`.
+      this.set(this.cidAttribute, this.cid);
+
+      // Add the model to `all` for each constructor in its prototype chain.
+      var ctor = this.constructor;
+      do { ctor.all().add(this); } while (ctor = ctor.parent);
+
+      // Trigger &apos;initialize&apos; for listening associations.
+      this.trigger(&apos;initialize&apos;, this);
+    },
+
+    // While `&quot;cid&quot;` is used for tracking models, it should not be persisted.
+    toJSON: function() {
+      var o = Backbone.Model.prototype.toJSON.apply(this, arguments);
+      delete o[this.cidAttribute];
+      return o;
+    },
+
+    // Associations are initialized/updated during `parse`.  They listen for
+    // the `&apos;parse&apos;` event and remove the appropriate properties after parsing.
+    parse: function(resp) {
+      this.trigger(&apos;parse&apos;, this, resp);
+      return resp;
+    }
+
+  }, {
+
+    // ## create
+    // Create a new model after checking for existence of a model with the same
+    // id.
+    create: function(attrs, options) {
+      var id = attrs &amp;&amp; attrs[this.prototype.idAttribute];
+
+      var model = this.find(attrs);
+
+      if (!options) options = {};
+
+      // If `attrs` belongs to an existing model, return it.
+      if (model &amp;&amp; attrs === model.attributes) return model;
+
+      // If found by id, modify and return it.
+      if (id &amp;&amp; model) {
+        model.set(model.parse(attrs), _.extend(options, {silent: false}));
+        return model;
+      }
+
+      // Throw if a model already exists with the same id in a superclass.
+      var parent = this;
+      while (parent = parent.parent) {
+        if (!parent.all().get(id)) continue;
+        throw new Error(&apos;Model with id &quot;&apos; + id + &apos;&quot; already exists.&apos;);
+      }
+
+      // Ensure attributes are parsed.
+      options.parse = true;
+
+      return new this(attrs, options);
+    },
+
+    // ## find
+    // Attempt to find an existing model matching the provided attrs
+    find: function(attrs, merge){
+      if (!attrs) return false;
+
+      var cid = attrs[this.prototype.cidAttribute];
+      var id = attrs[this.prototype.idAttribute];
+
+      return (cid || id) &amp;&amp; this.all().get(cid || id) || false;
+    },
+
+    // Create associations for a model.
+    has: function() {
+      return new Has(this);
+    },
+
+    // Return a collection of all models for a particular constructor.
+    all: function() {
+      return this._all || (this._all = new Backbone.Collection);
+    },
+
+    // Return a hash of all associations for a particular constructor.
+    associations: function() {
+      return this._associations || (this._associations = {});
+    },
+
+    // Models and associations are tracked via `all` and `associations`,
+    // respectively.  `reset` removes all model references to allow garbage
+    // collection.
+    reset: function() {
+      this._all = null;
+      this._associations = {};
+    }
+
+  });
+
+}));
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.8)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

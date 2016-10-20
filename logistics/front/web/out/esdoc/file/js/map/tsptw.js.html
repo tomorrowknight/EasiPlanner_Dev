@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">js/map/tsptw.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  </ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">js/map/tsptw.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">var _0x2c84=[&quot;\x76\x6F\x6C\x75\x6D\x65&quot;,&quot;\x67\x65\x74&quot;,&quot;\x72\x65\x64\x75\x63\x65&quot;,&quot;\x77\x65\x69\x67\x68\x74&quot;,&quot;\x70\x6C\x61\x6E\x6E\x65\x64\x5F\x64\x65\x6C\x69\x76\x65\x72\x5F\x74\x69\x6D\x65&quot;,&quot;\x73\x65\x74&quot;,&quot;\x76\x69\x73\x69\x74\x65\x64&quot;,&quot;\x65\x61\x63\x68&quot;,&quot;\x66\x69\x74\x54\x6F&quot;,&quot;\x72\x65\x6A\x65\x63\x74&quot;,&quot;\x6C\x65\x6E\x67\x74\x68&quot;,&quot;\x73\x68\x69\x66\x74&quot;,&quot;\x70\x75\x73\x68&quot;,&quot;\x6C\x65\x66\x74\x5F\x76\x6F\x6C\x75\x6D\x65&quot;,&quot;\x63\x61\x70\x61\x63\x69\x74\x79\x5F\x76\x6F\x6C\x75\x6D\x65&quot;,&quot;\x6C\x65\x66\x74\x5F\x77\x65\x69\x67\x68\x74&quot;,&quot;\x63\x61\x70\x61\x63\x69\x74\x79\x5F\x77\x65\x69\x67\x68\x74&quot;,&quot;\x64\x69\x73\x74\x61\x6E\x63\x65&quot;,&quot;\x73\x6F\x72\x74\x42\x79&quot;,&quot;\x73\x6C\x69\x63\x65&quot;,&quot;\x63\x6C\x6F\x6E\x65&quot;,&quot;\x6D\x61\x70&quot;,&quot;\x72\x65\x6D\x6F\x76\x65&quot;,&quot;\x70\x6F\x70&quot;,&quot;\x67\x65\x74\x54\x69\x6D\x65&quot;,&quot;\x70\x72\x6F\x74\x6F\x74\x79\x70\x65&quot;,&quot;\x69\x6E\x64\x65\x78\x4F\x66&quot;,&quot;\x73\x70\x6C\x69\x63\x65&quot;,&quot;\x6D\x61\x78&quot;,&quot;\x6C\x61\x74&quot;,&quot;\x6C\x6E\x67&quot;,&quot;\x75\x6E\x73\x68\x69\x66\x74&quot;,&quot;\x67\x65\x74\x57\x69\x6E\x64\x6F\x77\x53\x74\x61\x72\x74&quot;,&quot;\x74\x72\x61\x76\x65\x6C\x54\x69\x6D\x65&quot;,&quot;\x73\x61\x76\x69\x6E\x67&quot;,&quot;\x69\x6E\x64\x65\x78&quot;,&quot;\x67\x65\x74\x53\x65\x72\x76\x69\x63\x65\x45\x6E\x64\x54\x69\x6D\x65&quot;,&quot;\x67\x65\x74\x57\x69\x6E\x64\x6F\x77\x53\x74\x61\x72\x74\x54\x69\x6D\x65&quot;,&quot;\x67\x65\x74\x4C\x61\x74\x65\x73\x74\x53\x74\x61\x72\x74\x54\x69\x6D\x65&quot;,&quot;\x77\x69\x6E\x64\x6F\x77\x5F\x73\x74\x61\x72\x74&quot;,&quot;\x32\x30\x30\x30\x2D\x30\x31\x2D\x30\x31&quot;,&quot;\x77\x69\x6E\x64\x6F\x77\x5F\x65\x6E\x64&quot;,&quot;\x32\x30\x39\x39\x2D\x30\x31\x2D\x30\x31&quot;,&quot;\x69&quot;,&quot;\x70\x6F\x73\x74\x61\x6C&quot;,&quot;\x73\x65\x72\x76\x69\x63\x65\x5F\x74\x69\x6D\x65&quot;];function tsptw(_0xb09fx2,_0xb09fx3,_0xb09fx4,_0xb09fx5){var _0xb09fx6=[];_0xb09fx2= createDepotParcel(_0xb09fx2);_0xb09fx3[_0x2c84[2]](function(_0xb09fx3,_0xb09fx2){return _0xb09fx3+ _0xb09fx2[_0x2c84[1]](_0x2c84[0])},0);_0xb09fx3[_0x2c84[2]](function(_0xb09fx3,_0xb09fx2){return _0xb09fx3+ _0xb09fx2[_0x2c84[1]](_0x2c84[3])},0);_0xb09fx3[_0x2c84[7]](function(_0xb09fx3){_0xb09fx3[_0x2c84[5]](_0x2c84[4],null);_0xb09fx3[_0x2c84[5]](_0x2c84[6],null)});for(_0xb09fx3= _0xb09fx3[_0x2c84[9]](function(_0xb09fx3){for(var _0xb09fx2 in _0xb09fx4){if(_0xb09fx3[_0x2c84[8]](_0xb09fx4[_0xb09fx2])){return !1}};return !0});0&lt; _0xb09fx3[_0x2c84[10]];){var _0xb09fx7=_0xb09fx4[_0x2c84[11]]();_0xb09fx4[_0x2c84[12]](_0xb09fx7);_0xb09fx7[_0x2c84[13]]= _0xb09fx7[_0x2c84[1]](_0x2c84[14]);_0xb09fx7[_0x2c84[15]]= _0xb09fx7[_0x2c84[1]](_0x2c84[16]);var _0xb09fx8=[];_0xb09fx8[_0x2c84[12]](_0xb09fx2);for(_0xb09fx8[_0x2c84[12]](_0xb09fx2);;){var _0xb09fx9=!1;if(null== _0xb09fx5){var _0xb09fxa=getCenter(_0xb09fx8,_0xb09fx2,_0xb09fx3),_0xb09fxb=_[_0x2c84[18]](_0xb09fx3,function(_0xb09fx3){return _0xb09fx3[_0x2c84[17]](_0xb09fxa)})}else {_0xb09fxb= _[_0x2c84[18]](_0xb09fx3,function(_0xb09fx3){return _0xb09fx3[_0x2c84[17]](_0xb09fx5)})};_0xb09fxb= _[_0x2c84[9]](_0xb09fxb,function(_0xb09fx3){return !_0xb09fx3[_0x2c84[8]](_0xb09fx7)});_0xb09fxb= _0xb09fxb[_0x2c84[19]](0,10);_[_0x2c84[7]](_0xb09fxb,function(_0xb09fx2){if(!(_0xb09fx7[_0x2c84[13]]&lt; _0xb09fx2[_0x2c84[1]](_0x2c84[0])|| _0xb09fx7[_0x2c84[15]]&lt; _0xb09fx2[_0x2c84[1]](_0x2c84[3]))){for(var _0xb09fx4=calIndexsBySavings(_0xb09fx2,_0xb09fx8),_0xb09fx5=0;_0xb09fx5&lt; _0xb09fx4[_0x2c84[10]];_0xb09fx5++){var _0xb09fx6=_0xb09fx4[_0xb09fx5],_0xb09fxb=_[_0x2c84[21]](_0xb09fx8,function(_0xb09fx3){return _0xb09fx3[_0x2c84[20]]()});if(insertParcel(_0xb09fxb,_0xb09fx6,_0xb09fx2[_0x2c84[20]]())){insertParcel(_0xb09fx8,_0xb09fx6,_0xb09fx2);_0xb09fx2[_0x2c84[5]](_0x2c84[6],!0);_0xb09fx3[_0x2c84[22]](_0xb09fx2);_0xb09fx7[_0x2c84[13]]-= _0xb09fx2[_0x2c84[1]](_0x2c84[0]);_0xb09fx7[_0x2c84[15]]-= _0xb09fx2[_0x2c84[1]](_0x2c84[3]);_0xb09fx9=  !0;break}}}});if(!_0xb09fx9){break}};_0xb09fx8[_0x2c84[23]]();_0xb09fx8[_0x2c84[11]]();_0xb09fxb= {vehicle:_0xb09fx7,parcels:_0xb09fx8,id:( new Date)[_0x2c84[24]]()};if(null!= _0xb09fx5){return _0xb09fxb};_0xb09fx6[_0x2c84[12]](_0xb09fxb)};printRoutes(_0xb09fx6);return _0xb09fx6}Array[_0x2c84[25]][_0x2c84[22]]= function(_0xb09fx2){_0xb09fx2= this[_0x2c84[26]](_0xb09fx2);-1&lt; _0xb09fx2&amp;&amp; this[_0x2c84[27]](_0xb09fx2,1);return this};function getCenter(_0xb09fx2,_0xb09fx3,_0xb09fx4){if(2== _0xb09fx2[_0x2c84[10]]){return _[_0x2c84[28]](_0xb09fx4,function(_0xb09fx2){return _0xb09fx2[_0x2c84[1]](_0x2c84[6])?0:_0xb09fx2[_0x2c84[17]](_0xb09fx3)})};_0xb09fx2[_0x2c84[23]]();_0xb09fx2[_0x2c84[11]]();_0xb09fx4= _[_0x2c84[2]](_0xb09fx2,function(_0xb09fx3,_0xb09fx2){return {lat:_0xb09fx3[_0x2c84[29]]+ _0xb09fx2[_0x2c84[1]](_0x2c84[29]),lng:_0xb09fx3[_0x2c84[30]]+ _0xb09fx2[_0x2c84[1]](_0x2c84[30])}},{lat:0,lng:0});var _0xb09fx5= new Parcel;_0xb09fx5[_0x2c84[5]](_0x2c84[29],_0xb09fx4[_0x2c84[29]]/ _0xb09fx2[_0x2c84[10]]);_0xb09fx5[_0x2c84[5]](_0x2c84[30],_0xb09fx4[_0x2c84[30]]/ _0xb09fx2[_0x2c84[10]]);_0xb09fx2[_0x2c84[31]](_0xb09fx3);_0xb09fx2[_0x2c84[12]](_0xb09fx3);return _0xb09fx5}function printRoutes(_0xb09fx2){}function calIndexsBySavings(_0xb09fx2,_0xb09fx3){for(var _0xb09fx4=[],_0xb09fx5=0;_0xb09fx5&lt; _0xb09fx3[_0x2c84[10]]- 1;_0xb09fx5++){_0xb09fx4[_0x2c84[12]]({index:_0xb09fx5,saving:matrix[_0x2c84[33]](_0xb09fx2,_0xb09fx3[_0xb09fx5],_0xb09fx3[_0xb09fx5][_0x2c84[32]]())+ matrix[_0x2c84[33]](_0xb09fx2,_0xb09fx3[_0xb09fx5+ 1],_0xb09fx3[_0xb09fx5+ 1][_0x2c84[32]]())- matrix[_0x2c84[33]](_0xb09fx3[_0xb09fx5],_0xb09fx3[_0xb09fx5+ 1],_0xb09fx3[_0xb09fx5+ 1][_0x2c84[32]]())})};_0xb09fx4= _[_0x2c84[18]](_0xb09fx4,function(_0xb09fx3){return _0xb09fx3[_0x2c84[34]]});return _[_0x2c84[21]](_0xb09fx4,function(_0xb09fx3){return _0xb09fx3[_0x2c84[35]]})}function insertParcel(_0xb09fx2,_0xb09fx3,_0xb09fx4){_0xb09fx2[_0x2c84[27]](_0xb09fx3+ 1,0,_0xb09fx4);for(_0xb09fx3+= 1;_0xb09fx3&lt; _0xb09fx2[_0x2c84[10]]- 1;_0xb09fx3++){_0xb09fx4= Math[_0x2c84[28]](_0xb09fx2[_0xb09fx3- 1][_0x2c84[36]]()+ matrix[_0x2c84[33]](_0xb09fx2[_0xb09fx3- 1],_0xb09fx2[_0xb09fx3],_0xb09fx2[_0xb09fx3][_0x2c84[32]]()),_0xb09fx2[_0xb09fx3][_0x2c84[37]]());if(_0xb09fx4== _0xb09fx2[_0xb09fx3][_0x2c84[1]](_0x2c84[4])){break}else {if(_0xb09fx4&gt; _0xb09fx2[_0xb09fx3][_0x2c84[38]]()){return !1}};_0xb09fx2[_0xb09fx3][_0x2c84[5]](_0x2c84[4],_0xb09fx4)};return !0}function createDepotParcel(_0xb09fx2){var _0xb09fx3= new Parcel;_0xb09fx3[_0x2c84[5]](_0x2c84[39],_0x2c84[40]);_0xb09fx3[_0x2c84[5]](_0x2c84[41],_0x2c84[42]);_0xb09fx3[_0x2c84[5]](_0x2c84[29],_0xb09fx2[_0x2c84[1]](_0x2c84[29]));_0xb09fx3[_0x2c84[5]](_0x2c84[30],_0xb09fx2[_0x2c84[1]](_0x2c84[30]));_0xb09fx3[_0x2c84[5]](_0x2c84[43],0);_0xb09fx3[_0x2c84[5]](_0x2c84[44],_0xb09fx2[_0x2c84[1]](_0x2c84[44]));_0xb09fx3[_0x2c84[5]](_0x2c84[45],0);_0xb09fx3[_0x2c84[5]](_0x2c84[4],_0xb09fx3[_0x2c84[37]]());return _0xb09fx3}</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.8)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

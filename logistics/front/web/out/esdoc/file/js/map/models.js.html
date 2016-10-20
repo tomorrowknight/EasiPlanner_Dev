@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">js/map/models.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  </ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">js/map/models.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">//Author: Evan Lee, Email: chief725@gmail.com
+
+var SuperModel = {
+		Model : Supermodel.Model.extend({
+			name : &quot;&quot;,
+			urlRoot : function() {
+				return site.urlTo(this.name + &apos;s&apos;);
+			},
+			initialize : function() {
+				Supermodel.Model.prototype.initialize.apply(this, arguments);
+				this.boot();
+			},
+			createMarker : function(map) {
+				this.map = map;
+				this.marker = new google.maps.Marker({
+					position : this.getPosition(),
+					map : map,
+					model : this
+				});
+				this.marker.setIcon(this.getIcon());
+			},
+			addDeliveryStatusMarker: function(location, map, status) {
+				// Add the marker at the clicked location, and add the next-available label
+				// from the array of alphabetical characters.
+				this.map = map;
+				var baseURL = &quot;http://dev.logistics.lol/icon/&quot;
+				if(status==1){
+					var icon = baseURL + &quot;delivered.png&quot;;
+				}else if (status==2){
+					var icon = baseURL +&quot;rejected.png&quot;;	
+				}else if(status==3){
+					var icon = baseURL + &quot;failed.png&quot;;	
+				}
+				this.marker = new google.maps.Marker({
+					position: this.getPosition(),
+					map: map,
+					model: this,
+					icon: new google.maps.MarkerImage(icon)
+				});
+			},
+			getIcon : function() {
+				return this.getIconUrl(this.id);
+			},
+			getIconUrl : function(index) {
+				return site.urlTo(&quot;image/view?name=&quot; + this.name + &quot;&amp;id=&quot; + index);
+			},
+			getPosition : function() {
+				return new google.maps.LatLng(this.get(&apos;lat&apos;), this.get(&apos;lng&apos;));
+			},
+			distance : function(model) {
+				return google.maps.geometry.spherical.computeDistanceBetween(this
+						.getPosition(), model.getPosition());
+			},
+			travelTime : function(model) {
+				return this.distance(model) / 500;
+			},
+			boot : function() {
+			},
+			setMarkerIcon : function() {
+			},
+		}),
+		Collection : Backbone.Collection.extend({
+			triggerEach : function() {
+				var args = Array.prototype.slice.call(arguments);
+				func = args.shift();
+				this.each(function(model) {
+					model[func].apply(model, args);
+				});
+			},
+			search : function(func) {
+				return new this.constructor(this.filter(func));
+			},
+			getVisibleModels : function() {
+				return this.search(function(parcel) {
+					return !empty(parcel.marker) &amp;&amp; !empty(parcel.marker.map);
+				});
+			}
+		})
+};
+
+//Parcel
+var Parcel = SuperModel.Model
+.extend({
+	name : &quot;parcel&quot;,
+	boot : function() {
+		this.on(&apos;change:selected change:vehicle_id change:seq&apos;,
+				function() {
+			this.marker.setIcon(this.getIcon());
+			if (empty(this.get(&quot;vehicle_id&quot;))) {
+				this.set(&quot;seq&quot;, &quot;&quot;);
+			}
+		}, this);
+	},
+	getColor : function() {
+		return hexColor(this.get(&quot;vehicle_id&quot;));
+	},
+	getInvertColor : function() {
+		return hexInvertColor(this.get(&quot;vehicle_id&quot;));
+	},
+	getIcon : function() {
+		if (this.get(&quot;selected&quot;)) {
+			var fillColor = &quot;ffffff&quot;;
+			var textColor = &quot;000000&quot;;
+		} else if (empty(this.get(&quot;vehicle_id&quot;))) {
+			var fillColor = &quot;000000&quot;;
+			var textColor = &quot;ffffff&quot;;
+		} else {
+			var fillColor = this.getColor().slice(-6);
+			var textColor = this.getInvertColor().slice(-6);
+		}
+		if (this.get(&quot;vehicle_id&quot;) == &quot;&quot; || this.get(&quot;vehicle_id&quot;) == null) {
+			text = &quot;&quot;;
+		} else {
+			text = (this.get(&quot;seq&quot;) + 1);
+		}
+		return &quot;http://chart.apis.google.com/chart?chst=d_map_pin_letter&amp;chld=&quot;
+		+ text + &quot;|&quot; + fillColor + &quot;|&quot; + textColor;
+	},
+	getWindowStart : function() {
+		return createDate(this.get(&quot;window_start&quot;)).getHours()
+		+ new Date().getTimezoneOffset() / 60;
+	},
+	getWindowEnd : function() {
+		return createDate(this.get(&quot;window_end&quot;)).getHours()
+		+ new Date().getTimezoneOffset() / 60;
+	},
+	getWindowStartTime : function() {
+		return parseDate(this.get(&quot;window_start&quot;)) / 60000;
+	},
+	getWindowEndTime : function() {
+		return parseDate(this.get(&quot;window_end&quot;)) / 60000;
+	},
+	getLatestStartTime : function() {
+		return this.getWindowEndTime() - this.get(&quot;service_time&quot;);
+	},
+	getServiceEndTime : function() {
+		return this.get(&quot;planned_deliver_time&quot;)
+		+ this.get(&quot;service_time&quot;);
+	},
+	getDeliverTime : function() {
+		if(this.get(deliver.time != null)){
+			return createDate(this.get(&quot;deliver_time&quot;)).getHours()
+			+ new Date().getTimezoneOffset() / 60;
+		}
+	},
+	onFilter : function(vehicle_id, window_start, window_end) {
+		var isWithIn = (this.getWindowStart() &gt;= window_start &amp;&amp; this
+				.getWindowStart() &lt;= window_end)
+				|| (this.getWindowEnd() &gt;= window_start &amp;&amp; this
+						.getWindowEnd() &lt;= window_end);
+		if ((vehicle_id == &quot;&quot; || this.get(&quot;vehicle_id&quot;) == vehicle_id || this
+				.get(&quot;vehicle_id&quot;) == &quot;&quot;)
+				&amp;&amp; isWithIn) {
+			this.marker.setMap(this.map);
+		} else {
+			this.marker.setMap(null);
+		}
+	},
+	onSelect : function(bounds, selected) {
+		if (!empty(this.marker)
+				&amp;&amp; bounds.contains(this.marker.getPosition())) {
+			this.set(&apos;selected&apos;, selected);
+		}
+	},
+	fitTo:function(vehicle){
+		if(this.get(&quot;window_start&quot;) &gt; this.get(&quot;window_end&quot;))
+			return false;
+		var vehicle_types = this.get(&quot;vehicle_types&quot;);
+		var types = vehicle.get(&quot;types&quot;);
+		for(var key in vehicle_types){
+			if(types[key]==undefined || vehicle_types[key].indexOf(types[key]) == -1){
+				return false;
+			}
+		}
+		return true;
+	}
+});
+
+var Parcels = SuperModel.Collection.extend({
+	model : function(attrs, options) {
+		return Parcel.create(attrs, options);
+	},
+	url : site.urlTo(&quot;parcels&quot;) + &quot;?date=&quot; + getParameterByName(&quot;date&quot;),
+	getSelectedParcels : function() {
+		return this.search(function(parcel) {
+			return !empty(parcel.marker) &amp;&amp; parcel.marker.map != null
+			&amp; parcel.get(&quot;selected&quot;);
+		});
+	},
+	getSelectedTotalVolume : function() {
+		return this.getSelectedParcels().reduce(function(memo, parcel) {
+			return memo + parseFloat(parcel.get(&quot;volume&quot;));
+		}, 0);
+	},
+	getSelectedTotalWeight : function() {
+		return this.getSelectedParcels().reduce(function(memo, parcel) {
+			return memo + parseFloat(parcel.get(&quot;weight&quot;));
+		}, 0);
+	},
+	getIdleParcels : function() {
+		return this.getVisibleModels().search(function(parcel) {
+			return parcel.get(&quot;vehicle_id&quot;) == &quot;&quot;;
+		});
+	}
+});
+
+//Vehicle
+var Vehicle = SuperModel.Model.extend({
+	name : &quot;vehicle&quot;,
+	getPosition : function() {
+		return new google.maps.LatLng(this.driver().get(&apos;lat&apos;), this.driver()
+				.get(&apos;lng&apos;));
+	},
+	getCapacityVolumeLeft : function() {
+		return this.get(&quot;capacity_volume&quot;)
+		- this.parcels().search(function(parcel) {
+			return parcel.marker.map != null;
+		}).reduce(function(memo, parcel) {
+			return memo + parcel.get(&quot;volume&quot;);
+		}, 0);
+	},
+	getCapacityWeightLeft : function() {
+		return this.get(&quot;capacity_weight&quot;)
+		- this.parcels().search(function(parcel) {
+			return parcel.marker.map != null;
+		}).reduce(function(memo, parcel) {
+			return memo + parcel.get(&quot;weight&quot;);
+		}, 0);
+	},
+	getColor : function() {
+		return hexColor(this.id);
+	}
+});
+var Vehicles = SuperModel.Collection.extend({
+	model : function(attrs, options) {
+		return Vehicle.create(attrs, options);
+	},
+	url : site.urlTo(&quot;vehicles&quot;)
+});
+
+//Driver
+var Drivers = SuperModel.Collection.extend({
+	model : function(attrs, options) {
+		return Driver.create(attrs, options);
+	},
+	url : site.urlTo(&quot;drivers&quot;)
+});
+
+var Driver = SuperModel.Model.extend({
+	name : &quot;driver&quot;,
+});
+
+//Profile
+var Profile = SuperModel.Model.extend({
+	name : &quot;profile&quot;,
+	url : site.urlTo(&quot;profiles/my-profile&quot;),
+});
+
+//Relations
+Vehicle.has().many(&apos;parcels&apos;, {
+	collection : Parcels,
+	inverse : &apos;vehicle&apos;
+});
+
+Parcel.has().one(&apos;vehicle&apos;, {
+	model : Vehicle,
+	inverse : &apos;parcels&apos;
+});
+
+Vehicle.has().one(&apos;driver&apos;, {
+	model : Driver,
+	inverse : &apos;vehicle&apos;
+});
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.8)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

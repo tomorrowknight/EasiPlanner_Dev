@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">js/libs/spin.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  </ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">js/libs/spin.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ * Copyright (c) 2011-2014 Felix Gnass
+ * Licensed under the MIT license
+ */
+(function(root, factory) {
+
+  /* CommonJS */
+  if (typeof exports == &apos;object&apos;)  module.exports = factory()
+
+  /* AMD module */
+  else if (typeof define == &apos;function&apos; &amp;&amp; define.amd) define(factory)
+
+  /* Browser global */
+  else root.Spinner = factory()
+}
+(this, function() {
+  &quot;use strict&quot;;
+
+  var prefixes = [&apos;webkit&apos;, &apos;Moz&apos;, &apos;ms&apos;, &apos;O&apos;] /* Vendor prefixes */
+    , animations = {} /* Animation rules keyed by their name */
+    , useCssAnimations /* Whether to use CSS animations or setTimeout */
+
+  /**
+   * Utility function to create elements. If no tag name is given,
+   * a DIV is created. Optionally properties can be passed.
+   */
+  function createEl(tag, prop) {
+    var el = document.createElement(tag || &apos;div&apos;)
+      , n
+
+    for(n in prop) el[n] = prop[n]
+    return el
+  }
+
+  /**
+   * Appends children and returns the parent.
+   */
+  function ins(parent /* child1, child2, ...*/) {
+    for (var i=1, n=arguments.length; i&lt;n; i++)
+      parent.appendChild(arguments[i])
+
+    return parent
+  }
+
+  /**
+   * Insert a new stylesheet to hold the @keyframe or VML rules.
+   */
+  var sheet = (function() {
+    var el = createEl(&apos;style&apos;, {type : &apos;text/css&apos;})
+    ins(document.getElementsByTagName(&apos;head&apos;)[0], el)
+    return el.sheet || el.styleSheet
+  }())
+
+  /**
+   * Creates an opacity keyframe animation rule and returns its name.
+   * Since most mobile Webkits have timing issues with animation-delay,
+   * we create separate rules for each line/segment.
+   */
+  function addAnimation(alpha, trail, i, lines) {
+    var name = [&apos;opacity&apos;, trail, ~~(alpha*100), i, lines].join(&apos;-&apos;)
+      , start = 0.01 + i/lines * 100
+      , z = Math.max(1 - (1-alpha) / trail * (100-start), alpha)
+      , prefix = useCssAnimations.substring(0, useCssAnimations.indexOf(&apos;Animation&apos;)).toLowerCase()
+      , pre = prefix &amp;&amp; &apos;-&apos; + prefix + &apos;-&apos; || &apos;&apos;
+
+    if (!animations[name]) {
+      sheet.insertRule(
+        &apos;@&apos; + pre + &apos;keyframes &apos; + name + &apos;{&apos; +
+        &apos;0%{opacity:&apos; + z + &apos;}&apos; +
+        start + &apos;%{opacity:&apos; + alpha + &apos;}&apos; +
+        (start+0.01) + &apos;%{opacity:1}&apos; +
+        (start+trail) % 100 + &apos;%{opacity:&apos; + alpha + &apos;}&apos; +
+        &apos;100%{opacity:&apos; + z + &apos;}&apos; +
+        &apos;}&apos;, sheet.cssRules.length)
+
+      animations[name] = 1
+    }
+
+    return name
+  }
+
+  /**
+   * Tries various vendor prefixes and returns the first supported property.
+   */
+  function vendor(el, prop) {
+    var s = el.style
+      , pp
+      , i
+
+    prop = prop.charAt(0).toUpperCase() + prop.slice(1)
+    for(i=0; i&lt;prefixes.length; i++) {
+      pp = prefixes[i]+prop
+      if(s[pp] !== undefined) return pp
+    }
+    if(s[prop] !== undefined) return prop
+  }
+
+  /**
+   * Sets multiple style properties at once.
+   */
+  function css(el, prop) {
+    for (var n in prop)
+      el.style[vendor(el, n)||n] = prop[n]
+
+    return el
+  }
+
+  /**
+   * Fills in default values.
+   */
+  function merge(obj) {
+    for (var i=1; i &lt; arguments.length; i++) {
+      var def = arguments[i]
+      for (var n in def)
+        if (obj[n] === undefined) obj[n] = def[n]
+    }
+    return obj
+  }
+
+  /**
+   * Returns the absolute page-offset of the given element.
+   */
+  function pos(el) {
+    var o = { x:el.offsetLeft, y:el.offsetTop }
+    while((el = el.offsetParent))
+      o.x+=el.offsetLeft, o.y+=el.offsetTop
+
+    return o
+  }
+
+  /**
+   * Returns the line color from the given string or array.
+   */
+  function getColor(color, idx) {
+    return typeof color == &apos;string&apos; ? color : color[idx % color.length]
+  }
+
+  // Built-in defaults
+
+  var defaults = {
+    lines: 12,            // The number of lines to draw
+    length: 7,            // The length of each line
+    width: 5,             // The line thickness
+    radius: 10,           // The radius of the inner circle
+    rotate: 0,            // Rotation offset
+    corners: 1,           // Roundness (0..1)
+    color: &apos;#000&apos;,        // #rgb or #rrggbb
+    direction: 1,         // 1: clockwise, -1: counterclockwise
+    speed: 1,             // Rounds per second
+    trail: 100,           // Afterglow percentage
+    opacity: 1/4,         // Opacity of the lines
+    fps: 20,              // Frames per second when using setTimeout()
+    zIndex: 2e9,          // Use a high z-index by default
+    className: &apos;spinner&apos;, // CSS class to assign to the element
+    top: &apos;50%&apos;,           // center vertically
+    left: &apos;50%&apos;,          // center horizontally
+    position: &apos;absolute&apos;  // element position
+  }
+
+  /** The constructor */
+  function Spinner(o) {
+    this.opts = merge(o || {}, Spinner.defaults, defaults)
+  }
+
+  // Global defaults that override the built-ins:
+  Spinner.defaults = {}
+
+  merge(Spinner.prototype, {
+
+    /**
+     * Adds the spinner to the given target element. If this instance is already
+     * spinning, it is automatically removed from its previous target b calling
+     * stop() internally.
+     */
+    spin: function(target) {
+      this.stop()
+
+      var self = this
+        , o = self.opts
+        , el = self.el = css(createEl(0, {className: o.className}), {position: o.position, width: 0, zIndex: o.zIndex})
+        , mid = o.radius+o.length+o.width
+
+      css(el, {
+        left: o.left,
+        top: o.top
+      })
+        
+      if (target) {
+        target.insertBefore(el, target.firstChild||null)
+      }
+
+      el.setAttribute(&apos;role&apos;, &apos;progressbar&apos;)
+      self.lines(el, self.opts)
+
+      if (!useCssAnimations) {
+        // No CSS animation support, use setTimeout() instead
+        var i = 0
+          , start = (o.lines - 1) * (1 - o.direction) / 2
+          , alpha
+          , fps = o.fps
+          , f = fps/o.speed
+          , ostep = (1-o.opacity) / (f*o.trail / 100)
+          , astep = f/o.lines
+
+        ;(function anim() {
+          i++;
+          for (var j = 0; j &lt; o.lines; j++) {
+            alpha = Math.max(1 - (i + (o.lines - j) * astep) % f * ostep, o.opacity)
+
+            self.opacity(el, j * o.direction + start, alpha, o)
+          }
+          self.timeout = self.el &amp;&amp; setTimeout(anim, ~~(1000/fps))
+        })()
+      }
+      return self
+    },
+
+    /**
+     * Stops and removes the Spinner.
+     */
+    stop: function() {
+      var el = this.el
+      if (el) {
+        clearTimeout(this.timeout)
+        if (el.parentNode) el.parentNode.removeChild(el)
+        this.el = undefined
+      }
+      return this
+    },
+
+    /**
+     * Internal method that draws the individual lines. Will be overwritten
+     * in VML fallback mode below.
+     */
+    lines: function(el, o) {
+      var i = 0
+        , start = (o.lines - 1) * (1 - o.direction) / 2
+        , seg
+
+      function fill(color, shadow) {
+        return css(createEl(), {
+          position: &apos;absolute&apos;,
+          width: (o.length+o.width) + &apos;px&apos;,
+          height: o.width + &apos;px&apos;,
+          background: color,
+          boxShadow: shadow,
+          transformOrigin: &apos;left&apos;,
+          transform: &apos;rotate(&apos; + ~~(360/o.lines*i+o.rotate) + &apos;deg) translate(&apos; + o.radius+&apos;px&apos; +&apos;,0)&apos;,
+          borderRadius: (o.corners * o.width&gt;&gt;1) + &apos;px&apos;
+        })
+      }
+
+      for (; i &lt; o.lines; i++) {
+        seg = css(createEl(), {
+          position: &apos;absolute&apos;,
+          top: 1+~(o.width/2) + &apos;px&apos;,
+          transform: o.hwaccel ? &apos;translate3d(0,0,0)&apos; : &apos;&apos;,
+          opacity: o.opacity,
+          animation: useCssAnimations &amp;&amp; addAnimation(o.opacity, o.trail, start + i * o.direction, o.lines) + &apos; &apos; + 1/o.speed + &apos;s linear infinite&apos;
+        })
+
+        if (o.shadow) ins(seg, css(fill(&apos;#000&apos;, &apos;0 0 4px &apos; + &apos;#000&apos;), {top: 2+&apos;px&apos;}))
+        ins(el, ins(seg, fill(getColor(o.color, i), &apos;0 0 1px rgba(0,0,0,.1)&apos;)))
+      }
+      return el
+    },
+
+    /**
+     * Internal method that adjusts the opacity of a single line.
+     * Will be overwritten in VML fallback mode below.
+     */
+    opacity: function(el, i, val) {
+      if (i &lt; el.childNodes.length) el.childNodes[i].style.opacity = val
+    }
+
+  })
+
+
+  function initVML() {
+
+    /* Utility function to create a VML tag */
+    function vml(tag, attr) {
+      return createEl(&apos;&lt;&apos; + tag + &apos; xmlns=&quot;urn:schemas-microsoft.com:vml&quot; class=&quot;spin-vml&quot;&gt;&apos;, attr)
+    }
+
+    // No CSS transforms but VML support, add a CSS rule for VML elements:
+    sheet.addRule(&apos;.spin-vml&apos;, &apos;behavior:url(#default#VML)&apos;)
+
+    Spinner.prototype.lines = function(el, o) {
+      var r = o.length+o.width
+        , s = 2*r
+
+      function grp() {
+        return css(
+          vml(&apos;group&apos;, {
+            coordsize: s + &apos; &apos; + s,
+            coordorigin: -r + &apos; &apos; + -r
+          }),
+          { width: s, height: s }
+        )
+      }
+
+      var margin = -(o.width+o.length)*2 + &apos;px&apos;
+        , g = css(grp(), {position: &apos;absolute&apos;, top: margin, left: margin})
+        , i
+
+      function seg(i, dx, filter) {
+        ins(g,
+          ins(css(grp(), {rotation: 360 / o.lines * i + &apos;deg&apos;, left: ~~dx}),
+            ins(css(vml(&apos;roundrect&apos;, {arcsize: o.corners}), {
+                width: r,
+                height: o.width,
+                left: o.radius,
+                top: -o.width&gt;&gt;1,
+                filter: filter
+              }),
+              vml(&apos;fill&apos;, {color: getColor(o.color, i), opacity: o.opacity}),
+              vml(&apos;stroke&apos;, {opacity: 0}) // transparent stroke to fix color bleeding upon opacity change
+            )
+          )
+        )
+      }
+
+      if (o.shadow)
+        for (i = 1; i &lt;= o.lines; i++)
+          seg(i, -2, &apos;progid:DXImageTransform.Microsoft.Blur(pixelradius=2,makeshadow=1,shadowopacity=.3)&apos;)
+
+      for (i = 1; i &lt;= o.lines; i++) seg(i)
+      return ins(el, g)
+    }
+
+    Spinner.prototype.opacity = function(el, i, val, o) {
+      var c = el.firstChild
+      o = o.shadow &amp;&amp; o.lines || 0
+      if (c &amp;&amp; i+o &lt; c.childNodes.length) {
+        c = c.childNodes[i+o]; c = c &amp;&amp; c.firstChild; c = c &amp;&amp; c.firstChild
+        if (c) c.opacity = val
+      }
+    }
+  }
+
+  var probe = css(createEl(&apos;group&apos;), {behavior: &apos;url(#default#VML)&apos;})
+
+  if (!vendor(probe, &apos;transform&apos;) &amp;&amp; probe.adj) initVML()
+  else useCssAnimations = vendor(probe, &apos;animation&apos;)
+
+  return Spinner
+
+}));
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.8)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

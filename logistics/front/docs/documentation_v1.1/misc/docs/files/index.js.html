@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>index.js - Documenting JavaScript with YUIDoc</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="Documenting JavaScript with YUIDoc" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/Collection.html">Collection</a></li>
+                                <li><a href="../classes/index.js.html">index.js</a></li>
+                                <li><a href="../classes/initialize.html">initialize</a></li>
+                                <li><a href="../classes/near.html">near</a></li>
+                                <li><a href="../classes/Supermodel.html">Supermodel</a></li>
+                                <li><a href="../classes/tsptw.html">tsptw</a></li>
+                            </ul>
+                
+                
+                            <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/Backbone.html">Backbone</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1 class="file-heading">File: index.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+* This is the Backbone.js based module
+*@module Backbone
+*/
+
+
+Spinner.prototype.show = function() {
+	this.spin(document.getElementById(&quot;map_canvas&quot;));
+};
+
+function l(msg) {
+	console.log(msg);
+}
+
+var spinner = new Spinner();
+var map;
+var shadowLays = [];
+var routesLays = [];
+var drawingManager;
+
+/**
+* This method initializes the map and sets the map
+*@class initialize 
+*@static
+*/
+function initialize() {
+	var myOptions = {
+			zoom : parseInt(12),
+			center : new google.maps.LatLng(1.34, 103.82),
+			zoomControl : true,
+			mapTypeControl: true,
+			mapTypeControlOptions: {
+				position: google.maps.ControlPosition.LEFT_BOTTOM
+			},
+	};
+	map = new google.maps.Map(document.getElementById(&quot;map_canvas&quot;), myOptions);
+	drawingManager = new google.maps.drawing.DrawingManager({
+		drawingControl : true,
+		drawingControlOptions : {
+			position : google.maps.ControlPosition.TOP_LEFT,
+			drawingModes : [ google.maps.drawing.OverlayType.RECTANGLE,
+			                 google.maps.drawing.OverlayType.MARKER ]
+
+
+		},
+
+	});
+
+	drawingManager.setMap(map);
+	google.maps.event
+	.addListener(
+			drawingManager,
+			&#x27;overlaycomplete&#x27;,
+			function(event) {
+				var overlay = event.overlay;
+				if (event.type == google.maps.drawing.OverlayType.MARKER) {
+					shadowLays.forEach(function(lay, i) {
+						if (lay.getBounds().contains(
+								overlay.getPosition())) {
+							lay.setMap(null);
+							parcels.triggerEach(&quot;onSelect&quot;, lay
+									.getBounds(), false);
+						}
+					});
+					overlay.setMap(null);
+				} else {
+					if ($(&quot;#time_horizon&quot;).val() == &quot;&quot;) {
+						alert(&quot;You need to select time horizon before doing assignment.&quot;);
+						overlay.setMap(null);
+						return;
+					} else {
+						onHorizonChanged();
+						shadowLays.push(overlay);
+						parcels.triggerEach(&quot;onSelect&quot;, overlay
+								.getBounds(), true);
+					}
+				}
+				onSelect();
+			});
+
+	google.maps.event.addListener(map, &#x27;click&#x27;, function(event) {
+		setStatus(event.latLng.lat().toPrecision(6) + &quot; : &quot;
+				+ event.latLng.lng().toPrecision(6));
+	});
+
+
+	var trafficLayer = new google.maps.TrafficLayer();
+	trafficLayer.setMap(map);
+}
+/**
+* This is executed when you select the parcels on the map
+*@method onSelect
+*@for index.js
+*/
+function onSelect() {
+	$(&quot;#assignDiv&quot;).toggle(parcels.getSelectedParcels().length &gt; 0);
+	$(&quot;#autoFillBtn&quot;).toggle(
+			parcels.getSelectedParcels().length &lt;= 2
+			&amp;&amp; $(&quot;#vehicle_id2&quot;).val() != &quot;&quot;);
+	setStatus(parcels.getSelectedParcels().length
+			+ &quot; parcels selected. Total volume: &quot;
+			+ parcels.getSelectedTotalVolume().toFixed(2));
+}
+
+/**
+* This is executed when you select the parcels on the map
+*@method setStatus
+*@param status {String} the delivery status of the parcel
+*/
+function setStatus(status) {
+	$(&quot;#statusLabel&quot;).text(status);
+}
+
+/**
+* the method to execute the planned routes with spinner.js to show loading
+*@method planRoutes
+* 
+*/
+function planRoutes() {
+	spinner.show();
+	onHorizonChanged();
+
+	vehicles.each(function(vehicle) {
+		planRoute(vehicle);
+	});
+	spinner.stop();
+}
+
+/**
+* the method to plan routes
+*@method planRoute
+*@param vehicle {Vehicle} The vehicle used in planning the route
+* 
+*/
+function planRoute(vehicle) {
+	vehicle.capacity_weight = Number.MAX_VALUE;
+	vehicle.capacity_volume = Number.MAX_VALUE;
+	calRoute(profile, vehicle.parcels().getVisibleModels(), [ vehicle ], null,
+			function(routes) {
+		_.each(routes, function(route) {
+			plotRoute(route);
+			saveRoute(route);
+		});
+	});
+}
+
+/**
+* the method to execute the clustered route result
+@method planClusterRoutes
+* 
+*/
+function planClustersRoutes() {
+	log(&quot;plan all button clicked&quot;);
+	spinner.show();
+	onHorizonChanged();
+	var emptyVehicles = vehicles.filter(function(vehicle) {
+		return vehicle.parcels().length == 0;
+	});
+	log(&quot;plan vehicle start&quot;);
+	calRoute(profile, parcels.getIdleParcels(), emptyVehicles, null, function(
+			routes) {
+		_.each(routes, function(route) {
+			plotRoute(route);
+			saveRoute(route);
+		});
+		spinner.stop();
+	});
+}
+
+/**
+* the method to calculate the routes based on the input args
+@method calRoute
+@param profile {Profile} the profile information of the user
+@param planedParcels {Parcel}  The parcels that have been planned
+@param vehicles {Vehicle} the vehicles for the user
+@param anchor {Location} The depot location
+@param callback (Function)  this is a callback function 
+@return {Function} the callback event of the calculated route
+*/
+function calRoute(profile, planedParcels, vehicles, anchor, callback) {
+	if (planedParcels.length == 0)
+		return;
+	log(&quot;Loading distance matrix&quot;);
+	matrix.load(profile, parcels, function() {
+		var startTime = time();
+		setStatus(&quot;StartTime: &quot; + startTime);
+		log(&quot;Begin routing&quot;);
+		if(/near/.test(location.hash)){
+			var routes =near(profile, planedParcels, vehicles, anchor);
+		}else{
+			var routes =tsptw(profile, planedParcels, vehicles, anchor);	
+		}
+
+		setStatus(&quot;Time taken: &quot; + (time() - startTime) );
+		log(&quot;Routing complete&quot;);
+		callback(routes);
+	});
+}
+/**
+* the method to log the time
+@method log
+@param msg {String} the string message
+*/
+function log(msg){
+	console.log(new Date().toLocaleTimeString(&quot;en-US&quot;) +&quot; : &quot; + msg);
+	setStatus(new Date().toLocaleTimeString(&quot;en-US&quot;) +&quot; : &quot; + msg);
+}
+/**
+* the method to provide the time
+@method time
+*/
+function time(){
+	return Math.floor(new Date().getTime() / 1000);
+}
+
+/**
+* the method to autofill the parcels with the vehicles
+@method autoFill
+*/
+function autoFill() {
+	var anchor = parcels.getSelectedParcels().at(0);
+	calRoute(profile, parcels.getIdleParcels(), [ vehicles
+	                                              .get($(&quot;#vehicle_id2&quot;).val()) ], anchor, function(route) {
+		plotRoute(route);
+		_.each(route.parcels, function(parcel) {
+			parcel.set(&quot;selected&quot;, true);
+		});
+	});
+}
+/**
+* the method to plot the routes
+@method plotRoute
+@param route{Route} the route formed by the algorithm
+*/
+function plotRoute(route) {
+	var colors = [ &quot;#00C81A&quot;, &quot;#007CC6&quot;, &quot;#00BE94&quot;, &quot;#00A3C6&quot;, &quot;#CB7100&quot;,
+	               &quot;#C000B2&quot; ];
+	var coordinates = _.map(route.parcels, function(parcel) {
+		return parcel.marker.position;
+	});
+
+	var routePath = new google.maps.Polyline({
+		path : coordinates,
+		geodesic : true,
+		strokeColor : route.vehicle.getColor(),
+		strokeOpacity : 1.0,
+		strokeWeight : 4
+	});
+	routesLays.push(routePath);
+	routePath.setMap(map);
+}
+
+/**
+* the method to save the routes
+@method saveRoute
+@param route {Route} the route formed by the algorithm
+*/
+function saveRoute(route) {
+	_.each(route.parcels, function(parcel, index) {
+		parcel.set(&quot;vehicle_id&quot;, route.vehicle.id);
+		parcel.set(&quot;seq&quot;, index);
+		parcel.set(&quot;route&quot;, route.id);
+		parcel.save();
+	});
+}
+/**
+* the method to remove all the routes
+@method clearAll
+*/
+function clearAll() {
+	hide(routesLays);
+	hide(shadowLays);
+	parcels.each(function(parcel) {
+		parcel.set(&quot;selected&quot;, false);
+	});
+}
+
+/**
+* the method to hide all the route layers
+@method hide
+*/
+function hide(lays) {
+	_(lays).each(function(overlay) {
+		overlay.setMap(null);
+	});
+}
+/**
+* the method to flter all the parcels by vehicle or time windows
+@method onFilterParcels
+*/
+function onFilterParcels() {
+	clearAll();
+	var vehicle_id = $(&quot;#vehicle_id&quot;).val();
+	var window_start = $(&quot;#window_start&quot;).val();
+	var window_end = $(&quot;#window_end&quot;).val();
+	parcels.triggerEach(&quot;onFilter&quot;, vehicle_id, window_start, window_end);
+}
+/**
+* the method to filter based on horizon change
+@method onHorizonChanged
+*/
+function onHorizonChanged() {
+	var horizonArr = ($(&quot;#time_horizon&quot;).val() || &quot;0-24&quot;).split(&quot;-&quot;);
+	var horizonStart = parseInt(horizonArr[0]);
+	var horizonEnd = parseInt(horizonArr[1]);
+	if ($(&quot;#window_start&quot;).val() != horizonStart
+			|| $(&quot;#window_end&quot;).val() != horizonEnd) {
+		$(&quot;#window_start&quot;).val(horizonStart);
+		$(&quot;#window_end&quot;).val(horizonEnd);
+		_.defer(onFilterParcels);
+	}
+	$(&quot;.time-window option&quot;).each(function() {
+		if ($(this).val() &gt;= horizonStart &amp;&amp; $(this).val() &lt;= horizonEnd) {
+			$(this).removeAttr(&quot;disabled&quot;);
+		} else {
+			$(this).attr(&quot;disabled&quot;, &quot;disabled&quot;);
+		}
+	});
+}
+/**
+* the method to create the parcel markers
+@method createParcelMarker
+@param parcel {Parcel} parcels that exist
+*/
+function createParcelMarker(parcel) {
+	var sameParcelsCount = parcels.where({
+		lat : parcel.get(&quot;lat&quot;),
+		lng : parcel.get(&quot;lng&quot;)
+	}).length - 1;
+	var numParcelsPerCircle = 8;
+	//var randomSN = Math.floor((Math.random() * 100) + 1);
+	var radius = Math.ceil(sameParcelsCount / numParcelsPerCircle);
+	var degree = 2 * Math.PI / numParcelsPerCircle
+	* (sameParcelsCount % numParcelsPerCircle);
+	parcel.set(&quot;lng&quot;, parcel.get(&quot;lng&quot;) + radius * 0.0001 * Math.sin(degree));
+	parcel.set(&quot;lat&quot;, parcel.get(&quot;lat&quot;) + radius * 0.0001 * Math.cos(degree));
+	parcel.set(&quot;identifier&quot;, parcel.get(&quot;identifier&quot;));
+
+	if(parcel.get(&quot;deliver_time&quot;)!=null){
+		var parcelStatus = parcel.get(&quot;status&quot;);
+		parcel.addDeliveryStatusMarker(new google.maps.LatLng(parcel.get(&quot;lat&quot;),parcel.get(&quot;lng&quot;)),map,parcelStatus);
+		google.maps.event.addListener(parcel.marker, &#x27;click&#x27;, function() {
+			var infoWindow = new google.maps.InfoWindow({
+				content : _.template($(&quot;#tmpl_parcel_window&quot;).html())(this.model)
+			});
+			infoWindow.open(map, this);
+		});
+	}else{
+		parcel.createMarker(map);
+		google.maps.event.addListener(parcel.marker, &#x27;click&#x27;, function() {
+			var infoWindow = new google.maps.InfoWindow({
+				content : _.template($(&quot;#tmpl_parcel_window&quot;).html())(this.model)
+			});
+			infoWindow.open(map, this);
+		});
+		
+	}
+
+}
+/**
+* the method to geocode the parcels
+@method geocodeParcel
+@return {Parcel} returns the geocoded parcel
+*/
+function geocodeParcel() {
+	for (var i = 0; i &lt; parcels_blank.length; i++) {
+		parcel = parcels_blank.at(i);
+		if (!empty(parcel.get(&quot;lat&quot;)) || parcel.get(&quot;failed&quot;) == 1)
+			continue;
+		console.log(&quot;Geocoding &quot; + parcel.get(&quot;postal&quot;));
+		geocode(&quot;Singapore&quot;, parcel.get(&quot;postal&quot;), function(results, status) {
+			if (results != null &amp;&amp; results.length &gt; 0) {
+				console.log(&quot;Geocoded successfully &quot; + parcel.get(&quot;postal&quot;));
+				var latLng = results[0].geometry.location;
+				console.log(&quot;updating&quot;);
+				parcel.set(&quot;lat&quot;, latLng.lat());
+				parcel.set(&quot;lng&quot;, latLng.lng());
+				parcel.set(&quot;failed&quot;, 0);
+				parcel.save();
+				parcels.add(parcel);
+				createParcelMarker(parcel);
+
+				$.get(site.urlTo(&quot;geocode/update-geocode&quot;), {
+					postal : parcel.get(&quot;postal&quot;),
+					lat : latLng.lat(),
+					lng : latLng.lng()
+				});
+				setTimeout(function() {
+					geocodeParcel();
+				}, Math.random() *1000);
+			} else {
+				(function(parcel) {
+					console.log(&quot;Guess Geocoding &quot; + parcel.get(&quot;postal&quot;));
+					$.getJSON(site.urlTo(&quot;geocode/guess-geocode&quot;), {
+						postal : parcel.get(&quot;postal&quot;)
+					}).done(function(latLng) {
+						if (!empty(latLng.lat)) {
+							parcel.set(&quot;lat&quot;, latLng.lat);
+							parcel.set(&quot;lng&quot;, latLng.lng);
+							parcels.add(parcel);
+							createParcelMarker(parcel);
+						}
+						parcel.set(&quot;failed&quot;, 1);
+						parcel.save();
+						setTimeout(function() {
+							geocodeParcel();
+						}, Math.random() * 1000);
+					});
+				})(parcel);
+			}
+		});
+		return;
+	}
+}
+
+var parcels = new Parcels;
+var parcels_blank = new Parcels;
+var vehicles = new Vehicles;
+var profile = new Profile;
+var drivers = new Drivers;
+
+/**
+* the method create the initial map overlay of parcels updates the selection of parcels
+@method callback
+@return {Boolean} returns true on the success of an updated parcel
+*/
+$(function() {
+	// execute
+	initialize();
+	spinner.show();
+
+	drivers.fetch({
+		success : function() {
+			vehicles.fetch({
+				success : function(models, response, options) {
+					models.each(function(vehicle) {
+						if (!empty(vehicle.driver()))
+							vehicle.createMarker(map);
+					});
+				}
+			});
+		}
+	});
+
+	parcels.fetch({
+		success : function(ps, response, options) {
+			spinner.stop();
+			ps.each(function(parcel) {
+				if (empty(parcel)) {
+					parcels.remove(parcel);
+					console.log(&quot;empty?&quot;);
+				} else if (!empty(parcel.get(&quot;lat&quot;))) {
+					createParcelMarker(parcel);
+				} else {
+					parcels_blank.add(parcel);
+				}
+			});
+			parcels.remove(parcels_blank.toArray());
+			geocodeParcel();
+		}
+	});
+
+	profile.fetch({
+		success : function(model, response, options) {
+			model.createMarker(map);
+		}
+	});
+
+	$(&#x27;#datetimepicker&#x27;).datetimepicker({
+		pickTime : false
+	});
+
+	$(&quot;#datetimepicker&quot;).change(function() {
+		$(&quot;#datetimepickerForm&quot;).submit();
+	});
+
+	$(&quot;#vehicle_id2&quot;).change(
+			function() {
+				$(&quot;#autoFillBtn&quot;).toggle(
+						parcels.getSelectedParcels().length &lt;= 2
+						&amp;&amp; $(&quot;#vehicle_id2&quot;).val() != &quot;&quot;);
+			});
+
+	$(&quot;#autoFillBtn&quot;).click(function(e) {
+
+	});
+
+	$(&quot;#assignBtn&quot;)
+	.click(
+			function(e) {
+				e.preventDefault();
+
+				// find vehicle
+				var vehicleId = $(&quot;#vehicle_id2&quot;).val();
+				var vehicle = vehicles.get(vehicleId);
+				if (vehicle == null)
+					vehicle = {
+						id : 0
+				};
+
+				// check capacity
+
+				if (vehicleId != &quot;&quot;) {
+					var leftVolume = vehicle.getCapacityVolumeLeft()
+					- parcels.getSelectedTotalVolume();
+					var leftWeight = vehicle.getCapacityWeightLeft()
+					- parcels.getSelectedTotalWeight();
+					if ((leftVolume &lt; 0 || leftWeight &lt; 0)
+							&amp;&amp; false == confirm(&quot;Vehicle overloaded. Volume left  &quot;
+									+ leftVolume.toFixed(2)
+									+ &quot;. Weight left &quot;
+									+ leftWeight.toFixed(2)
+									+ &quot;. Confirm to assign?&quot;)) {
+						return false;
+					}
+				}
+
+				hide(shadowLays);
+				spinner.show();
+				//get the selected parcels
+				var selectedParcels = parcels.getSelectedParcels();
+				selectedParcels
+				.each(function(parcel) {
+					parcel.set(&quot;selected&quot;, false);
+					if (parcel.get(&quot;vehicle_id&quot;) != vehicle.id) {
+						parcel
+						.save(
+								{
+									vehicle_id : vehicle.id,
+									seq : 0
+								},
+								{
+									patch : true,
+									success : function() {
+										setStatus(&quot;Updated parcel &quot;
+												+ (selectedParcels
+														.indexOf(parcel) + 1)
+														+ &quot;/&quot;
+														+ selectedParcels.length);
+										parcel
+										.set(
+												&quot;vehicle_id&quot;,
+												vehicle.id);
+										if (selectedParcels.length
+												- selectedParcels
+												.indexOf(parcel) &lt; 6) {
+											spinner
+											.stop();
+										}
+									}
+								});
+					}
+				});
+				onSelect();
+				return false;
+			});
+});
+
+    </pre>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

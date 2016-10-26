@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>algo.js - Documenting JavaScript with YUIDoc</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="Documenting JavaScript with YUIDoc" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/Collection.html">Collection</a></li>
+                                <li><a href="../classes/index.js.html">index.js</a></li>
+                                <li><a href="../classes/initialize.html">initialize</a></li>
+                                <li><a href="../classes/near.html">near</a></li>
+                                <li><a href="../classes/Supermodel.html">Supermodel</a></li>
+                                <li><a href="../classes/tsptw.html">tsptw</a></li>
+                            </ul>
+                
+                
+                            <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/Backbone.html">Backbone</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1 class="file-heading">File: algo.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+* This the class for the Clark Wright Algorithm which is a key part of the application
+*@class near
+*@static
+*@param depot {Depot} the depot or start location
+*@param parcels {Parcel[]} the parcel and the information associated with it
+*@param vehicles (Vehicle[]) the vecicles that will be used to form the routes
+*@return routes (String) returns the route of the vehicle
+*/
+function clarkeRoute(depot, parcels, vehicles) {
+	if (depot == null || parcels == null || parcels.length &lt;= 1) {
+		return [];
+	}
+
+	var matrix = [];
+	for (var i = 0; i &lt; parcels.length; i++) {
+		for ( j = i + 1; j &lt; parcels.length; j++) {
+			var distance = parcels.at(i).distance(depot) + parcels.at(j).distance(depot) - parcels.at(i).distance(parcels.at(j));
+			matrix.push({
+				x : i,
+				y : j,
+				distance : distance
+			});
+		}
+	}
+	matrix.sort(function(a, b) {
+		return b.distance - a.distance;
+	});
+
+
+	var visited = [];
+	var routes = [];
+	while (visited.length != parcels.length) {
+		var vehicle = vehicles.shift();
+		vehicles.push(vehicle);
+		var indexs = [];
+
+		vehicle.left_volume = vehicle.get(&quot;capacity_volume&quot;);
+		vehicle.left_weight = vehicle.get(&quot;capacity_weight&quot;);
+		for (var i = 0; i &lt; matrix.length; i++) {
+			function visit(index, push) {
+				var parcel = parcels.at(index);
+				if (visited.indexOf(index) &gt;= 0) {
+					return;
+					//visited? skip.
+				}
+				if (vehicle.left_volume &lt; parcel.get(&quot;volume&quot;) || vehicle.left_weight &lt; parcel.get(&quot;weight&quot;)) {
+					return;
+					// overloaded? skip.
+				};
+
+				if (push) {
+					indexs.push(index);
+				} else {
+					indexs.unshift(index);
+				}
+				
+				//update vehicle capacity
+				vehicle.left_volume -= parcel.get(&quot;volume&quot;);
+				vehicle.left_weight -= parcel.get(&quot;weight&quot;);
+				
+				// remove saving.
+				saving.distance = 0;
+				
+				//mark as visited
+				visited.push(index);
+				
+				// restart loop
+				i = -1;
+			}
+
+			var saving = matrix[i];
+			if (saving.distance == 0)
+				continue;
+
+			if (indexs.length == 0) {
+				if (visited.indexOf(saving.y) == -1 &amp;&amp; visited.indexOf(saving.x) == -1) {
+					visit(saving.x, true);
+					visit(saving.y, true);
+				}
+			} else if (saving.x == indexs[0]) {
+				visit(saving.y, false);
+			} else if (saving.y == indexs[0]) {
+				visit(saving.x, false);
+			} else if (saving.x == indexs[indexs.length - 1]) {
+				visit(saving.y, true);
+			} else if (saving.y == indexs[indexs.length - 1]) {
+				visit(saving.x, true);
+			}
+		}
+
+		if (indexs.length == 0)
+			break;
+
+		var route = {
+			vehicle : vehicle,
+			indexs : indexs
+		};
+
+		route.parcels = _.map(route.indexs, function(i) {
+			return parcels.at(i);
+		});
+		routes.push(route);
+	}
+
+	return routes;
+}
+
+    </pre>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

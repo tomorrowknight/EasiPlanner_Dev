@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>tsptw.js - Documenting JavaScript with YUIDoc</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="Documenting JavaScript with YUIDoc" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/Collection.html">Collection</a></li>
+                                <li><a href="../classes/index.js.html">index.js</a></li>
+                                <li><a href="../classes/initialize.html">initialize</a></li>
+                                <li><a href="../classes/near.html">near</a></li>
+                                <li><a href="../classes/Supermodel.html">Supermodel</a></li>
+                                <li><a href="../classes/tsptw.html">tsptw</a></li>
+                            </ul>
+                
+                
+                            <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/Backbone.html">Backbone</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1 class="file-heading">File: tsptw.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+* This the class for the core algorithm of the application
+*@class tsptw
+*@static
+*@param depot {Depot} the depot or start location
+*@param parcels {Parcel[]} the parcel and the information associated with it
+*@param vehicles (Vehicle[]) the vecicles that will be used to form the routes
+*@param anchor (Coordinate) the point of reference from which the heuristic will base the next plotting of points on 
+*@return routes (String) returns the route of the vehicle
+*/
+function tsptw(depot, parcels, vehicles, anchor) {
+	var routes = [];
+	var depotParcel = createDepotParcel(depot);
+
+	var avgVolume = parcels.reduce(function(memo,parcel){return memo+parcel.get(&quot;volume&quot;);},0)/parcels.length;
+	var avgWeight = parcels.reduce(function(memo,parcel){return memo+parcel.get(&quot;weight&quot;);},0)/parcels.length;
+	
+	parcels.each(function(p) {
+		p.set(&quot;planned_deliver_time&quot;, null);
+		p.set(&quot;visited&quot;, null);
+	});
+	parcels = parcels.reject(function(parcel){
+		for(var i in vehicles){
+			if(parcel.fitTo(vehicles[i]))
+				return false;
+		}
+		return true;
+	});
+	
+	while (parcels.length &gt; 0) {
+		var vehicle = vehicles.shift();
+		vehicles.push(vehicle);
+		vehicle.left_volume = vehicle.get(&quot;capacity_volume&quot;);
+		vehicle.left_weight = vehicle.get(&quot;capacity_weight&quot;);
+		
+		var maxNumParcels = 10;
+		
+		var ps = [];
+		ps.push(depotParcel);
+		ps.push(depotParcel);
+		
+		
+		while (true) {
+			var inserted = false;
+			
+			if (anchor == null) {
+				var center = getCenter(ps, depotParcel, parcels);
+				var sortedParcels = _.sortBy(parcels,function(parcel) {
+					return parcel.distance(center);
+				});
+			} else {
+				var sortedParcels = _.sortBy(parcels,function(parcel) {
+					return parcel.distance(anchor);
+				});
+			}
+			sortedParcels = _.reject(sortedParcels, function(parcel){
+				return !parcel.fitTo(vehicle);
+			});
+			sortedParcels = sortedParcels.slice(0,maxNumParcels);
+			_.each(sortedParcels, function(parcel) {
+				if (vehicle.left_volume &lt; parcel.get(&quot;volume&quot;) || vehicle.left_weight &lt; parcel.get(&quot;weight&quot;)) {
+					return;
+				}
+
+				var orderBySavingIndexs = calIndexsBySavings(parcel, ps);
+				for (var i = 0; i &lt; orderBySavingIndexs.length; i++) {
+					var orderBySavingIndex = orderBySavingIndexs[i];
+					var ps_clone = _.map(ps, function(p) {
+						return p.clone();
+					});
+					if (insertParcel(ps_clone, orderBySavingIndex, parcel.clone())) {
+						insertParcel(ps, orderBySavingIndex, parcel);
+						parcel.set(&quot;visited&quot;, true);
+						parcels.remove(parcel);
+						//update vehicle capacity
+						vehicle.left_volume -= parcel.get(&quot;volume&quot;);
+						vehicle.left_weight -= parcel.get(&quot;weight&quot;);
+						inserted = true;
+						break;
+					};
+				}
+			});
+			if (!inserted)
+				break;
+		}
+
+		ps.pop();
+		ps.shift();
+
+		var route = {
+			vehicle : vehicle,
+			parcels : ps,
+			id:new Date().getTime()
+		};
+		
+		if(anchor!=null){
+			return route; // only one route.
+		}
+		
+		routes.push(route);
+	}
+	printRoutes(routes);
+	return routes;
+}
+
+Array.prototype.remove = function(val) {
+	var index = this.indexOf(val);
+	if (index &gt; -1) {
+		this.splice(index, 1);
+	}
+    return this;
+}
+/**
+* This the method to get the centroid of the depot and parcels and reference parcel
+*@method getCentre
+*@param ps {Parcel[]} parcels at the depot
+*@param depotParcel {Parcel} the parcels at the depot or start location
+*@param parcels {Parcel[]} the parcel and the information associated with it
+*@return center (String) returns the centre coordinates of the routes based on the depot
+*/
+function getCenter(ps, depotParcel, parcels) {
+	if (ps.length == 2) {
+		return _.max(parcels,function(p) {
+			return p.get(&quot;visited&quot;) ? 0 : p.distance(depotParcel);
+		});
+	}
+	ps.pop();
+	ps.shift();
+	var centerSum = _.reduce(ps, function(memo, p) {
+		return {
+			lat : memo.lat + p.get(&quot;lat&quot;),
+			lng : memo.lng + p.get(&quot;lng&quot;)
+		};
+	}, {
+		lat : 0,
+		lng : 0
+	});
+	var center = new Parcel;
+	center.set(&quot;lat&quot;, centerSum.lat / ps.length);
+	center.set(&quot;lng&quot;, centerSum.lng / ps.length);
+	ps.unshift(depotParcel);
+	ps.push(depotParcel);
+	return center;
+}
+/**
+* This the class for the core algorithm of the application
+*@class tsptw
+*@static
+*@param routes {Parcel[]} prints the route for each parcel
+*/
+function printRoutes(routes) {
+	return;
+	_.each(routes, function(route) {
+		console.log(&quot;================================&quot;);
+		_.each(route.parcels, function(parcel) {
+			var tmpl = &quot;&lt;%=obj.get(&#x27;customer_name&#x27;)%&gt;\t&lt;%=obj.get(&#x27;window_start&#x27;)%&gt;\t\t&lt;%=obj.get(&#x27;window_end&#x27;)%&gt;\t\t&lt;%=obj.get(&#x27;service_time&#x27;)%&gt;\t\t&lt;%=new Date(obj.get(&#x27;planned_deliver_time&#x27;)*60000)%&gt;&quot;;
+			//console.log(_.template(tmpl)(parcel).toString());
+		});
+	});
+}
+
+/**
+* This the class for the core algorithm of the application
+*@method calIndexsBySavings
+*@param parcel {Parcel} the parcel to compare the time saving to
+*@param ps {Parcel[]} prints the route for each parcel
+*@return {Number} the index of the pair of parcels which results in a saving
+*/
+function calIndexsBySavings(parcel, ps) {
+	var savingPairs = [];
+	for (var i = 0; i &lt; ps.length - 1; i++) {
+		savingPairs.push({
+			index : i,
+			saving : matrix.travelTime(parcel,ps[i],ps[i].getWindowStart()) + matrix.travelTime(parcel,ps[i + 1],ps[i+1].getWindowStart()) - matrix.travelTime(ps[i],ps[i + 1],ps[i+1].getWindowStart())
+		});
+	}
+	savingPairs = _.sortBy(savingPairs, function(savingPair) {
+		return savingPair.saving;
+	});
+	return _.map(savingPairs, function(savingPair) {
+		return savingPair.index;
+	});
+}
+/**
+* This the class for the core algorithm of the application
+*@method insertParcel
+*@param ps_clone {Parcel[]} creates a clone array for the ps
+*@param index {Number} the index of each savingPair
+*@param parcel {Parcel} the parcel to compare with
+*@return {boolean} returns true if a parcel can be inserted into the route
+*/
+function insertParcel(ps_clone, index, parcel) {
+	ps_clone.splice(index + 1, 0, parcel);
+	for (var i = index + 1; i &lt; ps_clone.length - 1; i++) {
+		var newStartTime = Math.max(ps_clone[i - 1].getServiceEndTime() + matrix.travelTime(ps_clone[i - 1], ps_clone[i],ps_clone[i].getWindowStart()), ps_clone[i].getWindowStartTime());
+		if (newStartTime == ps_clone[i].get(&quot;planned_deliver_time&quot;)) {
+			return true;
+		} else if (newStartTime &gt; ps_clone[i].getLatestStartTime()) {
+			return false;
+		}
+		ps_clone[i].set(&quot;planned_deliver_time&quot;, newStartTime);
+	}
+	return true;
+}
+
+/**
+* This the class for the core algorithm of the application
+*@method createDepotParcel
+*@param depot {Location} the location of the depot
+*@return {Parcel} returns a generic parcel Object 
+*/
+function createDepotParcel(depot) {
+	var parcel = new Parcel();
+	parcel.set(&quot;window_start&quot;, &quot;2000-01-01&quot;);
+	parcel.set(&quot;window_end&quot;, &quot;2099-01-01&quot;);
+	parcel.set(&quot;lat&quot;, depot.get(&quot;lat&quot;));
+	parcel.set(&quot;lng&quot;, depot.get(&quot;lng&quot;));
+	parcel.set(&quot;i&quot;,0);
+	parcel.set(&quot;postal&quot;,depot.get(&quot;postal&quot;));
+	parcel.set(&quot;service_time&quot;, 0);
+	parcel.set(&quot;planned_deliver_time&quot;, parcel.getWindowStartTime());
+	return parcel;
+}
+
+    </pre>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

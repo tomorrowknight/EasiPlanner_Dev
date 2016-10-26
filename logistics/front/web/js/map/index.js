@@ -90,7 +90,7 @@ function initialize() {
 /**
 * This is executed when you select the parcels on the map
 *@method onSelect
-*@for index.js
+*
 */
 function onSelect() {
 	$("#assignDiv").toggle(parcels.getSelectedParcels().length > 0);

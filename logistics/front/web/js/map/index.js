@@ -1,4 +1,9 @@
-//variables
+/**
+* This is the Backbone.js based module
+*@module Backbone
+*/
+
+
 Spinner.prototype.show = function() {
 	this.spin(document.getElementById("map_canvas"));
 };
@@ -13,7 +18,11 @@ var shadowLays = [];
 var routesLays = [];
 var drawingManager;
 
-//functions
+/**
+* This method initializes the map and sets the map
+*@class initialize 
+*@static
+*/
 function initialize() {
 	var myOptions = {
 			zoom : parseInt(12),
@@ -78,7 +87,11 @@ function initialize() {
 	var trafficLayer = new google.maps.TrafficLayer();
 	trafficLayer.setMap(map);
 }
-
+/**
+* This is executed when you select the parcels on the map
+*@method onSelect
+*@for index.js
+*/
 function onSelect() {
 	$("#assignDiv").toggle(parcels.getSelectedParcels().length > 0);
 	$("#autoFillBtn").toggle(
@@ -89,10 +102,20 @@ function onSelect() {
 			+ parcels.getSelectedTotalVolume().toFixed(2));
 }
 
+/**
+* This is executed when you select the parcels on the map
+*@method setStatus
+*@param status {String} the delivery status of the parcel
+*/
 function setStatus(status) {
 	$("#statusLabel").text(status);
 }
 
+/**
+* the method to execute the planned routes with spinner.js to show loading
+*@method planRoutes
+* 
+*/
 function planRoutes() {
 	spinner.show();
 	onHorizonChanged();
@@ -103,6 +126,12 @@ function planRoutes() {
 	spinner.stop();
 }
 
+/**
+* the method to plan routes
+*@method planRoute
+@param vehicle {Vehicle} The vehicle used in planning the route
+* 
+*/
 function planRoute(vehicle) {
 	vehicle.capacity_weight = Number.MAX_VALUE;
 	vehicle.capacity_volume = Number.MAX_VALUE;
@@ -115,6 +144,11 @@ function planRoute(vehicle) {
 	});
 }
 
+/**
+* the method to execute the clustered route result
+@method planClusterRoutes
+* 
+*/
 function planClustersRoutes() {
 	log("plan all button clicked");
 	spinner.show();
@@ -133,6 +167,16 @@ function planClustersRoutes() {
 	});
 }
 
+/**
+* the method to calculate the routes based on the input args
+@method calRoute
+@param profile {Profile}  Argument 1 
+@param planedParcels {Parcel}  Argument 2
+@param vehicles {Vehicle} Argument 3
+@param anchor {Vehicle} Argument 4
+@param callback (Function)  Argument 5
+@return {Function} the callback event of the calculated route
+*/
 function calRoute(profile, planedParcels, vehicles, anchor, callback) {
 	if (planedParcels.length == 0)
 		return;
@@ -152,13 +196,27 @@ function calRoute(profile, planedParcels, vehicles, anchor, callback) {
 		callback(routes);
 	});
 }
+/**
+* the method to log the time
+@method log
+@param msg {String} Argument 1 
+*/
 function log(msg){
 	console.log(new Date().toLocaleTimeString("en-US") +" : " + msg);
 	setStatus(new Date().toLocaleTimeString("en-US") +" : " + msg);
 }
+/**
+* the method to provide the time
+@method time
+*/
 function time(){
 	return Math.floor(new Date().getTime() / 1000);
 }
+
+/**
+* the method to autofill the parcels with the vehicles
+@method autoFill
+*/
 function autoFill() {
 	var anchor = parcels.getSelectedParcels().at(0);
 	calRoute(profile, parcels.getIdleParcels(), [ vehicles
@@ -169,7 +227,11 @@ function autoFill() {
 		});
 	});
 }
-
+/**
+* the method to plot the routes
+@method plotRoute
+@param {Route} route Argument 1 
+*/
 function plotRoute(route) {
 	var colors = [ "#00C81A", "#007CC6", "#00BE94", "#00A3C6", "#CB7100",
 	               "#C000B2" ];
@@ -188,6 +250,11 @@ function plotRoute(route) {
 	routePath.setMap(map);
 }
 
+/**
+* the method to save the routes
+@method saveRoute
+@param {Route} route Argument 1 
+*/
 function saveRoute(route) {
 	_.each(route.parcels, function(parcel, index) {
 		parcel.set("vehicle_id", route.vehicle.id);
@@ -196,7 +263,10 @@ function saveRoute(route) {
 		parcel.save();
 	});
 }
-
+/**
+* the method to remove all the routes
+@method clearAll
+*/
 function clearAll() {
 	hide(routesLays);
 	hide(shadowLays);
@@ -205,13 +275,19 @@ function clearAll() {
 	});
 }
 
-
+/**
+* the method to hide all the route layers
+@method hide
+*/
 function hide(lays) {
 	_(lays).each(function(overlay) {
 		overlay.setMap(null);
 	});
 }
-
+/**
+* the method to flter all the parcels by vehicle or time windows
+@method onFilterParcels
+*/
 function onFilterParcels() {
 	clearAll();
 	var vehicle_id = $("#vehicle_id").val();
@@ -219,7 +295,10 @@ function onFilterParcels() {
 	var window_end = $("#window_end").val();
 	parcels.triggerEach("onFilter", vehicle_id, window_start, window_end);
 }
-
+/**
+* the method to filter based on horizon change
+@method onHorizonChanged
+*/
 function onHorizonChanged() {
 	var horizonArr = ($("#time_horizon").val() || "0-24").split("-");
 	var horizonStart = parseInt(horizonArr[0]);
@@ -238,7 +317,11 @@ function onHorizonChanged() {
 		}
 	});
 }
-
+/**
+* the method to create the parcel markers
+@method createParcelMarker
+@param parcel {Parcel} Argument 1 
+*/
 function createParcelMarker(parcel) {
 	var sameParcelsCount = parcels.where({
 		lat : parcel.get("lat"),
@@ -274,7 +357,11 @@ function createParcelMarker(parcel) {
 	}
 
 }
-
+/**
+* the method to geocode the parcels
+@method geocodeParcel
+@return {Parcel} returns the geocoded parcel
+*/
 function geocodeParcel() {
 	for (var i = 0; i < parcels_blank.length; i++) {
 		parcel = parcels_blank.at(i);
@@ -332,6 +419,11 @@ var vehicles = new Vehicles;
 var profile = new Profile;
 var drivers = new Drivers;
 
+/**
+* the method create the initial map overlay of parcels updates the selection of parcels
+@method callback
+@return {Boolean} returns true on the success of an updated parcel
+*/
 $(function() {
 	// execute
 	initialize();

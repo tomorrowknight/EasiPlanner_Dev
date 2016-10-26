@@ -1,5 +1,4 @@
 //Author: Evan Lee, Email: chief725@gmail.com
-console.log("############ Coded by Evan Lee, Email: chief725@gmail.com ############");
 function Site() {
 	this.webUrl = document.body.getAttribute("data-root");
 	this.urlTo = function(relativeUrl) {

@@ -33,7 +33,7 @@ $this->title = Yii::$app->name;
 		<p>The future of cloud based routing and dispatching planning at you
 			fingertips.</p>
 		<p>
-			<a class="btn btn-primary btn-lg" href="login.php" role="button" style='text-shadow: none'>Learn more</a>
+			<a class="btn btn-primary btn-lg" href="/user/login" role="button" style='text-shadow: none'>Learn more</a>
 		</p>
 	</div>
 

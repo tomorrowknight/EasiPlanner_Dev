@@ -4,7 +4,7 @@ $params = require (__DIR__ . '/params.php');
 $config = [
 		'id' => 'Easy Planner',
 		'basePath' => dirname ( __DIR__ ),
-		'name'=>"Easy Planner",
+		'name'=>"EasiPlanner",
 		'bootstrap' => [
 				'log',
 				function () {

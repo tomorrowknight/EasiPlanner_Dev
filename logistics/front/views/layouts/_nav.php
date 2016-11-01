@@ -68,12 +68,12 @@ $items [] = [
 $items [] = Yii::$app->user->isGuest ? [
 		'label' => Utils::iconfa ( "question" ) . ' Help',
 		'url' => [
-				Url::to("@web/help.logistics.lol")
+				'/help'
 		]
 ] : [
 		'label' => Utils::iconfa ( "sign-out" ) . 'Logout',
 		'url' => [
-				'/help'
+				'/user/logout'
 		],
 		'linkOptions' => [
 				'data-method' => 'post'

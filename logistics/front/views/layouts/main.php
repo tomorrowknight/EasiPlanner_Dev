@@ -36,10 +36,8 @@ use chief725\libs\Utils;
 <footer class="footer">
 	<div class="container">
 		<p class="pull-left">
-			&copy; Republic Poly
+			&copy; Republic Polytechnic - COI-SCM
 			<?= date('Y') ?>
-			-
-			<?=Html::a("Help","http://help.logistics.lol/") ?>
 		</p>
 	</div>
 </footer>

@@ -66,14 +66,14 @@ $items [] = [
 		'visible' => Utils::isAdmin ()
 ];
 $items [] = Yii::$app->user->isGuest ? [
-		'label' => Utils::iconfa ( "question" ) . 'Help',
+		'label' => Utils::iconfa ( "question" ) . ' Help',
 		'url' => [
 				Url::to("@web/help.logistics.lol")
 		]
 ] : [
 		'label' => Utils::iconfa ( "sign-out" ) . 'Logout',
 		'url' => [
-				'/user/logout'
+				'/help'
 		],
 		'linkOptions' => [
 				'data-method' => 'post'

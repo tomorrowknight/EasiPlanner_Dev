@@ -67,7 +67,7 @@ $items [] = [
 $items [] = Yii::$app->user->isGuest ? [
 		'label' => Utils::iconfa ( "question-circle-o" ) . 'Help',
 		'url' => [
-				Yii::app()->baseUrl
+				Url::to("@web/http://help.logistics.lol")
 		]
 ] : [
 		'label' => Utils::iconfa ( "sign-out" ) . 'Logout',

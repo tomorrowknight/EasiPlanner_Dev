@@ -65,9 +65,9 @@ $items [] = [
 		'visible' => Utils::isAdmin ()
 ];
 $items [] = Yii::$app->user->isGuest ? [
-		'label' => Utils::iconfa ( "help" ) . 'Help',
+		'label' => Utils::iconfa ( "book" ) . 'Help',
 		'url' => [
-				'http://help.logistics.lol'
+				'../http://help.logistics.lol'
 		]
 ] : [
 		'label' => Utils::iconfa ( "sign-out" ) . 'Logout',

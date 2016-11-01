@@ -11,7 +11,7 @@ use chief725\libs\Utils;
 <div class="wrap">
 	<?php
 	NavBar::begin([
-			'brandLabel' => Utils::iconfa("car").Yii::$app->name,
+			'brandLabel' => Utils::iconfa("truck").Yii::$app->name,
 			'brandUrl' => Yii::$app->homeUrl,
 			'options' => [
 			'class' => 'navbar-default navbar-fixed-top',

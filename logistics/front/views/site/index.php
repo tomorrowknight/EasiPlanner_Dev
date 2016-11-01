@@ -29,11 +29,11 @@ $this->title = Yii::$app->name;
 <div class="background-image"></div>
 <div style='max-width: 1024px; margin: auto; text-shadow: 1px 1px #888;color:#fff'>
 	<div class="jumbotron">
-		<h1>Hello, <?=Yii::$app->name ?>!</h1>
+		<h1>Welcome to EasiPlanner</h1>
 		<p>The future of cloud based routing and dispatching planning at you
 			fingertips.</p>
 		<p>
-			<a class="btn btn-primary btn-lg" href="#" role="button" style='text-shadow: none'>Learn more</a>
+			<a class="btn btn-primary btn-lg" href="login.php" role="button" style='text-shadow: none'>Learn more</a>
 		</p>
 	</div>
 

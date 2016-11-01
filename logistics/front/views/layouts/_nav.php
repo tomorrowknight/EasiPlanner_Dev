@@ -24,7 +24,7 @@ if (Yii::$app->user->can ( "admin" )) {
 					]
 			],
 			[
-					'label' => Utils::iconfa ( "car" ) . 'Vehicle',
+					'label' => Utils::iconfa ( "truck" ) . 'Vehicle',
 					'url' => [
 							'/vehicle'
 					]
@@ -65,9 +65,9 @@ $items [] = [
 		'visible' => Utils::isAdmin ()
 ];
 $items [] = Yii::$app->user->isGuest ? [
-		'label' => Utils::iconfa ( "sign-in" ) . 'Login',
+		'label' => Utils::iconfa ( "help" ) . 'Help',
 		'url' => [
-				'/user/login'
+				'http://help.logistics.lol'
 		]
 ] : [
 		'label' => Utils::iconfa ( "sign-out" ) . 'Logout',
